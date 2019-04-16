@@ -6,19 +6,11 @@ use rutie::{
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyObject, Array, Class, Fixnum, Float, Object, Symbol,
+    wrappable_struct, AnyObject, Array, Class, Fixnum, Float, Object, RString, Symbol,
 };
 use std::{mem, rc::Rc};
 use wasmer_runtime::{self as runtime, imports};
 use wasmer_runtime_core::types::Type;
-
-static WASM: &'static [u8] = &[
-    0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00, 0x01, 0x06, 0x01, 0x60, 0x01, 0x7f, 0x01, 0x7f,
-    0x03, 0x02, 0x01, 0x00, 0x07, 0x0b, 0x01, 0x07, 0x61, 0x64, 0x64, 0x5f, 0x6f, 0x6e, 0x65, 0x00,
-    0x00, 0x0a, 0x09, 0x01, 0x07, 0x00, 0x20, 0x00, 0x41, 0x01, 0x6a, 0x0b, 0x00, 0x1a, 0x04, 0x6e,
-    0x61, 0x6d, 0x65, 0x01, 0x0a, 0x01, 0x00, 0x07, 0x61, 0x64, 0x64, 0x5f, 0x6f, 0x6e, 0x65, 0x02,
-    0x07, 0x01, 0x00, 0x01, 0x00, 0x02, 0x70, 0x30,
-];
 
 pub struct ExportedFunctions {
     instance: Rc<runtime::Instance>,
@@ -112,9 +104,9 @@ pub struct Instance {
 }
 
 impl Instance {
-    pub fn new() -> Self {
+    pub fn new(bytes: &[u8]) -> Self {
         let import_object = imports! {};
-        let instance = Rc::new(runtime::instantiate(WASM, &import_object).unwrap());
+        let instance = Rc::new(runtime::instantiate(bytes, &import_object).unwrap());
 
         Self { instance }
     }
@@ -129,8 +121,8 @@ methods!(
     RubyInstance,
     _itself,
 
-    fn ruby_instance_new() -> AnyObject {
-        let instance = Instance::new();
+    fn ruby_instance_new(bytes: RString) -> AnyObject {
+        let instance = Instance::new(bytes.unwrap().to_bytes_unchecked());
         let exported_functions = ExportedFunctions::new(instance.instance.clone());
 
         let mut ruby_instance: AnyObject = Class::from_existing("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
