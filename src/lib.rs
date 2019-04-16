@@ -88,7 +88,7 @@ class!(RubyExportedFunctions);
 pub extern "C" fn ruby_exported_functions_method_missing(
     argc: Argc,
     argv: *const AnyObject,
-    itself: AnyObject,
+    itself: RubyExportedFunctions,
 ) -> AnyObject {
     let arguments = Value::from(0);
 
