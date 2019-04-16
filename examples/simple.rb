@@ -1,4 +1,5 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
 require "wasmer"
 
 file = File.expand_path("simple.wasm", File.dirname(__FILE__))
