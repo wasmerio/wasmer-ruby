@@ -3,6 +3,7 @@
 use rutie::{Class, Object};
 
 pub mod instance;
+pub mod module;
 
 #[allow(non_snake_case)]
 #[no_mangle]
@@ -27,5 +28,13 @@ pub extern "C" fn Init_wasmer() {
             "method_missing",
             instance::ruby_exported_functions_method_missing,
         );
+    });
+
+    let module_data_class = Class::from_existing("Object");
+
+    // Declare the `Module` Ruby class.
+    Class::new("Module", Some(&module_data_class)).define(|itself| {
+        // Declare the `self.validate` method.
+        itself.def_self("validate", module::ruby_module_validate);
     });
 }
