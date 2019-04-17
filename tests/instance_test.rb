@@ -1,7 +1,6 @@
 require "prelude"
 
-
-class WasmerTest < Minitest::Test
+class InstanceTest < Minitest::Test
   def bytes
     IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
   end
