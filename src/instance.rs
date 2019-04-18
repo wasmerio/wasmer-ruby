@@ -1,5 +1,6 @@
 //! The `Instance` WebAssembly class.
 
+use crate::memory::{Memory, RubyMemory, MEMORY_WRAPPER};
 use lazy_static::lazy_static;
 use rutie::{
     class, methods,
@@ -9,7 +10,7 @@ use rutie::{
     wrappable_struct, AnyObject, Array, Class, Fixnum, Float, Object, RString, Symbol,
 };
 use std::{mem, rc::Rc};
-use wasmer_runtime::{self as runtime, imports};
+use wasmer_runtime::{self as runtime, imports, Export};
 use wasmer_runtime_core::types::Type;
 
 /// The `ExportedFunctions` Ruby class.
@@ -129,16 +130,34 @@ class!(RubyInstance);
 methods!(
     RubyInstance,
     _itself,
-
     // Glue code to call the `Instance.new` method.
     fn ruby_instance_new(bytes: RString) -> AnyObject {
         let instance = Instance::new(bytes.unwrap().to_bytes_unchecked());
         let exported_functions = ExportedFunctions::new(instance.instance.clone());
 
-        let mut ruby_instance: AnyObject = Class::from_existing("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
-        let ruby_exported_functions: RubyExportedFunctions = Class::from_existing("ExportedFunctions").wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
+        let memory = instance
+            .instance
+            .exports()
+            .find_map(|(_, export)| match export {
+                Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
+                _ => None,
+            })
+            .ok_or_else(|| panic!("ahhhhh"))
+            .unwrap();
+
+        let mut ruby_instance: AnyObject =
+            Class::from_existing("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
+
+        let ruby_exported_functions: RubyExportedFunctions =
+            Class::from_existing("ExportedFunctions")
+                .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
 
         ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
+
+        let ruby_memory: RubyMemory =
+            Class::from_existing("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
+
+        ruby_instance.instance_variable_set("@memory", ruby_memory);
 
         ruby_instance
     }
@@ -146,7 +165,18 @@ methods!(
     // Glue code to call the `Instance.exports` getter method.
     fn ruby_instance_exported_functions() -> RubyExportedFunctions {
         unsafe {
-            _itself.instance_variable_get("@exports").to::<RubyExportedFunctions>()
+            _itself
+                .instance_variable_get("@exports")
+                .to::<RubyExportedFunctions>()
+        }
+    }
+
+    // Glue code to call the `Instance.memory` getter method.
+    fn ruby_instance_memory() -> RubyMemory {
+        unsafe {
+            _itself
+                .instance_variable_get("@memory")
+                .to::<RubyMemory>()
         }
     }
 );

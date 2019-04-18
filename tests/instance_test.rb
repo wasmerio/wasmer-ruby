@@ -44,4 +44,12 @@ class InstanceTest < Minitest::Test
   def test_call_string
     assert_equal 1048576, Instance.new(self.bytes).exports.string
   end
+
+  def test_exports
+    assert_instance_of ExportedFunctions, Instance.new(self.bytes).exports
+  end
+
+  def test_memory
+    assert_instance_of Memory, Instance.new(self.bytes).memory
+  end
 end

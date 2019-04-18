@@ -3,6 +3,7 @@
 use rutie::{Class, Object};
 
 pub mod instance;
+pub mod memory;
 pub mod module;
 
 #[allow(non_snake_case)]
@@ -17,6 +18,9 @@ pub extern "C" fn Init_wasmer() {
 
         // Declare the `exports` getter method.
         itself.def("exports", instance::ruby_instance_exported_functions);
+
+        // Declare the `memory` getter method.
+        itself.def("memory", instance::ruby_instance_memory);
     });
 
     let exported_functions_data_class = Class::from_existing("Object");
@@ -37,4 +41,9 @@ pub extern "C" fn Init_wasmer() {
         // Declare the `self.validate` method.
         itself.def_self("validate", module::ruby_module_validate);
     });
+
+    let memory_data_class = Class::from_existing("Object");
+
+    // Declare the `Memory` Ruby class.
+    Class::new("Memory", Some(&memory_data_class)).define(|_itself| {});
 }
