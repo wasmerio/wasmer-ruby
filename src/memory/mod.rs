@@ -1,6 +1,6 @@
 pub mod view;
 
-use crate::memory::view::{MemoryView, RubyMemoryView, MEMORY_VIEW_WRAPPER};
+use crate::memory::view::*;
 use lazy_static::lazy_static;
 use rutie::{class, methods, wrappable_struct, Class, Integer, Object};
 use std::rc::Rc;
@@ -15,8 +15,8 @@ impl Memory {
         Self { memory }
     }
 
-    pub fn view(&self, offset: usize) -> MemoryView {
-        MemoryView::new(self.memory.clone(), offset)
+    pub fn uint8_view(&self, offset: usize) -> Uint8Array {
+        view::Uint8Array::new(self.memory.clone(), offset)
     }
 }
 
@@ -30,12 +30,12 @@ methods!(
     itself,
 
     // Glue code to call the `Memory.view` method.
-    fn ruby_memory_view(offset: Integer) -> RubyMemoryView {
+    fn ruby_memory_uint8array(offset: Integer) -> RubyUint8Array {
         let offset = offset
             .map(|offset| offset.to_i64() as usize)
             .unwrap_or(0);
-        let memory_view = itself.get_data(&*MEMORY_WRAPPER).view(offset);
+        let memory_view = itself.get_data(&*MEMORY_WRAPPER).uint8_view(offset);
 
-        Class::from_existing("MemoryView").wrap_data(memory_view, &*MEMORY_VIEW_WRAPPER)
+        Class::from_existing("Uint8Array").wrap_data(memory_view, &*UINT8ARRAY_WRAPPER)
     }
 );

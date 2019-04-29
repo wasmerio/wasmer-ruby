@@ -47,20 +47,20 @@ pub extern "C" fn Init_wasmer() {
     // Declare the `Memory` Ruby class.
     Class::new("Memory", Some(&memory_data_class)).define(|itself| {
         // Declare the `view` method.
-        itself.def("view", memory::ruby_memory_view);
+        itself.def("uint8_view", memory::ruby_memory_uint8array);
     });
 
-    let memory_view_data_class = Class::from_existing("Object");
+    let uint8array_data_class = Class::from_existing("Object");
 
     // Declare the `MemoryView` Ruby class.
-    Class::new("MemoryView", Some(&memory_view_data_class)).define(|itself| {
+    Class::new("Uint8Array", Some(&uint8array_data_class)).define(|itself| {
         // Declare the `length` method.
-        itself.def("length", memory::view::ruby_memory_view_length);
+        itself.def("length", memory::view::ruby_uint8array_length);
 
         // Declare the `set` method.
-        itself.def("set", memory::view::ruby_memory_view_set);
+        itself.def("set", memory::view::ruby_uint8array_set);
 
         // Declare the `get` method.
-        itself.def("get", memory::view::ruby_memory_view_get);
+        itself.def("get", memory::view::ruby_uint8array_get);
     });
 }

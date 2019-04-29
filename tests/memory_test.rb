@@ -6,19 +6,19 @@ class ModuleTest < Minitest::Test
   end
 
   def test_view
-    assert_instance_of MemoryView, Instance.new(self.bytes).memory.view
+    assert_instance_of Uint8Array, Instance.new(self.bytes).memory.uint8_view
   end
 
   def test_view_with_offset
-    assert_instance_of MemoryView, Instance.new(self.bytes).memory.view(7)
+    assert_instance_of Uint8Array, Instance.new(self.bytes).memory.uint8_view(7)
   end
 
   def test_length
-    assert_equal 1114112, Instance.new(self.bytes).memory.view.length
+    assert_equal 1114112, Instance.new(self.bytes).memory.uint8_view.length
   end
 
   def test_get
-    memory = Instance.new(self.bytes).memory.view
+    memory = Instance.new(self.bytes).memory.uint8_view
     index = 0
     value = 42
     memory.set(index, value)
@@ -29,7 +29,7 @@ class ModuleTest < Minitest::Test
   def test_hello_world
     instance = Instance.new(self.bytes)
     pointer = instance.exports.string
-    memory = instance.memory.view(pointer)
+    memory = instance.memory.uint8_view(pointer)
     nth = 0
     string = ''
 
