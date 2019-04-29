@@ -12,7 +12,7 @@ nth = 0
 string = ""
 
 while true
-  char = memory.get nth
+  char = memory[nth]
 
   if 0 == char
     break

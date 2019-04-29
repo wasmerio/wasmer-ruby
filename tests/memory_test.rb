@@ -26,9 +26,9 @@ class MemoryTest < Minitest::Test
     memory = Instance.new(self.bytes).memory.uint8_view
     index = 0
     value = 42
-    memory.set(index, value)
+    memory[index] = value
 
-    assert_equal value, memory.get(index)
+    assert_equal value, memory[index]
   end
 
   def test_hello_world
@@ -39,7 +39,7 @@ class MemoryTest < Minitest::Test
     string = ""
 
     while true
-      char = memory.get nth
+      char = memory[nth]
 
       if 0 == char
         break

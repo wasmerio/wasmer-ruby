@@ -75,10 +75,10 @@ pub extern "C" fn Init_wasmer() {
                 itself.def("length", memory::view::$mod_name::ruby_memory_view_length);
 
                 // Declare the `set` method.
-                itself.def("set", memory::view::$mod_name::ruby_memory_view_set);
+                itself.def("[]=", memory::view::$mod_name::ruby_memory_view_set);
 
                 // Declare the `get` method.
-                itself.def("get", memory::view::$mod_name::ruby_memory_view_get);
+                itself.def("[]", memory::view::$mod_name::ruby_memory_view_get);
             });
         };
     }
