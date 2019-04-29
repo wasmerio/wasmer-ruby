@@ -34,7 +34,7 @@ class MemoryTest < Minitest::Test
   def test_hello_world
     instance = Instance.new(self.bytes)
     pointer = instance.exports.string
-    memory = instance.memory.uint8_view(pointer)
+    memory = instance.memory.uint8_view pointer
     nth = 0
     string = ''
 
