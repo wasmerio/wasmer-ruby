@@ -48,19 +48,45 @@ pub extern "C" fn Init_wasmer() {
     Class::new("Memory", Some(&memory_data_class)).define(|itself| {
         // Declare the `view` method.
         itself.def("uint8_view", memory::ruby_memory_uint8array);
+
+        // Declare the `view` method.
+        itself.def("int8_view", memory::ruby_memory_int8array);
+
+        // Declare the `view` method.
+        itself.def("uint16_view", memory::ruby_memory_uint16array);
+
+        // Declare the `view` method.
+        itself.def("int16_view", memory::ruby_memory_int16array);
+
+        // Declare the `view` method.
+        itself.def("uint32_view", memory::ruby_memory_uint32array);
+
+        // Declare the `view` method.
+        itself.def("int32_view", memory::ruby_memory_int32array);
     });
 
-    let uint8array_data_class = Class::from_existing("Object");
+    macro_rules! memory_view {
+        ($class_name:ident in $mod_name:ident) => {
+            let uint8array_data_class = Class::from_existing("Object");
 
-    // Declare the `MemoryView` Ruby class.
-    Class::new("Uint8Array", Some(&uint8array_data_class)).define(|itself| {
-        // Declare the `length` method.
-        itself.def("length", memory::view::ruby_uint8array_length);
+            // Declare the `MemoryView` Ruby class.
+            Class::new(stringify!($class_name), Some(&uint8array_data_class)).define(|itself| {
+                // Declare the `length` method.
+                itself.def("length", memory::view::$mod_name::ruby_memory_view_length);
 
-        // Declare the `set` method.
-        itself.def("set", memory::view::ruby_uint8array_set);
+                // Declare the `set` method.
+                itself.def("set", memory::view::$mod_name::ruby_memory_view_set);
 
-        // Declare the `get` method.
-        itself.def("get", memory::view::ruby_uint8array_get);
-    });
+                // Declare the `get` method.
+                itself.def("get", memory::view::$mod_name::ruby_memory_view_get);
+            });
+        };
+    }
+
+    memory_view!(Uint8Array in uint8array);
+    memory_view!(Int8Array in int8array);
+    memory_view!(Uint16Array in uint16array);
+    memory_view!(Int16Array in int16array);
+    memory_view!(Uint32Array in uint32array);
+    memory_view!(Int32Array in int32array);
 }

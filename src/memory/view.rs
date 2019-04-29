@@ -1,82 +1,95 @@
-use lazy_static::lazy_static;
-use rutie::{class, methods, wrappable_struct, Fixnum, Integer, NilClass, Object};
-use std::{mem::size_of, rc::Rc};
-use wasmer_runtime as runtime;
+macro_rules! memory_view {
+    ($mod_name:ident over $wasm_type:ty) => {
+        pub mod $mod_name {
+            use lazy_static::lazy_static;
+            use rutie::{class, methods, wrappable_struct, Fixnum, Integer, NilClass, Object};
+            use std::{mem::size_of, rc::Rc};
+            use wasmer_runtime as runtime;
 
-pub struct Uint8Array {
-    memory: Rc<runtime::memory::Memory>,
-    offset: usize,
+            pub struct MemoryView {
+                memory: Rc<runtime::memory::Memory>,
+                offset: usize,
+            }
+
+            impl MemoryView {
+                pub fn new(memory: Rc<runtime::Memory>, offset: usize) -> Self {
+                    Self { memory, offset }
+                }
+
+                pub fn len(&self) -> usize {
+                    self.memory.view::<$wasm_type>()[self.offset..].len() / size_of::<$wasm_type>()
+                }
+
+                pub fn set(&self, index: isize, value: $wasm_type) -> Result<(), &str> {
+                    let offset = self.offset;
+                    let view = self.memory.view::<$wasm_type>();
+
+                    if index < 0 {
+                        return Err("foo");
+                    }
+
+                    let index = index as usize;
+
+                    if view.len() <= offset + index {
+                        Err("bar")
+                    } else {
+                        view[offset + index].set(value);
+
+                        Ok(())
+                    }
+                }
+
+                pub fn get(&self, index: isize) -> Result<$wasm_type, &str> {
+                    let offset = self.offset;
+                    let view = self.memory.view::<$wasm_type>();
+
+                    if index < 0 {
+                        return Err("foo");
+                    }
+
+                    let index = index as usize;
+
+                    if view.len() <= offset + index {
+                        Err("bar")
+                    } else {
+                        Ok(view[offset + index].get())
+                    }
+                }
+            }
+
+            wrappable_struct!(MemoryView, MemoryViewWrapper, MEMORY_VIEW_WRAPPER);
+
+            class!(RubyMemoryView);
+
+            #[rustfmt::skip]
+            methods!(
+                RubyMemoryView,
+                itself,
+
+                fn ruby_memory_view_length() -> Fixnum {
+                    Fixnum::new(itself.get_data(&*MEMORY_VIEW_WRAPPER).len() as i64)
+                }
+
+                fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
+                    let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                    memory_view.set(index.unwrap().to_i32() as isize, value.unwrap().to_i32() as $wasm_type).unwrap();
+
+                    NilClass::new()
+                }
+
+                fn ruby_memory_view_get(index: Integer) -> Fixnum {
+                    let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
+
+                    Fixnum::new(memory_view.get(index.unwrap().to_i32() as isize).unwrap() as i64)
+                }
+            );
+        }
+    }
 }
 
-impl Uint8Array {
-    pub fn new(memory: Rc<runtime::Memory>, offset: usize) -> Self {
-        Self { memory, offset }
-    }
-
-    pub fn len(&self) -> usize {
-        self.memory.view::<u8>()[self.offset..].len() / size_of::<u8>()
-    }
-
-    pub fn set(&self, index: isize, value: u8) -> Result<(), &str> {
-        let offset = self.offset;
-        let view = self.memory.view::<u8>();
-
-        if index < 0 {
-            return Err("foo");
-        }
-
-        let index = index as usize;
-
-        if view.len() <= offset + index {
-            Err("bar")
-        } else {
-            view[offset + index].set(value);
-
-            Ok(())
-        }
-    }
-
-    pub fn get(&self, index: isize) -> Result<u8, &str> {
-        let offset = self.offset;
-        let view = self.memory.view::<u8>();
-
-        if index < 0 {
-            return Err("foo");
-        }
-
-        let index = index as usize;
-
-        if view.len() <= offset + index {
-            Err("bar")
-        } else {
-            Ok(view[offset + index].get())
-        }
-    }
-}
-
-wrappable_struct!(Uint8Array, Uint8ArrayWrapper, UINT8ARRAY_WRAPPER);
-
-class!(RubyUint8Array);
-
-#[rustfmt::skip]
-methods!(
-    RubyUint8Array,
-    itself,
-
-    fn ruby_uint8array_length() -> Fixnum {
-        Fixnum::new(itself.get_data(&*UINT8ARRAY_WRAPPER).len() as i64)
-    }
-
-    fn ruby_uint8array_set(index: Integer, value: Integer) -> NilClass {
-        let uint8array = itself.get_data(&*UINT8ARRAY_WRAPPER);
-        uint8array.set(index.unwrap().to_i32() as isize, value.unwrap().to_i32() as u8).unwrap();
-
-        NilClass::new()
-    }
-
-    fn ruby_uint8array_get(index: Integer) -> Fixnum {
-        let uint8array = itself.get_data(&*UINT8ARRAY_WRAPPER);
-
-        Fixnum::new(uint8array.get(index.unwrap().to_i32() as isize).unwrap() as i64)
-    }
-);
+memory_view!(uint8array over u8);
+memory_view!(int8array over i8);
+memory_view!(uint16array over u16);
+memory_view!(int16array over i16);
+memory_view!(uint32array over u32);
+memory_view!(int32array over i32);

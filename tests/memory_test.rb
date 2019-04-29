@@ -1,12 +1,17 @@
 require "prelude"
 
-class ModuleTest < Minitest::Test
+class MemoryTest < Minitest::Test
   def bytes
     IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
   end
 
-  def test_view
+  def test_typedarrays
     assert_instance_of Uint8Array, Instance.new(self.bytes).memory.uint8_view
+    assert_instance_of Int8Array, Instance.new(self.bytes).memory.int8_view
+    assert_instance_of Uint16Array, Instance.new(self.bytes).memory.uint16_view
+    assert_instance_of Int16Array, Instance.new(self.bytes).memory.int16_view
+    assert_instance_of Uint32Array, Instance.new(self.bytes).memory.uint32_view
+    assert_instance_of Int32Array, Instance.new(self.bytes).memory.int32_view
   end
 
   def test_view_with_offset
