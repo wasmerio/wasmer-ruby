@@ -55,12 +55,12 @@ pub extern "C" fn Init_wasmer() {
     // Declare the `MemoryView` Ruby class.
     Class::new("MemoryView", Some(&memory_view_data_class)).define(|itself| {
         // Declare the `length` method.
-        itself.def("length", memory::ruby_memory_view_length);
+        itself.def("length", memory::view::ruby_memory_view_length);
 
         // Declare the `set` method.
-        itself.def("set", memory::ruby_memory_view_set);
+        itself.def("set", memory::view::ruby_memory_view_set);
 
         // Declare the `get` method.
-        itself.def("get", memory::ruby_memory_view_get);
+        itself.def("get", memory::view::ruby_memory_view_get);
     });
 }
