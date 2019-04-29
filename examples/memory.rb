@@ -9,7 +9,7 @@ pointer = instance.exports.return_hello
 
 memory = instance.memory.uint8_view pointer
 nth = 0
-string = ''
+string = ""
 
 while true
   char = memory.get nth

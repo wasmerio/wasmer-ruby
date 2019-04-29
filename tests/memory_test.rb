@@ -36,7 +36,7 @@ class MemoryTest < Minitest::Test
     pointer = instance.exports.string
     memory = instance.memory.uint8_view pointer
     nth = 0
-    string = ''
+    string = ""
 
     while true
       char = memory.get nth
