@@ -38,8 +38,14 @@ class MemoryTest < Minitest::Test
     nth = 0
     string = ''
 
-    while 0 != memory.get(nth)
-      string += memory.get(nth).chr
+    while true
+      char = memory.get nth
+
+      if 0 == char
+        break
+      end
+
+      string += char.chr
       nth += 1
     end
 
