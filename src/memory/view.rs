@@ -1,3 +1,5 @@
+//! The `TypedArray`/`MemoryView` WebAssembly classes.
+
 macro_rules! memory_view {
     ($mod_name:ident over $wasm_type:ty) => {
         pub mod $mod_name {
@@ -66,10 +68,12 @@ macro_rules! memory_view {
                 RubyMemoryView,
                 itself,
 
+                // Glue code to call the `TypedArray.length` method.
                 fn ruby_memory_view_length() -> Fixnum {
                     Fixnum::new(itself.get_data(&*MEMORY_VIEW_WRAPPER).len() as i64)
                 }
 
+                // Glue code to call the `TypedArray.set` method.
                 fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
                     let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
                     memory_view.set(index.unwrap().to_i32() as isize, value.unwrap().to_i32() as $wasm_type).unwrap();
@@ -77,6 +81,7 @@ macro_rules! memory_view {
                     NilClass::new()
                 }
 
+                // Glue code to call the `TypedArray.get` method.
                 fn ruby_memory_view_get(index: Integer) -> Fixnum {
                     let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
 

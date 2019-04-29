@@ -1,3 +1,5 @@
+//! The `Memory` WebAssembly class.
+
 pub mod view;
 
 use crate::memory::view::{
