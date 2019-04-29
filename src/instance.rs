@@ -130,6 +130,7 @@ class!(RubyInstance);
 methods!(
     RubyInstance,
     _itself,
+
     // Glue code to call the `Instance.new` method.
     fn ruby_instance_new(bytes: RString) -> AnyObject {
         let instance = Instance::new(bytes.unwrap().to_bytes_unchecked());

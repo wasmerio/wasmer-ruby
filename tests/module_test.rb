@@ -1,7 +1,7 @@
 require "prelude"
 
 class ModuleTest < Minitest::Test
-  def bytes
+  def valid_bytes
     IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
   end
 
@@ -10,7 +10,7 @@ class ModuleTest < Minitest::Test
   end
 
   def test_validate
-    assert Module.validate self.bytes
+    assert Module.validate self.valid_bytes
   end
 
   def test_validate_invalid_bytes
