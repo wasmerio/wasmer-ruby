@@ -175,7 +175,7 @@ while true
   if 0 == char
     break
   end
-  
+
   string += char.chr
   nth += 1
 end
