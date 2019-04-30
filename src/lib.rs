@@ -71,6 +71,12 @@ pub extern "C" fn Init_wasmer() {
 
             // Declare the `MemoryView` Ruby class.
             Class::new(stringify!($class_name), Some(&uint8array_data_class)).define(|itself| {
+                // Declare the `bytes_per_element` getter method.
+                itself.def(
+                    "bytes_per_element",
+                    memory::view::$mod_name::ruby_memory_view_bytes_per_element,
+                );
+
                 // Declare the `length` method.
                 itself.def("length", memory::view::$mod_name::ruby_memory_view_length);
 

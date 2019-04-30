@@ -1,7 +1,7 @@
 //! The `TypedArray`/`MemoryView` WebAssembly classes.
 
 macro_rules! memory_view {
-    ($mod_name:ident over $wasm_type:ty) => {
+    ($mod_name:ident over $wasm_type:ty | $bytes_per_element:expr) => {
         pub mod $mod_name {
             use lazy_static::lazy_static;
             use rutie::{class, methods, wrappable_struct, Fixnum, Integer, NilClass, Object};
@@ -66,16 +66,21 @@ macro_rules! memory_view {
             #[rustfmt::skip]
             methods!(
                 RubyMemoryView,
-                itself,
+                _itself,
+
+                // The `TypedArray.bytes_per_element` method.
+                fn ruby_memory_view_bytes_per_element() -> Fixnum {
+                    Fixnum::new($bytes_per_element)
+                }
 
                 // Glue code to call the `TypedArray.length` method.
                 fn ruby_memory_view_length() -> Fixnum {
-                    Fixnum::new(itself.get_data(&*MEMORY_VIEW_WRAPPER).len() as i64)
+                    Fixnum::new(_itself.get_data(&*MEMORY_VIEW_WRAPPER).len() as i64)
                 }
 
                 // Glue code to call the `TypedArray.set` method.
                 fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
-                    let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                    let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
                     memory_view.set(index.unwrap().to_i32() as isize, value.unwrap().to_i32() as $wasm_type).unwrap();
 
                     NilClass::new()
@@ -83,7 +88,7 @@ macro_rules! memory_view {
 
                 // Glue code to call the `TypedArray.get` method.
                 fn ruby_memory_view_get(index: Integer) -> Fixnum {
-                    let memory_view = itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                    let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
 
                     Fixnum::new(memory_view.get(index.unwrap().to_i32() as isize).unwrap() as i64)
                 }
@@ -92,9 +97,9 @@ macro_rules! memory_view {
     }
 }
 
-memory_view!(uint8array over u8);
-memory_view!(int8array over i8);
-memory_view!(uint16array over u16);
-memory_view!(int16array over i16);
-memory_view!(uint32array over u32);
-memory_view!(int32array over i32);
+memory_view!(uint8array over u8|1);
+memory_view!(int8array over i8|1);
+memory_view!(uint16array over u16|2);
+memory_view!(int16array over i16|2);
+memory_view!(uint32array over u32|4);
+memory_view!(int32array over i32|4);

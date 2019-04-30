@@ -5,6 +5,10 @@ class MemoryTest < Minitest::Test
     IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
   end
 
+  def test_memory
+    assert_instance_of Memory, Instance.new(self.bytes).memory
+  end
+
   def test_typedarrays
     assert_instance_of Uint8Array, Instance.new(self.bytes).memory.uint8_view
     assert_instance_of Int8Array, Instance.new(self.bytes).memory.int8_view
@@ -12,6 +16,15 @@ class MemoryTest < Minitest::Test
     assert_instance_of Int16Array, Instance.new(self.bytes).memory.int16_view
     assert_instance_of Uint32Array, Instance.new(self.bytes).memory.uint32_view
     assert_instance_of Int32Array, Instance.new(self.bytes).memory.int32_view
+  end
+
+  def test_bytes_per_element
+    assert_equal 1, Instance.new(self.bytes).memory.uint8_view.bytes_per_element
+    assert_equal 1, Instance.new(self.bytes).memory.int8_view.bytes_per_element
+    assert_equal 2, Instance.new(self.bytes).memory.uint16_view.bytes_per_element
+    assert_equal 2, Instance.new(self.bytes).memory.int16_view.bytes_per_element
+    assert_equal 4, Instance.new(self.bytes).memory.uint32_view.bytes_per_element
+    assert_equal 4, Instance.new(self.bytes).memory.int32_view.bytes_per_element
   end
 
   def test_view_with_offset
