@@ -7,7 +7,8 @@ use rutie::{
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyObject, Array, Class, Fixnum, Float, Object, RString, Symbol,
+    wrappable_struct, AnyException, AnyObject, Array, Class, Exception, Fixnum, Float, Object,
+    RString, Symbol, VM,
 };
 use std::{mem, rc::Rc};
 use wasmer_runtime::{self as runtime, imports, Export};
@@ -27,7 +28,16 @@ impl ExportedFunctions {
 
     /// Call an exported function on the given WebAssembly instance.
     pub fn method_missing(&self, method_name: &str, arguments: Array) -> AnyObject {
-        let function = self.instance.dyn_func(method_name).unwrap();
+        let function = self
+            .instance
+            .dyn_func(method_name)
+            .map_err(|_| {
+                VM::raise_ex(AnyException::new(
+                    "RuntimeError",
+                    Some(&format!("Function `{}` does not exist.", method_name)),
+                ))
+            })
+            .unwrap();
         let signature = function.signature();
         let parameters = signature.params();
         let number_of_parameters = parameters.len() as isize;
@@ -35,9 +45,23 @@ impl ExportedFunctions {
         let diff: isize = number_of_parameters - number_of_arguments;
 
         if diff > 0 {
-            panic!("Missing arguments");
+            VM::raise_ex(AnyException::new(
+                "ArgumentError",
+                Some(&format!(
+                    "Missing {} argument(s) when calling `{}`: Expect {} argument(s), given {}.",
+                    diff, method_name, number_of_parameters, number_of_arguments
+                )),
+            ));
+            unreachable!();
         } else if diff < 0 {
-            panic!("Too much arguments");
+            VM::raise_ex(AnyException::new(
+                "ArgumentError",
+                Some(&format!(
+                    "Given {} extra argument(s) when calling `{}`: Expect {} argument(s), given {}.",
+                    diff.abs(), method_name, number_of_parameters, number_of_arguments
+                )),
+            ));
+            unreachable!();
         }
 
         let mut function_arguments =

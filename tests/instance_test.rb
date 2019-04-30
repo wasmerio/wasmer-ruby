@@ -13,6 +13,27 @@ class InstanceTest < Minitest::Test
     assert_equal 3, Instance.new(self.bytes).exports.sum(1, 2)
   end
 
+  def test_call_unknown_function
+    error = assert_raises(RuntimeError) {
+      Instance.new(self.bytes).exports.foo
+    }
+    assert_equal "Function `foo` does not exist.", error.message
+  end
+
+  def test_call_missing_argument
+    error = assert_raises(ArgumentError) {
+      Instance.new(self.bytes).exports.sum 1
+    }
+    assert_equal "Missing 1 argument(s) when calling `sum`: Expect 2 argument(s), given 1.", error.message
+  end
+
+  def test_call_extra_argument
+    error = assert_raises(ArgumentError) {
+      Instance.new(self.bytes).exports.sum 1, 2, 3
+    }
+    assert_equal "Given 1 extra argument(s) when calling `sum`: Expect 2 argument(s), given 3.", error.message
+  end
+
   def test_call_arity_0
     assert_equal 42, Instance.new(self.bytes).exports.arity_0
   end
