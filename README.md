@@ -142,6 +142,7 @@ All these classes share the same implementation. Taking the example of
 
 ```ruby
 class Uint8Array
+    def bytes_per_element
     def length
     def [](index)
     def []=(index, value)
