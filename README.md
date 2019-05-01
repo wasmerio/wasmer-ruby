@@ -30,9 +30,9 @@ To install the `wasmer` Ruby gem, just run this command in your shell:
 $ gem install wasmer
 ```
 
-**Note**: [Rust][rust] is required to be installed (Cargo —the build
-tool for Rust— is used to compile the extension). See [how to install
-Rust][install-rust].
+**Note**: [Rust][rust] is required to install the Ruby library (Cargo
+—the build tool for Rust— is used to compile the extension). See [how
+to install Rust][install-rust].
 
 [View the `wasmer` gem on RubyGems][wasmer-gem].
 
