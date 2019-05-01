@@ -1,5 +1,5 @@
-# Compile and install the Rust library.
-rust:
+# Compile and install the Ruby extension.
+build:
 	rake build_lib
 
 # Run the tests.

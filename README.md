@@ -263,7 +263,7 @@ This function returns a boolean.
 To compile the entire project, run the following commands:
 
 ```sh
-$ just rust
+$ just build
 $ just test
 $ ruby examples/simple.rb
 ```
