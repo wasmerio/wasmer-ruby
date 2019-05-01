@@ -112,4 +112,24 @@ class MemoryTest < Minitest::Test
 
     assert_equal "Hello, World!", string
   end
+
+  def test_views_share_the_same_buffer
+    instance = Instance.new self.bytes
+    int8 = instance.memory.int8_view
+    int16 = instance.memory.int16_view
+    int32 = instance.memory.int32_view
+
+    int8[0] = 0b00000001
+    int8[1] = 0b00000100
+    int8[2] = 0b00010000
+    int8[3] = 0b01000000
+
+    assert_equal 0b00000001, int8[0]
+    assert_equal 0b00000100, int8[1]
+    assert_equal 0b00010000, int8[2]
+    assert_equal 0b01000000, int8[3]
+    assert_equal 0b00000100_00000001, int16[0]
+    assert_equal 0b01000000_00010000, int16[1]
+    assert_equal 0b01000000_00010000_00000100_00000001, int32[0]
+  end
 end
