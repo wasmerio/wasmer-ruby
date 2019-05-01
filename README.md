@@ -7,39 +7,40 @@
 <p align="center">
   <a href="https://spectrum.chat/wasmer">
     <img src="https://withspectrum.github.io/badge/badge.svg" alt="Join the Wasmer Community"></a>
+  <a href="https://rubygems.org/gems/wasmer">
+    <img src="https://img.shields.io/gem/v/wasmer.svg" alt="Gem"></a>
+  <a href="https://rubygems.org/gems/wasmer">
+    <img src="https://img.shields.io/gem/dt/wasmer.svg" alt="Gem"></a>
   <a href="https://github.com/wasmerio/wasmer/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/wasmerio/wasmer.svg" alt="License"></a>
 </p>
 
-# The Ruby extension to run WebAssembly
+Wasmer is a Ruby library for executing WebAssembly binaries:
 
-The goal of the project is to be able to run WebAssembly binaries from
-Ruby directly. So much fun coming!
+ * **Easy to use**: The `wasmer` API mimics the standard WebAssembly API,
+ * **Fast**: `wasmer` executes the WebAssembly modules as fast as possible,
+ * **Safe**: All calls to WebAssembly will be fast, but more
+   importantly, completely safe and sandboxed.
 
-_Under Development, don't use it in product yet_.
+# Install
 
-## What is WebAssembly?
+To install the `wasmer` Ruby gem, just run this command in your shell:
 
-Quoting [the WebAssembly site](https://webassembly.org/):
+```sh
+$ gem install wasmer
+```
 
-> WebAssembly (abbreviated Wasm) is a binary instruction format for a
-> stack-based virtual machine. Wasm is designed as a portable target
-> for compilation of high-level languages like C/C++/Rust, enabling
-> deployment on the web for client and server applications.
+**Note**: [Rust][rust] is required to be installed (Cargo —the build
+tool for Rust— is used to compile the extension). See [how to install
+Rust][install-rust].
 
-About speed:
+[View the `wasmer` gem on RubyGems][wasmer-gem].
 
-> WebAssembly aims to execute at native speed by taking advantage of
-> [common hardware
-> capabilities](https://webassembly.org/docs/portability/#assumptions-for-efficient-execution)
-> available on a wide range of platforms.
+[rust]: https://www.rust-lang.org/
+[install-rust]: https://www.rust-lang.org/tools/install
+[wasmer-gem]: https://rubygems.org/gems/wasmer
 
-About safety:
-
-> WebAssembly describes a memory-safe, sandboxed [execution
-> environment](https://webassembly.org/docs/semantics/#linear-memory) […].
-
-## Example
+# Example
 
 There is a toy program in `examples/simple.rs`, written in Rust (or
 any other language that compiles to Wasm):
@@ -71,9 +72,9 @@ $ ruby simple.rb
 3
 ```
 
-## API documentation
+# API documentation
 
-### The `Instance` class
+## The `Instance` class
 
 Instantiates a WebAssembly module represented by bytes, and calls exported functions on it:
 
@@ -105,7 +106,7 @@ view = instance.memory.uint8_view
 
 See below for more information.
 
-### The `Memory` class
+## The `Memory` class
 
 A WebAssembly instance has its own memory, represented by the `Memory`
 class. It is accessible by the `Instance.memory` getter.
@@ -124,7 +125,7 @@ view = instance.memory.uint8_view offset
 puts view[0]
 ```
 
-#### The `*Array` classes
+### The `*Array` classes
 
 These classes represent views over a memory buffer of an instance.
 
@@ -241,7 +242,7 @@ assert_equal 0b01000000_00010000, int16[1]
 assert_equal 0b01000000_00010000_00000100_00000001, int32[0]
 ```
 
-### The `Module` class
+## The `Module` class
 
 The `Module` class contains one static method `validate`, that checks
 whether the given bytes represent valid WebAssembly bytes:
@@ -258,7 +259,7 @@ end
 
 This function returns a boolean.
 
-## Install and Testing
+# Install and Testing
 
 To compile the entire project, run the following commands:
 
@@ -268,12 +269,36 @@ $ just test
 $ ruby examples/simple.rb
 ```
 
-(Yes, you need [`just`](https://github.com/casey/just/)).
+(Yes, you need [`just`][just]).
 
-## License
+[just]: https://github.com/casey/just/
+
+# What is WebAssembly?
+
+Quoting [the WebAssembly site][wasm]:
+
+> WebAssembly (abbreviated Wasm) is a binary instruction format for a
+> stack-based virtual machine. Wasm is designed as a portable target
+> for compilation of high-level languages like C/C++/Rust, enabling
+> deployment on the web for client and server applications.
+
+About speed:
+
+> WebAssembly aims to execute at native speed by taking advantage of
+> [common hardware
+> capabilities](https://webassembly.org/docs/portability/#assumptions-for-efficient-execution)
+> available on a wide range of platforms.
+
+About safety:
+
+> WebAssembly describes a memory-safe, sandboxed [execution
+> environment](https://webassembly.org/docs/semantics/#linear-memory) […].
+
+[wasm]: https://webassembly.org/
+
+# License
 
 The entire project is under the BSD-3-Clause license. Please read [the
 `LICENSE` file][license].
-
 
 [license]: https://github.com/wasmerio/wasmer/blob/master/LICENSE
