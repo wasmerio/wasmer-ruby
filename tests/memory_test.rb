@@ -44,6 +44,54 @@ class MemoryTest < Minitest::Test
     assert_equal value, memory[index]
   end
 
+  def test_get_invalid_index_type
+    error = assert_raises(TypeError) {
+      Instance.new(self.bytes).memory.uint8_view["-1"]
+    }
+    assert_equal "Error converting to Integer", error.message
+  end
+
+  def test_get_out_of_bound_negative
+    error = assert_raises(ArgumentError) {
+      Instance.new(self.bytes).memory.uint8_view[-1]
+    }
+    assert_equal "Out of bound: Index cannot be negative.", error.message
+  end
+
+  def test_get_out_of_bound_too_large
+    error = assert_raises(ArgumentError) {
+      memory = Instance.new(self.bytes).memory.uint8_view
+      length = memory.length
+
+      Instance.new(self.bytes).memory.uint8_view[length + 1]
+    }
+    assert_equal "Out of bound: Maximum index 1114113 is larger than the memory size 1114112.", error.message
+  end
+
+  def test_set_invalid_index_type
+    error = assert_raises(TypeError) {
+      Instance.new(self.bytes).memory.uint8_view["-1"] = 1
+    }
+    assert_equal "Error converting to Integer", error.message
+  end
+
+  def test_set_out_of_bound_negative
+    error = assert_raises(ArgumentError) {
+      Instance.new(self.bytes).memory.uint8_view[-1] = 1
+    }
+    assert_equal "Out of bound: Index cannot be negative.", error.message
+  end
+
+  def test_set_out_of_bound_too_large
+    error = assert_raises(ArgumentError) {
+      memory = Instance.new(self.bytes).memory.uint8_view
+      length = memory.length
+
+      Instance.new(self.bytes).memory.uint8_view[length + 1] = 1
+    }
+    assert_equal "Out of bound: Maximum index 1114113 is larger than the memory size 1114112.", error.message
+  end
+
   def test_hello_world
     instance = Instance.new(self.bytes)
     pointer = instance.exports.string

@@ -4,7 +4,10 @@ macro_rules! memory_view {
     ($mod_name:ident over $wasm_type:ty | $bytes_per_element:expr) => {
         pub mod $mod_name {
             use lazy_static::lazy_static;
-            use rutie::{class, methods, wrappable_struct, Fixnum, Integer, NilClass, Object};
+            use rutie::{
+                class, methods, wrappable_struct, AnyException, Exception, Fixnum, Integer,
+                NilClass, Object, VM,
+            };
             use std::{mem::size_of, rc::Rc};
             use wasmer_runtime as runtime;
 
@@ -22,18 +25,22 @@ macro_rules! memory_view {
                     self.memory.view::<$wasm_type>()[self.offset..].len() / size_of::<$wasm_type>()
                 }
 
-                pub fn set(&self, index: isize, value: $wasm_type) -> Result<(), &str> {
+                pub fn set(&self, index: isize, value: $wasm_type) -> Result<(), String> {
                     let offset = self.offset;
                     let view = self.memory.view::<$wasm_type>();
 
                     if index < 0 {
-                        return Err("foo");
+                        return Err("Out of bound: Index cannot be negative.".into());
                     }
 
                     let index = index as usize;
 
                     if view.len() <= offset + index {
-                        Err("bar")
+                        Err(format!(
+                            "Out of bound: Maximum index {} is larger than the memory size {}.",
+                            offset + index,
+                            view.len()
+                        ))
                     } else {
                         view[offset + index].set(value);
 
@@ -41,18 +48,22 @@ macro_rules! memory_view {
                     }
                 }
 
-                pub fn get(&self, index: isize) -> Result<$wasm_type, &str> {
+                pub fn get(&self, index: isize) -> Result<$wasm_type, String> {
                     let offset = self.offset;
                     let view = self.memory.view::<$wasm_type>();
 
                     if index < 0 {
-                        return Err("foo");
+                        return Err("Out of bound: Index cannot be negative.".into());
                     }
 
                     let index = index as usize;
 
                     if view.len() <= offset + index {
-                        Err("bar")
+                        Err(format!(
+                            "Out of bound: Maximum index {} is larger than the memory size {}.",
+                            offset + index,
+                            view.len()
+                        ))
                     } else {
                         Ok(view[offset + index].get())
                     }
@@ -81,7 +92,13 @@ macro_rules! memory_view {
                 // Glue code to call the `TypedArray.set` method.
                 fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
                     let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
-                    memory_view.set(index.unwrap().to_i32() as isize, value.unwrap().to_i32() as $wasm_type).unwrap();
+                    memory_view
+                        .set(
+                            index.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as isize,
+                            value.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as $wasm_type,
+                        )
+                        .map_err(|e| VM::raise_ex(AnyException::new("ArgumentError", Some(&e))))
+                        .unwrap();
 
                     NilClass::new()
                 }
@@ -90,11 +107,16 @@ macro_rules! memory_view {
                 fn ruby_memory_view_get(index: Integer) -> Fixnum {
                     let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
 
-                    Fixnum::new(memory_view.get(index.unwrap().to_i32() as isize).unwrap() as i64)
+                    Fixnum::new(
+                        memory_view
+                            .get(index.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as isize)
+                            .map_err(|e| VM::raise_ex(AnyException::new("ArgumentError", Some(&e))))
+                            .unwrap() as i64,
+                    )
                 }
             );
         }
-    }
+    };
 }
 
 memory_view!(uint8array over u8|1);
