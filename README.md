@@ -10,7 +10,7 @@
   <a href="https://rubygems.org/gems/wasmer">
     <img src="https://img.shields.io/gem/v/wasmer.svg" alt="Gem"></a>
   <a href="https://rubygems.org/gems/wasmer">
-    <img src="https://img.shields.io/gem/dt/wasmer.svg" alt="Gem"></a>
+    <img src="https://img.shields.io/gem/dt/wasmer.svg" alt="Number of gem downloads"></a>
   <a href="https://github.com/wasmerio/wasmer/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/wasmerio/wasmer.svg" alt="License"></a>
 </p>
