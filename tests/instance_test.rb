@@ -5,8 +5,34 @@ class InstanceTest < Minitest::Test
     IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
   end
 
+  def invalid_bytes
+    IO.read File.expand_path("invalid.wasm", File.dirname(__FILE__)), mode: "rb"
+  end
+
   def test_can_construct
     assert Instance.new self.bytes
+  end
+
+  def test_constructor_needs_bytes
+    error = assert_raises(ArgumentError) {
+      Instance.new 123
+    }
+    assert_equal "WebAssembly module must be represented by Ruby bytes only.", error.message
+  end
+
+  def test_module_must_have_an_exported_memory
+    error = assert_raises(RuntimeError) {
+      bytes = IO.read File.expand_path("no_memory.wasm", File.dirname(__FILE__)), mode: "rb"
+      Instance.new bytes
+    }
+    assert_equal "The WebAssembly module has no exported memory.", error.message
+  end
+
+  def test_invalid_module
+    error = assert_raises(RuntimeError) {
+      Instance.new self.invalid_bytes
+    }
+    assert_equal "Failed to instantiate the module:\n    compile error: Validation error \"Invalid type\"", error.message
   end
 
   def test_basic_sum
@@ -32,6 +58,13 @@ class InstanceTest < Minitest::Test
       Instance.new(self.bytes).exports.sum 1, 2, 3
     }
     assert_equal "Given 1 extra argument(s) when calling `sum`: Expect 2 argument(s), given 3.", error.message
+  end
+
+  def test_call_cannot_convert_argument
+    error = assert_raises(ArgumentError) {
+      Instance.new(self.bytes).exports.sum 1, "2"
+    }
+    assert_equal "Cannot convert argument #2 to a WebAssembly value. Only integers and floats are supported. Given `RString`.", error.message
   end
 
   def test_call_arity_0

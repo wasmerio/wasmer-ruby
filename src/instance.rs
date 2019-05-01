@@ -67,27 +67,88 @@ impl ExportedFunctions {
         let mut function_arguments =
             Vec::<runtime::Value>::with_capacity(number_of_parameters as usize);
 
-        for (parameter, argument) in parameters.iter().zip(arguments.into_iter()) {
+        for (nth, (parameter, argument)) in parameters.iter().zip(arguments.into_iter()).enumerate()
+        {
             let value = match (parameter, argument.ty()) {
-                (Type::I32, ValueType::Fixnum) => {
-                    runtime::Value::I32(argument.try_convert_to::<Fixnum>().unwrap().to_i32())
+                (Type::I32, ValueType::Fixnum) => runtime::Value::I32(
+                    argument
+                        .try_convert_to::<Fixnum>()
+                        .map_err(|_| {
+                            VM::raise_ex(AnyException::new(
+                                "TypeError",
+                                Some(&format!(
+                                    "Cannot convert argument #{} to a WebAssembly i32 value.",
+                                    nth + 1
+                                )),
+                            ))
+                        })
+                        .unwrap()
+                        .to_i32(),
+                ),
+                (Type::I64, ValueType::Fixnum) => runtime::Value::I64(
+                    argument
+                        .try_convert_to::<Fixnum>()
+                        .map_err(|_| {
+                            VM::raise_ex(AnyException::new(
+                                "TypeError",
+                                Some(&format!(
+                                    "Cannot convert argument #{} to a WebAssembly i64 value.",
+                                    nth + 1
+                                )),
+                            ))
+                        })
+                        .unwrap()
+                        .to_i64(),
+                ),
+                (Type::F32, ValueType::Float) => runtime::Value::F32(
+                    argument
+                        .try_convert_to::<Float>()
+                        .map_err(|_| {
+                            VM::raise_ex(AnyException::new(
+                                "TypeError",
+                                Some(&format!(
+                                    "Cannot convert argument #{} to a WebAssembly f32 value.",
+                                    nth + 1
+                                )),
+                            ))
+                        })
+                        .unwrap()
+                        .to_f64() as f32,
+                ),
+                (Type::F64, ValueType::Float) => runtime::Value::F64(
+                    argument
+                        .try_convert_to::<Float>()
+                        .map_err(|_| {
+                            VM::raise_ex(AnyException::new(
+                                "TypeError",
+                                Some(&format!(
+                                    "Cannot convert argument #{} to a WebAssembly f64 value.",
+                                    nth + 1
+                                )),
+                            ))
+                        })
+                        .unwrap()
+                        .to_f64(),
+                ),
+                (_, ty) => {
+                    VM::raise_ex(AnyException::new(
+                        "ArgumentError",
+                        Some(&format!(
+                            "Cannot convert argument #{} to a WebAssembly value. Only integers and floats are supported. Given `{:?}`.",
+                            nth + 1,
+                            ty
+                        ))));
+                    unreachable!()
                 }
-                (Type::I64, ValueType::Fixnum) => {
-                    runtime::Value::I64(argument.try_convert_to::<Fixnum>().unwrap().to_i64())
-                }
-                (Type::F32, ValueType::Float) => {
-                    runtime::Value::F32(argument.try_convert_to::<Float>().unwrap().to_f64() as f32)
-                }
-                (Type::F64, ValueType::Float) => {
-                    runtime::Value::F64(argument.try_convert_to::<Float>().unwrap().to_f64())
-                }
-                _ => panic!("aaahhh"),
             };
 
             function_arguments.push(value);
         }
 
-        let results = function.call(function_arguments.as_slice()).unwrap();
+        let results = function
+            .call(function_arguments.as_slice())
+            .map_err(|e| VM::raise_ex(AnyException::new("RuntimeError", Some(&format!("{}", e)))))
+            .unwrap();
 
         match results[0] {
             runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
@@ -140,7 +201,16 @@ impl Instance {
     /// The constructor receives bytes from a string.
     pub fn new(bytes: &[u8]) -> Self {
         let import_object = imports! {};
-        let instance = Rc::new(runtime::instantiate(bytes, &import_object).unwrap());
+        let instance = Rc::new(
+            runtime::instantiate(bytes, &import_object)
+                .map_err(|e| {
+                    VM::raise_ex(AnyException::new(
+                        "RuntimeError",
+                        Some(&format!("Failed to instantiate the module:\n    {}", e)),
+                    ))
+                })
+                .unwrap(),
+        );
 
         Self { instance }
     }
@@ -154,10 +224,19 @@ class!(RubyInstance);
 methods!(
     RubyInstance,
     _itself,
-
     // Glue code to call the `Instance.new` method.
     fn ruby_instance_new(bytes: RString) -> AnyObject {
-        let instance = Instance::new(bytes.unwrap().to_bytes_unchecked());
+        let instance = Instance::new(
+            bytes
+                .map_err(|_| {
+                    VM::raise_ex(AnyException::new(
+                        "ArgumentError",
+                        Some("WebAssembly module must be represented by Ruby bytes only."),
+                    ))
+                })
+                .unwrap()
+                .to_bytes_unchecked(),
+        );
         let exported_functions = ExportedFunctions::new(instance.instance.clone());
 
         let memory = instance
@@ -167,7 +246,7 @@ methods!(
                 Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
                 _ => None,
             })
-            .ok_or_else(|| panic!("ahhhhh"))
+            .ok_or_else(|| VM::raise_ex(AnyException::new("RuntimeError", Some("The WebAssembly module has no exported memory."))))
             .unwrap();
 
         let mut ruby_instance: AnyObject =
@@ -198,10 +277,6 @@ methods!(
 
     // Glue code to call the `Instance.memory` getter method.
     fn ruby_instance_memory() -> RubyMemory {
-        unsafe {
-            _itself
-                .instance_variable_get("@memory")
-                .to::<RubyMemory>()
-        }
+        unsafe { _itself.instance_variable_get("@memory").to::<RubyMemory>() }
     }
 );
