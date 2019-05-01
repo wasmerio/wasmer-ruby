@@ -35,6 +35,7 @@ jobs:
           name: Test the extension
           command: |
             export PATH="$HOME/.cargo/bin:$PATH"
+            gem install bundler
             just test
 
 
