@@ -184,7 +184,62 @@ end
 puts string # Hello, World!
 ```
 
-Each view shares the same memory buffer internally.
+Notice that `*Array` treat bytes in little-endian, as required by the
+WebAssembly specification, [Chapter Structure, Section Instructions,
+Sub-Section Memory
+Instructions](https://webassembly.github.io/spec/core/syntax/instructions.html#memory-instructions):
+
+> All values are read and written in [little
+> endian](https://en.wikipedia.org/wiki/Endianness#Little-endian) byte
+> order.
+
+Each view shares the same memory buffer internally. Let's have some fun:
+
+```ruby
+int8 = instance.memory.int8_view
+int16 = instance.memory.int16_view
+int32 = instance.memory.int32_view
+
+               b₁
+            ┌┬┬┬┬┬┬┐
+int8[0] = 0b00000001
+               b₂
+            ┌┬┬┬┬┬┬┐
+int8[1] = 0b00000100
+               b₃
+            ┌┬┬┬┬┬┬┐
+int8[2] = 0b00010000
+               b₄
+            ┌┬┬┬┬┬┬┐
+int8[3] = 0b01000000
+
+// No surprise with the following assertions.
+                  b₁
+               ┌┬┬┬┬┬┬┐
+assert_equal 0b00000001, int8[0]
+                  b₂
+               ┌┬┬┬┬┬┬┐
+assert_equal 0b00000100, int8[1]
+                  b₃
+               ┌┬┬┬┬┬┬┐
+assert_equal 0b00010000, int8[2]
+                  b₄
+               ┌┬┬┬┬┬┬┐
+assert_equal 0b01000000, int8[3]
+
+// The `int16` view reads 2 bytes.
+                  b₂       b₁
+               ┌┬┬┬┬┬┬┐ ┌┬┬┬┬┬┬┐
+assert_equal 0b00000100_00000001, int16[0]
+                  b₄       b₃
+               ┌┬┬┬┬┬┬┐ ┌┬┬┬┬┬┬┐
+assert_equal 0b01000000_00010000, int16[1]
+
+// The `int32` view reads 4 bytes.
+                  b₄       b₃       b₂       b₁
+               ┌┬┬┬┬┬┬┐ ┌┬┬┬┬┬┬┐ ┌┬┬┬┬┬┬┐ ┌┬┬┬┬┬┬┐
+assert_equal 0b01000000_00010000_00000100_00000001, int32[0]
+```
 
 ### The `Module` class
 
