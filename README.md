@@ -252,7 +252,7 @@ require "wasmer"
 
 wasm_bytes = IO.read "my_program.wasm", mode: "rb"
 
-if not Module.validate wasm_bytes
+if not Wasmer::Module.validate wasm_bytes
     puts "The program seems corrupted."
 end
 ```
