@@ -5,6 +5,7 @@ use rutie::{Class, Module, Object};
 pub mod instance;
 pub mod memory;
 pub mod module;
+pub mod util;
 
 #[allow(non_snake_case)]
 #[no_mangle]

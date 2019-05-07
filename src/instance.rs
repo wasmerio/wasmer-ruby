@@ -1,6 +1,7 @@
 //! The `Instance` WebAssembly class.
 
 use crate::memory::{Memory, RubyMemory, MEMORY_WRAPPER};
+use crate::util::unwrap_or_raise;
 use lazy_static::lazy_static;
 use rutie::{
     class, methods,
@@ -8,7 +9,7 @@ use rutie::{
     types::{Argc, Value},
     util::str_to_cstring,
     wrappable_struct, AnyException, AnyObject, Array, Module, Exception, Fixnum, Float, Object,
-    RString, Symbol, VM,
+    RString, Symbol,
 };
 use std::{mem, rc::Rc};
 use wasmer_runtime::{self as runtime, imports, Export};
@@ -27,17 +28,16 @@ impl ExportedFunctions {
     }
 
     /// Call an exported function on the given WebAssembly instance.
-    pub fn method_missing(&self, method_name: &str, arguments: Array) -> AnyObject {
+    pub fn method_missing(&self, method_name: &str, arguments: Array) -> Result<AnyObject, AnyException> {
         let function = self
             .instance
             .dyn_func(method_name)
             .map_err(|_| {
-                VM::raise_ex(AnyException::new(
+                AnyException::new(
                     "RuntimeError",
                     Some(&format!("Function `{}` does not exist.", method_name)),
-                ))
-            })
-            .unwrap();
+                )
+            })?;
         let signature = function.signature();
         let parameters = signature.params();
         let number_of_parameters = parameters.len() as isize;
@@ -45,23 +45,21 @@ impl ExportedFunctions {
         let diff: isize = number_of_parameters - number_of_arguments;
 
         if diff > 0 {
-            VM::raise_ex(AnyException::new(
+            return Err(AnyException::new(
                 "ArgumentError",
                 Some(&format!(
                     "Missing {} argument(s) when calling `{}`: Expect {} argument(s), given {}.",
                     diff, method_name, number_of_parameters, number_of_arguments
                 )),
             ));
-            unreachable!();
         } else if diff < 0 {
-            VM::raise_ex(AnyException::new(
+            return Err(AnyException::new(
                 "ArgumentError",
                 Some(&format!(
                     "Given {} extra argument(s) when calling `{}`: Expect {} argument(s), given {}.",
                     diff.abs(), method_name, number_of_parameters, number_of_arguments
                 )),
             ));
-            unreachable!();
         }
 
         let mut function_arguments =
@@ -74,71 +72,62 @@ impl ExportedFunctions {
                     argument
                         .try_convert_to::<Fixnum>()
                         .map_err(|_| {
-                            VM::raise_ex(AnyException::new(
+                            AnyException::new(
                                 "TypeError",
                                 Some(&format!(
                                     "Cannot convert argument #{} to a WebAssembly i32 value.",
                                     nth + 1
                                 )),
-                            ))
-                        })
-                        .unwrap()
-                        .to_i32(),
+                            )
+                        })?.to_i32(),
                 ),
                 (Type::I64, ValueType::Fixnum) => runtime::Value::I64(
                     argument
                         .try_convert_to::<Fixnum>()
                         .map_err(|_| {
-                            VM::raise_ex(AnyException::new(
+                            AnyException::new(
                                 "TypeError",
                                 Some(&format!(
                                     "Cannot convert argument #{} to a WebAssembly i64 value.",
                                     nth + 1
                                 )),
-                            ))
-                        })
-                        .unwrap()
-                        .to_i64(),
+                            )
+                        })?.to_i64(),
                 ),
                 (Type::F32, ValueType::Float) => runtime::Value::F32(
                     argument
                         .try_convert_to::<Float>()
                         .map_err(|_| {
-                            VM::raise_ex(AnyException::new(
+                            AnyException::new(
                                 "TypeError",
                                 Some(&format!(
                                     "Cannot convert argument #{} to a WebAssembly f32 value.",
                                     nth + 1
                                 )),
-                            ))
-                        })
-                        .unwrap()
-                        .to_f64() as f32,
+                            )
+                        })?.to_f64() as f32,
                 ),
                 (Type::F64, ValueType::Float) => runtime::Value::F64(
                     argument
                         .try_convert_to::<Float>()
                         .map_err(|_| {
-                            VM::raise_ex(AnyException::new(
+                            AnyException::new(
                                 "TypeError",
                                 Some(&format!(
                                     "Cannot convert argument #{} to a WebAssembly f64 value.",
                                     nth + 1
                                 )),
-                            ))
-                        })
-                        .unwrap()
-                        .to_f64(),
+                            )
+                        })?.to_f64(),
                 ),
                 (_, ty) => {
-                    VM::raise_ex(AnyException::new(
+                    return Err(AnyException::new(
                         "ArgumentError",
                         Some(&format!(
                             "Cannot convert argument #{} to a WebAssembly value. Only integers and floats are supported. Given `{:?}`.",
                             nth + 1,
                             ty
                         ))));
-                    unreachable!()
                 }
             };
 
@@ -147,15 +136,15 @@ impl ExportedFunctions {
 
         let results = function
             .call(function_arguments.as_slice())
-            .map_err(|e| VM::raise_ex(AnyException::new("RuntimeError", Some(&format!("{}", e)))))
-            .unwrap();
+            .map_err(|e| AnyException::new("RuntimeError", Some(&format!("{}", e))))?;
 
-        match results[0] {
+        let result = match results[0] {
             runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
             runtime::Value::I64(result) => Fixnum::new(result).into(),
             runtime::Value::F32(result) => Float::new(result as f64).into(),
             runtime::Value::F64(result) => Float::new(result).into(),
-        }
+        };
+        Ok(result)
     }
 }
 
@@ -173,21 +162,23 @@ pub extern "C" fn ruby_exported_functions_method_missing(
     argv: *const AnyObject,
     itself: RubyExportedFunctions,
 ) -> AnyObject {
-    let arguments = Value::from(0);
+    unwrap_or_raise(|| {
+        let arguments = Value::from(0);
 
-    unsafe {
-        let argv_pointer: *const Value = mem::transmute(argv);
+        unsafe {
+            let argv_pointer: *const Value = mem::transmute(argv);
 
-        class::rb_scan_args(argc, argv_pointer, str_to_cstring("*").as_ptr(), &arguments)
-    };
+            class::rb_scan_args(argc, argv_pointer, str_to_cstring("*").as_ptr(), &arguments)
+        };
 
-    let mut arguments = Array::from(arguments);
-    let method_name = unsafe { arguments.shift().to::<Symbol>() };
-    let method_name = method_name.to_str();
+        let mut arguments = Array::from(arguments);
+        let method_name = unsafe { arguments.shift().to::<Symbol>() };
+        let method_name = method_name.to_str();
 
-    itself
-        .get_data(&*EXPORTED_FUNCTIONS_WRAPPER)
-        .method_missing(method_name, arguments)
+        itself
+            .get_data(&*EXPORTED_FUNCTIONS_WRAPPER)
+            .method_missing(method_name, arguments)
+    })
 }
 
 /// The `Instance` Ruby class.
@@ -200,19 +191,19 @@ impl Instance {
     /// Create a new instance of the `Instance` Ruby class.
     /// The constructor receives bytes from a string.
     pub fn new(bytes: &[u8]) -> Self {
-        let import_object = imports! {};
-        let instance = Rc::new(
-            runtime::instantiate(bytes, &import_object)
-                .map_err(|e| {
-                    VM::raise_ex(AnyException::new(
-                        "RuntimeError",
-                        Some(&format!("Failed to instantiate the module:\n    {}", e)),
-                    ))
-                })
-                .unwrap(),
-        );
-
-        Self { instance }
+        unwrap_or_raise(|| {
+            let import_object = imports! {};
+            let instance = Rc::new(
+                runtime::instantiate(bytes, &import_object)
+                    .map_err(|e| {
+                        AnyException::new(
+                            "RuntimeError",
+                            Some(&format!("Failed to instantiate the module:\n    {}", e)),
+                        )
+                    })?
+            );
+            Ok(Self { instance })
+        })
     }
 }
 
@@ -226,46 +217,45 @@ methods!(
     _itself,
     // Glue code to call the `Instance.new` method.
     fn ruby_instance_new(bytes: RString) -> AnyObject {
-        let instance = Instance::new(
-            bytes
-                .map_err(|_| {
-                    VM::raise_ex(AnyException::new(
-                        "ArgumentError",
-                        Some("WebAssembly module must be represented by Ruby bytes only."),
-                    ))
+        unwrap_or_raise(||{
+            let instance = Instance::new(
+                bytes
+                    .map_err(|_| {
+                        AnyException::new(
+                            "ArgumentError",
+                            Some("WebAssembly module must be represented by Ruby bytes only."),
+                        )
+                    })?.to_bytes_unchecked(),
+            );
+            let exported_functions = ExportedFunctions::new(instance.instance.clone());
+
+            let memory = instance
+                .instance
+                .exports()
+                .find_map(|(_, export)| match export {
+                    Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
+                    _ => None,
                 })
-                .unwrap()
-                .to_bytes_unchecked(),
-        );
-        let exported_functions = ExportedFunctions::new(instance.instance.clone());
+                .ok_or_else(|| AnyException::new("RuntimeError", Some("The WebAssembly module has no exported memory.")))?;
 
-        let memory = instance
-            .instance
-            .exports()
-            .find_map(|(_, export)| match export {
-                Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
-                _ => None,
-            })
-            .ok_or_else(|| VM::raise_ex(AnyException::new("RuntimeError", Some("The WebAssembly module has no exported memory."))))
-            .unwrap();
+            let wasmer_module = Module::from_existing("Wasmer");
 
-        let wasmer_module = Module::from_existing("Wasmer");
+            let mut ruby_instance: AnyObject =
+                wasmer_module.get_nested_class("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
 
-        let mut ruby_instance: AnyObject =
-            wasmer_module.get_nested_class("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
+            let ruby_exported_functions: RubyExportedFunctions =
+                wasmer_module.get_nested_class("ExportedFunctions")
+                    .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
 
-        let ruby_exported_functions: RubyExportedFunctions =
-            wasmer_module.get_nested_class("ExportedFunctions")
-                .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
+            ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
 
-        ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
+            let ruby_memory: RubyMemory =
+                wasmer_module.get_nested_class("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
 
-        let ruby_memory: RubyMemory =
-            wasmer_module.get_nested_class("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
+            ruby_instance.instance_variable_set("@memory", ruby_memory);
 
-        ruby_instance.instance_variable_set("@memory", ruby_memory);
-
-        ruby_instance
+            Ok(ruby_instance)
+        })
     }
 
     // Glue code to call the `Instance.exports` getter method.

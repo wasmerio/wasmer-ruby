@@ -3,10 +3,11 @@
 macro_rules! memory_view {
     ($mod_name:ident over $wasm_type:ty | $bytes_per_element:expr) => {
         pub mod $mod_name {
+            use crate::util::unwrap_or_raise;
             use lazy_static::lazy_static;
             use rutie::{
                 class, methods, wrappable_struct, AnyException, Exception, Fixnum, Integer,
-                NilClass, Object, VM,
+                NilClass, Object,
             };
             use std::{mem::size_of, rc::Rc};
             use wasmer_runtime as runtime;
@@ -91,28 +92,30 @@ macro_rules! memory_view {
 
                 // Glue code to call the `TypedArray.set` method.
                 fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
-                    let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
-                    memory_view
-                        .set(
-                            index.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as isize,
-                            value.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as $wasm_type,
-                        )
-                        .map_err(|e| VM::raise_ex(AnyException::new("ArgumentError", Some(&e))))
-                        .unwrap();
+                    unwrap_or_raise(|| {
+                        let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                        memory_view
+                            .set(
+                                index?.to_i32() as isize,
+                                value?.to_i32() as $wasm_type,
+                            )
+                            .map_err(|e| AnyException::new("ArgumentError", Some(&e)))?;
 
-                    NilClass::new()
+                        Ok(NilClass::new())
+                    })
                 }
 
                 // Glue code to call the `TypedArray.get` method.
                 fn ruby_memory_view_get(index: Integer) -> Fixnum {
-                    let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                    unwrap_or_raise(|| {
+                        let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
 
-                    Fixnum::new(
-                        memory_view
-                            .get(index.map_err(|e| VM::raise_ex(e)).unwrap().to_i32() as isize)
-                            .map_err(|e| VM::raise_ex(AnyException::new("ArgumentError", Some(&e))))
-                            .unwrap() as i64,
-                    )
+                        Ok(Fixnum::new(
+                            memory_view
+                                .get(index?.to_i32() as isize)
+                                .map_err(|e| AnyException::new("ArgumentError", Some(&e)))? as i64,
+                        ))
+                    })
                 }
             );
         }
