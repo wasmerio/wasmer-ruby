@@ -4,7 +4,7 @@ require "wasmer"
 
 file = File.expand_path "memory.wasm", File.dirname(__FILE__)
 bytes = IO.read file, mode: "rb"
-instance = Instance.new bytes
+instance = Wasmer::Instance.new bytes
 pointer = instance.exports.return_hello
 
 memory = instance.memory.uint8_view pointer

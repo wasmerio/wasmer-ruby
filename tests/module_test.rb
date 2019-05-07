@@ -10,14 +10,14 @@ class ModuleTest < Minitest::Test
   end
 
   def test_validate
-    assert Module.validate self.valid_bytes
+    assert Wasmer::Module.validate self.valid_bytes
   end
 
   def test_validate_invalid_bytes
-    assert_equal false, Module.validate(self.invalid_bytes)
+    assert_equal false, Wasmer::Module.validate(self.invalid_bytes)
   end
 
   def test_validate_invalid_type
-    assert_equal false, Module.validate(42)
+    assert_equal false, Wasmer::Module.validate(42)
   end
 end

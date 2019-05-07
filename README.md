@@ -61,7 +61,7 @@ Then, we can execute it in Ruby (!) with the `examples/simple.rb` file:
 require "wasmer"
 
 bytes = IO.read "simple.wasm", mode: "rb"
-instance = Instance.new bytes
+instance = Wasmer::Instance.new bytes
 puts instance.exports.sum 1, 2
 ```
 
@@ -85,7 +85,7 @@ require "wasmer"
 wasm_bytes = IO.read "my_program.wasm", mode: "rb"
 
 # Instantiates the Wasm module.
-instance = Instance.new wasm_bytes
+instance = Wasmer::Instance.new wasm_bytes
 
 # Call a function on it.
 result = instance.exports.sum 1, 2
@@ -109,7 +109,7 @@ See below for more information.
 ## The `Memory` class
 
 A WebAssembly instance has its own memory, represented by the `Memory`
-class. It is accessible by the `Instance.memory` getter.
+class. It is accessible by the `Wasmer::Instance.memory` getter.
 
 The `Memory` class offers methods to create views of the memory
 internal buffer, e.g. `uint8_view`, `int8_view`, `uint16_view`
@@ -159,7 +159,7 @@ require "wasmer"
 wasm_bytes = IO.read "my_program.wasm", mode: "rb"
 
 # Instantiates the Wasm module.
-instance = Instance.new wasm_bytes
+instance = Wasmer::Instance.new wasm_bytes
 
 # Call a function that returns a pointer to a string for instance.
 pointer = instance.exports.return_string

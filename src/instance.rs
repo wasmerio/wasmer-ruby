@@ -7,7 +7,7 @@ use rutie::{
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyException, AnyObject, Array, Class, Exception, Fixnum, Float, Object,
+    wrappable_struct, AnyException, AnyObject, Array, Module, Exception, Fixnum, Float, Object,
     RString, Symbol, VM,
 };
 use std::{mem, rc::Rc};
@@ -249,17 +249,19 @@ methods!(
             .ok_or_else(|| VM::raise_ex(AnyException::new("RuntimeError", Some("The WebAssembly module has no exported memory."))))
             .unwrap();
 
+        let wasmer_module = Module::from_existing("Wasmer");
+
         let mut ruby_instance: AnyObject =
-            Class::from_existing("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
+            wasmer_module.get_nested_class("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
 
         let ruby_exported_functions: RubyExportedFunctions =
-            Class::from_existing("ExportedFunctions")
+            wasmer_module.get_nested_class("ExportedFunctions")
                 .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
 
         ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
 
         let ruby_memory: RubyMemory =
-            Class::from_existing("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
+            wasmer_module.get_nested_class("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
 
         ruby_instance.instance_variable_set("@memory", ruby_memory);
 

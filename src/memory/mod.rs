@@ -11,7 +11,7 @@ use crate::memory::view::{
     uint8array::{RubyMemoryView as RubyUint8Array, MEMORY_VIEW_WRAPPER as UINT8ARRAY_WRAPPER},
 };
 use lazy_static::lazy_static;
-use rutie::{class, methods, wrappable_struct, Class, Integer, Object};
+use rutie::{class, methods, wrappable_struct, Module, Integer, Object};
 use std::rc::Rc;
 use wasmer_runtime as runtime;
 
@@ -65,7 +65,8 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).uint8_view(offset);
 
-        Class::from_existing("Uint8Array").wrap_data(memory_view, &*UINT8ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Uint8Array").wrap_data(memory_view, &*UINT8ARRAY_WRAPPER)
     }
 
     // Glue code to call the `Memory.int8_view` method.
@@ -75,7 +76,8 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).int8_view(offset);
 
-        Class::from_existing("Int8Array").wrap_data(memory_view, &*INT8ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Int8Array").wrap_data(memory_view, &*INT8ARRAY_WRAPPER)
     }
 
     // Glue code to call the `Memory.uint16_view` method.
@@ -85,7 +87,8 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).uint16_view(offset);
 
-        Class::from_existing("Uint16Array").wrap_data(memory_view, &*UINT16ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Uint16Array").wrap_data(memory_view, &*UINT16ARRAY_WRAPPER)
     }
 
     // Glue code to call the `Memory.int16_view` method.
@@ -95,7 +98,8 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).int16_view(offset);
 
-        Class::from_existing("Int16Array").wrap_data(memory_view, &*INT16ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Int16Array").wrap_data(memory_view, &*INT16ARRAY_WRAPPER)
     }
 
     // Glue code to call the `Memory.uint32_view` method.
@@ -105,7 +109,8 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).uint32_view(offset);
 
-        Class::from_existing("Uint32Array").wrap_data(memory_view, &*UINT32ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Uint32Array").wrap_data(memory_view, &*UINT32ARRAY_WRAPPER)
     }
 
     // Glue code to call the `Memory.int32_view` method.
@@ -115,6 +120,7 @@ methods!(
             .unwrap_or(0);
         let memory_view = itself.get_data(&*MEMORY_WRAPPER).int32_view(offset);
 
-        Class::from_existing("Int32Array").wrap_data(memory_view, &*INT32ARRAY_WRAPPER)
+        let wasmer_module = Module::from_existing("Wasmer");
+        wasmer_module.get_nested_class("Int32Array").wrap_data(memory_view, &*INT32ARRAY_WRAPPER)
     }
 );

@@ -1,6 +1,6 @@
 #![deny(warnings)]
 
-use rutie::{Class, Object};
+use rutie::{Class, Module, Object};
 
 pub mod instance;
 pub mod memory;
@@ -9,10 +9,12 @@ pub mod module;
 #[allow(non_snake_case)]
 #[no_mangle]
 pub extern "C" fn Init_wasmer() {
+    let mut wasmer_module = Module::from_existing("Wasmer");
+
     let instance_data_class = Class::from_existing("Object");
 
     // Declare the `Instance` Ruby class.
-    Class::new("Instance", Some(&instance_data_class)).define(|itself| {
+    wasmer_module.define_nested_class("Instance", Some(&instance_data_class)).define(|itself| {
         // Declare the `self.new` method.
         itself.def_self("new", instance::ruby_instance_new);
 
@@ -26,7 +28,7 @@ pub extern "C" fn Init_wasmer() {
     let exported_functions_data_class = Class::from_existing("Object");
 
     // Declare the `ExportedFunctions` Ruby class.
-    Class::new("ExportedFunctions", Some(&exported_functions_data_class)).define(|itself| {
+    wasmer_module.define_nested_class("ExportedFunctions", Some(&exported_functions_data_class)).define(|itself| {
         // Declare the `method_missing` method.
         itself.def(
             "method_missing",
@@ -37,7 +39,7 @@ pub extern "C" fn Init_wasmer() {
     let module_data_class = Class::from_existing("Object");
 
     // Declare the `Module` Ruby class.
-    Class::new("Module", Some(&module_data_class)).define(|itself| {
+    wasmer_module.define_nested_class("Module", Some(&module_data_class)).define(|itself| {
         // Declare the `self.validate` method.
         itself.def_self("validate", module::ruby_module_validate);
     });
@@ -45,7 +47,7 @@ pub extern "C" fn Init_wasmer() {
     let memory_data_class = Class::from_existing("Object");
 
     // Declare the `Memory` Ruby class.
-    Class::new("Memory", Some(&memory_data_class)).define(|itself| {
+    wasmer_module.define_nested_class("Memory", Some(&memory_data_class)).define(|itself| {
         // Declare the `view` method.
         itself.def("uint8_view", memory::ruby_memory_uint8array);
 
@@ -70,7 +72,7 @@ pub extern "C" fn Init_wasmer() {
             let uint8array_data_class = Class::from_existing("Object");
 
             // Declare the `MemoryView` Ruby class.
-            Class::new(stringify!($class_name), Some(&uint8array_data_class)).define(|itself| {
+            wasmer_module.define_nested_class(stringify!($class_name), Some(&uint8array_data_class)).define(|itself| {
                 // Declare the `bytes_per_element` getter method.
                 itself.def(
                     "bytes_per_element",
