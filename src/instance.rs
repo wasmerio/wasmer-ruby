@@ -143,13 +143,12 @@ impl ExportedFunctions {
             .call(function_arguments.as_slice())
             .map_err(|e| AnyException::new("RuntimeError", Some(&format!("{}", e))))?;
 
-        let result = match results[0] {
+        Ok(match results[0] {
             runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
             runtime::Value::I64(result) => Fixnum::new(result).into(),
             runtime::Value::F32(result) => Float::new(result as f64).into(),
             runtime::Value::F64(result) => Float::new(result).into(),
-        };
-        Ok(result)
+        })
     }
 }
 
@@ -197,13 +196,15 @@ impl Instance {
     /// The constructor receives bytes from a string.
     pub fn new(bytes: &[u8]) -> Result<Self, AnyException> {
         let import_object = imports! {};
-        let instance = Rc::new(runtime::instantiate(bytes, &import_object).map_err(|e| {
-            AnyException::new(
-                "RuntimeError",
-                Some(&format!("Failed to instantiate the module:\n    {}", e)),
-            )
-        })?);
-        Ok(Self { instance })
+
+        Ok(Self {
+            instance: Rc::new(runtime::instantiate(bytes, &import_object).map_err(|e| {
+                AnyException::new(
+                    "RuntimeError",
+                    Some(&format!("Failed to instantiate the module:\n    {}", e)),
+                )
+            })?),
+        })
     }
 }
 
@@ -215,9 +216,10 @@ class!(RubyInstance);
 methods!(
     RubyInstance,
     _itself,
+
     // Glue code to call the `Instance.new` method.
     fn ruby_instance_new(bytes: RString) -> AnyObject {
-        unwrap_or_raise(||{
+        unwrap_or_raise(|| {
             let instance = Instance::new(
                 bytes
                     .map_err(|_| {
@@ -225,7 +227,8 @@ methods!(
                             "ArgumentError",
                             Some("WebAssembly module must be represented by Ruby bytes only."),
                         )
-                    })?.to_bytes_unchecked(),
+                    })?
+                    .to_bytes_unchecked(),
             )?;
             let exported_functions = ExportedFunctions::new(instance.instance.clone());
 
@@ -236,21 +239,28 @@ methods!(
                     Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
                     _ => None,
                 })
-                .ok_or_else(|| AnyException::new("RuntimeError", Some("The WebAssembly module has no exported memory.")))?;
+                .ok_or_else(|| {
+                    AnyException::new(
+                        "RuntimeError",
+                        Some("The WebAssembly module has no exported memory."),
+                    )
+                })?;
 
             let wasmer_module = Module::from_existing("Wasmer");
 
-            let mut ruby_instance: AnyObject =
-                wasmer_module.get_nested_class("Instance").wrap_data(instance, &*INSTANCE_WRAPPER);
+            let mut ruby_instance: AnyObject = wasmer_module
+                .get_nested_class("Instance")
+                .wrap_data(instance, &*INSTANCE_WRAPPER);
 
-            let ruby_exported_functions: RubyExportedFunctions =
-                wasmer_module.get_nested_class("ExportedFunctions")
-                    .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
+            let ruby_exported_functions: RubyExportedFunctions = wasmer_module
+                .get_nested_class("ExportedFunctions")
+                .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
 
             ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
 
-            let ruby_memory: RubyMemory =
-                wasmer_module.get_nested_class("Memory").wrap_data(memory, &*MEMORY_WRAPPER);
+            let ruby_memory: RubyMemory = wasmer_module
+                .get_nested_class("Memory")
+                .wrap_data(memory, &*MEMORY_WRAPPER);
 
             ruby_instance.instance_variable_set("@memory", ruby_memory);
 
