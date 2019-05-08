@@ -190,20 +190,18 @@ pub struct Instance {
 impl Instance {
     /// Create a new instance of the `Instance` Ruby class.
     /// The constructor receives bytes from a string.
-    pub fn new(bytes: &[u8]) -> Self {
-        unwrap_or_raise(|| {
-            let import_object = imports! {};
-            let instance = Rc::new(
-                runtime::instantiate(bytes, &import_object)
-                    .map_err(|e| {
-                        AnyException::new(
-                            "RuntimeError",
-                            Some(&format!("Failed to instantiate the module:\n    {}", e)),
-                        )
-                    })?
-            );
-            Ok(Self { instance })
-        })
+    pub fn new(bytes: &[u8]) -> Result<Self, AnyException> {
+        let import_object = imports! {};
+        let instance = Rc::new(
+            runtime::instantiate(bytes, &import_object)
+                .map_err(|e| {
+                    AnyException::new(
+                        "RuntimeError",
+                        Some(&format!("Failed to instantiate the module:\n    {}", e)),
+                    )
+                })?
+        );
+        Ok(Self { instance })
     }
 }
 
@@ -226,7 +224,7 @@ methods!(
                             Some("WebAssembly module must be represented by Ruby bytes only."),
                         )
                     })?.to_bytes_unchecked(),
-            );
+            )?;
             let exported_functions = ExportedFunctions::new(instance.instance.clone());
 
             let memory = instance
