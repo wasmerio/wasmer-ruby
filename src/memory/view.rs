@@ -3,7 +3,7 @@
 macro_rules! memory_view {
     ($mod_name:ident over $wasm_type:ty | $bytes_per_element:expr) => {
         pub mod $mod_name {
-            use crate::util::unwrap_or_raise;
+            use crate::error::unwrap_or_raise;
             use lazy_static::lazy_static;
             use rutie::{
                 class, methods, wrappable_struct, AnyException, Exception, Fixnum, Integer,

@@ -1,14 +1,14 @@
 //! The `Instance` WebAssembly class.
 
+use crate::error::unwrap_or_raise;
 use crate::memory::{Memory, RubyMemory, MEMORY_WRAPPER};
-use crate::util::unwrap_or_raise;
 use lazy_static::lazy_static;
 use rutie::{
     class, methods,
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyException, AnyObject, Array, Module, Exception, Fixnum, Float, Object,
+    wrappable_struct, AnyException, AnyObject, Array, Exception, Fixnum, Float, Module, Object,
     RString, Symbol,
 };
 use std::{mem, rc::Rc};
@@ -28,16 +28,17 @@ impl ExportedFunctions {
     }
 
     /// Call an exported function on the given WebAssembly instance.
-    pub fn method_missing(&self, method_name: &str, arguments: Array) -> Result<AnyObject, AnyException> {
-        let function = self
-            .instance
-            .dyn_func(method_name)
-            .map_err(|_| {
-                AnyException::new(
-                    "RuntimeError",
-                    Some(&format!("Function `{}` does not exist.", method_name)),
-                )
-            })?;
+    pub fn method_missing(
+        &self,
+        method_name: &str,
+        arguments: Array,
+    ) -> Result<AnyObject, AnyException> {
+        let function = self.instance.dyn_func(method_name).map_err(|_| {
+            AnyException::new(
+                "RuntimeError",
+                Some(&format!("Function `{}` does not exist.", method_name)),
+            )
+        })?;
         let signature = function.signature();
         let parameters = signature.params();
         let number_of_parameters = parameters.len() as isize;
@@ -79,7 +80,8 @@ impl ExportedFunctions {
                                     nth + 1
                                 )),
                             )
-                        })?.to_i32(),
+                        })?
+                        .to_i32(),
                 ),
                 (Type::I64, ValueType::Fixnum) => runtime::Value::I64(
                     argument
@@ -92,7 +94,8 @@ impl ExportedFunctions {
                                     nth + 1
                                 )),
                             )
-                        })?.to_i64(),
+                        })?
+                        .to_i64(),
                 ),
                 (Type::F32, ValueType::Float) => runtime::Value::F32(
                     argument
@@ -105,7 +108,8 @@ impl ExportedFunctions {
                                     nth + 1
                                 )),
                             )
-                        })?.to_f64() as f32,
+                        })?
+                        .to_f64() as f32,
                 ),
                 (Type::F64, ValueType::Float) => runtime::Value::F64(
                     argument
@@ -118,7 +122,8 @@ impl ExportedFunctions {
                                     nth + 1
                                 )),
                             )
-                        })?.to_f64(),
+                        })?
+                        .to_f64(),
                 ),
                 (_, ty) => {
                     return Err(AnyException::new(
@@ -192,15 +197,12 @@ impl Instance {
     /// The constructor receives bytes from a string.
     pub fn new(bytes: &[u8]) -> Result<Self, AnyException> {
         let import_object = imports! {};
-        let instance = Rc::new(
-            runtime::instantiate(bytes, &import_object)
-                .map_err(|e| {
-                    AnyException::new(
-                        "RuntimeError",
-                        Some(&format!("Failed to instantiate the module:\n    {}", e)),
-                    )
-                })?
-        );
+        let instance = Rc::new(runtime::instantiate(bytes, &import_object).map_err(|e| {
+            AnyException::new(
+                "RuntimeError",
+                Some(&format!("Failed to instantiate the module:\n    {}", e)),
+            )
+        })?);
         Ok(Self { instance })
     }
 }
