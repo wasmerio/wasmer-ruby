@@ -1,5 +1,7 @@
 //! The `TypedArray`/`MemoryView` WebAssembly classes.
 
+#[rustfmt::skip]
+
 macro_rules! memory_view {
     ($mod_name:ident over $wasm_type:ty | $bytes_per_element:expr) => {
         pub mod $mod_name {
@@ -75,7 +77,6 @@ macro_rules! memory_view {
 
             class!(RubyMemoryView);
 
-            #[rustfmt::skip]
             methods!(
                 RubyMemoryView,
                 _itself,
@@ -94,11 +95,9 @@ macro_rules! memory_view {
                 fn ruby_memory_view_set(index: Integer, value: Integer) -> NilClass {
                     unwrap_or_raise(|| {
                         let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
+
                         memory_view
-                            .set(
-                                index?.to_i32() as isize,
-                                value?.to_i32() as $wasm_type,
-                            )
+                            .set(index?.to_i32() as isize, value?.to_i32() as $wasm_type)
                             .map_err(|e| AnyException::new("ArgumentError", Some(&e)))?;
 
                         Ok(NilClass::new())
@@ -113,7 +112,8 @@ macro_rules! memory_view {
                         Ok(Fixnum::new(
                             memory_view
                                 .get(index?.to_i32() as isize)
-                                .map_err(|e| AnyException::new("ArgumentError", Some(&e)))? as i64,
+                                .map_err(|e| AnyException::new("ArgumentError", Some(&e)))?
+                                as i64,
                         ))
                     })
                 }
