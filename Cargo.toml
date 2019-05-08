@@ -19,3 +19,6 @@ wasmer-runtime = "0.4.0"
 wasmer-runtime-core = "0.4.0"
 rutie = "0.5.4"
 lazy_static = "1.3.0"
+
+[package.metadata.thermite]
+github_releases = true
