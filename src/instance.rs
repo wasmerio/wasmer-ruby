@@ -8,8 +8,8 @@ use rutie::{
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyException, AnyObject, Array, Exception, Fixnum, Float, Module, Object,
-    RString, Symbol,
+    wrappable_struct, AnyException, AnyObject, Array, Exception, Fixnum, Float, Module, NilClass,
+    Object, RString, Symbol,
 };
 use std::{mem, rc::Rc};
 use wasmer_runtime::{self as runtime, imports, Export};
@@ -143,12 +143,16 @@ impl ExportedFunctions {
             .call(function_arguments.as_slice())
             .map_err(|e| AnyException::new("RuntimeError", Some(&format!("{}", e))))?;
 
-        Ok(match results[0] {
-            runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
-            runtime::Value::I64(result) => Fixnum::new(result).into(),
-            runtime::Value::F32(result) => Float::new(result as f64).into(),
-            runtime::Value::F64(result) => Float::new(result).into(),
-        })
+        if results.len() > 0 {
+            Ok(match results[0] {
+                runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
+                runtime::Value::I64(result) => Fixnum::new(result).into(),
+                runtime::Value::F32(result) => Float::new(result as f64).into(),
+                runtime::Value::F64(result) => Float::new(result).into(),
+            })
+        } else {
+            Ok(NilClass::new().into())
+        }
     }
 }
 
