@@ -99,6 +99,10 @@ class InstanceTest < Minitest::Test
     assert_equal 1048576, Wasmer::Instance.new(self.bytes).exports.string
   end
 
+  def test_call_void
+    assert_equal nil, Wasmer::Instance.new(self.bytes).exports.void
+  end
+
   def test_exports
     assert_instance_of Wasmer::ExportedFunctions, Wasmer::Instance.new(self.bytes).exports
   end
