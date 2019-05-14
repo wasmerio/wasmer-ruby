@@ -36,12 +36,16 @@ class InstanceTest < Minitest::Test
   end
 
   def test_basic_sum
-    assert_equal 3, Wasmer::Instance.new(self.bytes).exports.sum(1, 2)
+    exports = Wasmer::Instance.new(self.bytes).exports
+    assert exports.respond_to?(:sum)
+    assert_equal 3, exports.sum(1, 2)
   end
 
   def test_call_unknown_function
+    exports = Wasmer::Instance.new(self.bytes).exports
+    assert !exports.respond_to?(:foo)
     error = assert_raises(RuntimeError) {
-      Wasmer::Instance.new(self.bytes).exports.foo
+      exports.foo
     }
     assert_equal "Function `foo` does not exist.", error.message
   end

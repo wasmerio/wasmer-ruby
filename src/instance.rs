@@ -8,8 +8,8 @@ use rutie::{
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyException, AnyObject, Array, Exception, Fixnum, Float, Module, NilClass,
-    Object, RString, Symbol,
+    wrappable_struct, AnyException, AnyObject, Array, Boolean, Exception, Fixnum, Float, Module,
+    NilClass, Object, RString, Symbol,
 };
 use std::{mem, rc::Rc};
 use wasmer_runtime::{self as runtime, imports, Export};
@@ -25,6 +25,11 @@ impl ExportedFunctions {
     /// Create a new instance of the `ExportedFunctions` Ruby class.
     pub fn new(instance: Rc<runtime::Instance>) -> Self {
         Self { instance }
+    }
+
+    /// Check that an exported function exists.
+    pub fn respond_to_missing(&self, method_name: &str) -> bool {
+        self.instance.dyn_func(method_name).is_ok()
     }
 
     /// Call an exported function on the given WebAssembly instance.
@@ -163,6 +168,22 @@ wrappable_struct!(
 );
 
 class!(RubyExportedFunctions);
+
+#[rustfmt::skip]
+methods!(
+    RubyExportedFunctions,
+    itself,
+
+    // Glue code to call the `ExportedFunctions.respond_to` method.
+    fn ruby_exported_functions_method_exists(symbol: Symbol, _include_private: Boolean) -> Boolean {
+        unwrap_or_raise(|| {
+            let symbol = symbol?;
+            let instance = itself.get_data(&*EXPORTED_FUNCTIONS_WRAPPER);
+
+            Ok(Boolean::new(instance.respond_to_missing(symbol.to_str())))
+        })
+    }
+);
 
 /// Glue code to call the `ExportedFunctions.method_missing` method.
 pub extern "C" fn ruby_exported_functions_method_missing(
