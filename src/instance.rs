@@ -170,7 +170,7 @@ class!(RubyExportedFunctions);
 
 #[rustfmt::skip]
 methods!(
-    RubyInstance,
+    RubyExportedFunctions,
     itself,
 
     fn ruby_exported_functions_method_exists(symbol: Symbol, _include_private: Boolean) -> Boolean {
