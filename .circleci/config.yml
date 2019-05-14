@@ -3,7 +3,7 @@ version: 2.1
 # List of all jobs.
 jobs:
   # Build and test the project the project.
-  build_and_test:
+  build-and-test:
     docker:
       - image: circleci/ruby:latest
     steps:
@@ -61,10 +61,12 @@ workflows:
   # The build workflow.
   build:
     jobs:
-      # Run the `build_and_test` job for all branches and all tags.
-      - build_and_test:
+      # Run the `build-and-test` job for the `trying` and `staging` branches, and all tags.
+      - build-and-test:
           filters:
             branches:
-              only: /.*/
+              only:
+                - trying
+                - staging
             tags:
               only: /.*/
