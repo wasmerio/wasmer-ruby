@@ -34,7 +34,10 @@ pub extern "C" fn Init_wasmer() {
     wasmer_module
         .define_nested_class("ExportedFunctions", Some(&exported_functions_data_class))
         .define(|itself| {
-            // Declare the `method_missing` method.
+            itself.def(
+                "respond_to_missing?",
+                instance::ruby_exported_functions_method_exists,
+            );
             itself.def(
                 "method_missing",
                 instance::ruby_exported_functions_method_missing,
