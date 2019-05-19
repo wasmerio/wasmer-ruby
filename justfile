@@ -1,6 +1,6 @@
 # Compile and install the Ruby extension.
 build:
-	rake build_lib
+	rake thermite:build
 
 # Run the tests.
 test:

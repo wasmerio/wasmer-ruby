@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/wasmerio/ruby-ext-wasm"
   spec.license       = "BSD-3-Clause"
 
-  spec.extensions    = %w(Rakefile)
+  spec.extensions    = %w(ext/Rakefile)
 
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(examples|tests)/}) }
@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w(lib)
 
   spec.add_dependency "rutie", "~> 0.0.3"
+  spec.add_runtime_dependency "thermite", "~> 0"
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
