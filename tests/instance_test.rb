@@ -104,7 +104,7 @@ class InstanceTest < Minitest::Test
   end
 
   def test_call_void
-    assert_equal nil, Wasmer::Instance.new(self.bytes).exports.void
+    assert_nil Wasmer::Instance.new(self.bytes).exports.void
   end
 
   def test_exports
