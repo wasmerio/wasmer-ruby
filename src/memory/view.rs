@@ -9,7 +9,7 @@ macro_rules! memory_view {
             use lazy_static::lazy_static;
             use rutie::{
                 class, methods, wrappable_struct, AnyException, Exception, Fixnum, Integer,
-                NilClass, Object,
+                NilClass, Object, VM,
             };
             use std::{mem::size_of, rc::Rc};
             use wasmer_runtime as runtime;
@@ -71,6 +71,17 @@ macro_rules! memory_view {
                         Ok(view[offset + index].get())
                     }
                 }
+
+                pub fn each(&self) {
+                    let view = self.memory.view::<$wasm_type>();
+
+                    let mut offset = self.offset;
+                    while offset < view.len() {
+                        let value = view[offset].get();
+                        VM::yield_object(Integer::from(value as i64));
+                        offset += 1;
+                    }
+                }
             }
 
             wrappable_struct!(MemoryView, MemoryViewWrapper, MEMORY_VIEW_WRAPPER);
@@ -116,6 +127,12 @@ macro_rules! memory_view {
                                 as i64,
                         ))
                     })
+                }
+
+                fn ruby_memory_view_each() -> RubyMemoryView {
+                    let memory_view = _itself.get_data(&*MEMORY_VIEW_WRAPPER);
+                    memory_view.each();
+                    _itself
                 }
             );
         }

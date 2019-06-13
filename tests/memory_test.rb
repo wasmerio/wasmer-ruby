@@ -99,17 +99,13 @@ class MemoryTest < Minitest::Test
     nth = 0
     string = ""
 
-    while true
-      char = memory[nth]
-
-      if 0 == char
-        break
-      end
-
-      string += char.chr
+    memory.each do |char|
+      break if 0 == char
+      string << char.chr
       nth += 1
     end
 
+    assert_equal 13, nth
     assert_equal "Hello, World!", string
   end
 
