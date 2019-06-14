@@ -75,11 +75,9 @@ macro_rules! memory_view {
                 pub fn each(&self) {
                     let view = self.memory.view::<$wasm_type>();
 
-                    let mut offset = self.offset;
-                    while offset < view.len() {
-                        let value = view[offset].get();
-                        VM::yield_object(Integer::from(value as i64));
-                        offset += 1;
+                    for nth in self.offset..view.len() {
+                        let value = view[nth].get() as i64;
+                        VM::yield_object(Integer::from(value));
                     }
                 }
             }
