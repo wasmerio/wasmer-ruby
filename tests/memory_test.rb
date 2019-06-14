@@ -109,6 +109,18 @@ class MemoryTest < Minitest::Test
     assert_equal "Hello, World!", string
   end
 
+  def test_enumerable
+    instance = Wasmer::Instance.new self.bytes
+    memory = instance.memory.int16_view
+    memory[0] = 1
+    memory[1] = 10
+    memory[2] = 100
+    memory[3] = 1000
+    memory[5] = 2
+    sum = memory.take_while{|x| x > 0}.inject(0, &:+)
+    assert_equal 1111, sum
+  end
+
   def test_views_share_the_same_buffer
     instance = Wasmer::Instance.new self.bytes
     int8 = instance.memory.int8_view
