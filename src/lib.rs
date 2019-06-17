@@ -104,7 +104,11 @@ pub extern "C" fn Init_wasmer() {
 
                     // Declare the `[]` (get) method.
                     itself.def("[]", memory::view::$mod_name::ruby_memory_view_get);
-                });
+
+                    // Declare the `each` method.
+                    itself.def("each", memory::view::$mod_name::ruby_memory_view_each);
+                })
+                .include("Enumerable");
         };
     }
 

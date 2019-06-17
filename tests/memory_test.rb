@@ -99,18 +99,26 @@ class MemoryTest < Minitest::Test
     nth = 0
     string = ""
 
-    while true
-      char = memory[nth]
-
-      if 0 == char
-        break
-      end
-
-      string += char.chr
+    memory.each do |char|
+      break if 0 == char
+      string << char.chr
       nth += 1
     end
 
+    assert_equal 13, nth
     assert_equal "Hello, World!", string
+  end
+
+  def test_enumerable
+    instance = Wasmer::Instance.new self.bytes
+    memory = instance.memory.int16_view
+    memory[0] = 1
+    memory[1] = 10
+    memory[2] = 100
+    memory[3] = 1000
+    memory[5] = 2
+    sum = memory.take_while{|x| x > 0}.inject(0, &:+)
+    assert_equal 1111, sum
   end
 
   def test_views_share_the_same_buffer
