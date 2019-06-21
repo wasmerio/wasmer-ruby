@@ -168,18 +168,12 @@ pointer = instance.exports.return_string
 memory = instance.memory.uint8_view pointer
 
 # Read the string pointed by the pointer.
-nth = 0
+
 string = ""
 
-while true
-  char = memory[nth]
-
-  if 0 == char
-    break
-  end
-
+memory.each do |char|
+  break if char == 0
   string += char.chr
-  nth += 1
 end
 
 puts string # Hello, World!
