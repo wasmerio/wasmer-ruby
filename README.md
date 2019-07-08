@@ -111,6 +111,13 @@ See below for more information.
 A WebAssembly instance has its own memory, represented by the `Memory`
 class. It is accessible by the `Wasmer::Instance.memory` getter.
 
+The `Memory.grow` methods allows to grow the memory by a number of
+pages (of 65kb each).
+
+```ruby
+instance.memory.grow 1
+```
+
 The `Memory` class offers methods to create views of the memory
 internal buffer, e.g. `uint8_view`, `int8_view`, `uint16_view`
 etc. All these methods accept one optional argument: `offset`, to
