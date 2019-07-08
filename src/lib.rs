@@ -63,6 +63,9 @@ pub extern "C" fn Init_wasmer() {
     wasmer_module
         .define_nested_class("Memory", Some(&memory_data_class))
         .define(|itself| {
+            // Declare the `grow` method.
+            itself.def("grow", memory::ruby_memory_grow);
+
             // Declare the `view` method.
             itself.def("uint8_view", memory::ruby_memory_uint8array);
 
