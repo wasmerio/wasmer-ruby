@@ -1,7 +1,9 @@
 //! The `Instance` WebAssembly class.
 
-use crate::error::unwrap_or_raise;
-use crate::memory::{Memory, RubyMemory, MEMORY_WRAPPER};
+use crate::{
+    error::unwrap_or_raise,
+    memory::{Memory, RubyMemory, MEMORY_WRAPPER},
+};
 use lazy_static::lazy_static;
 use rutie::{
     class, methods,

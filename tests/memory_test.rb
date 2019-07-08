@@ -140,4 +140,28 @@ class MemoryTest < Minitest::Test
     assert_equal 0b01000000_00010000, int16[1]
     assert_equal 0b01000000_00010000_00000100_00000001, int32[0]
   end
+
+  def test_memory_grow
+    instance = Wasmer::Instance.new self.bytes
+    memory = instance.memory
+    int8 = memory.int8_view
+
+    old_memory_length = int8.length
+
+    assert_equal 1114112, old_memory_length
+
+    memory.grow 1
+
+    memory_length = int8.length
+
+    assert_equal 1179648, memory_length
+    assert_equal 65536, memory_length - old_memory_length
+  end
+
+  def test_memory_grow_too_much
+    error = assert_raises(RuntimeError) {
+      Wasmer::Instance.new(self.bytes).memory.grow 100000
+    }
+    assert_equal "Failed to grow the memory: Grow Error: Failed to add pages because would exceed maximum number of pages. Left: 17, Right: 100000, Pages added: 100017.", error.message
+  end
 end
