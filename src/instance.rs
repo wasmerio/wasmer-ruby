@@ -156,6 +156,12 @@ impl ExportedFunctions {
                 runtime::Value::I64(result) => Fixnum::new(result).into(),
                 runtime::Value::F32(result) => Float::new(result as f64).into(),
                 runtime::Value::F64(result) => Float::new(result).into(),
+                runtime::Value::V128(_result) => {
+                    return Err(AnyException::new(
+                        "RuntimeError",
+                        Some("Type `V128` isn't supported yet."),
+                    ))
+                }
             })
         } else {
             Ok(NilClass::new().into())
