@@ -1,0 +1,64 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+  # The `test` job.
+  test:
+    name: Test
+
+    strategy:
+      matrix:
+        # The job runs on 2 different OS.
+        os: [ubuntu-latest, macos-latest]
+      # As soon as one job fails in the matrix, all the other
+      # in-progress jobs are canceled.
+      fail-fast: true
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        shell: bash
+        run: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+      - name: Cache Cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache Cargo bin
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-bin-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache Cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Set up just
+        shell: bash
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          test -f $HOME/.cargo/bin/just || cargo install just
+
+      - name: Compile the library
+        shell: bash
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          just build
+
+      - name: Run all the tests
+        shell: bash
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          gem install bundler
+          just test
