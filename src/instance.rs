@@ -150,7 +150,7 @@ impl ExportedFunctions {
             .call(function_arguments.as_slice())
             .map_err(|e| AnyException::new("RuntimeError", Some(&format!("{}", e))))?;
 
-        if results.len() > 0 {
+        if !results.is_empty() {
             Ok(match results[0] {
                 runtime::Value::I32(result) => Fixnum::new(result as i64).into(),
                 runtime::Value::I64(result) => Fixnum::new(result).into(),
