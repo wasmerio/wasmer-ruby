@@ -13,7 +13,7 @@ use rutie::{
     wrappable_struct, AnyException, AnyObject, Array, Boolean, Exception, Fixnum, Float, Module,
     NilClass, Object, RString, Symbol,
 };
-use std::{mem, rc::Rc};
+use std::rc::Rc;
 use wasmer_runtime::{self as runtime, imports, Export};
 use wasmer_runtime_core::types::Type;
 
@@ -203,7 +203,7 @@ pub extern "C" fn ruby_exported_functions_method_missing(
         let arguments = Value::from(0);
 
         unsafe {
-            let argv_pointer: *const Value = mem::transmute(argv);
+            let argv_pointer = argv as *const Value;
 
             class::rb_scan_args(argc, argv_pointer, str_to_cstring("*").as_ptr(), &arguments)
         };
