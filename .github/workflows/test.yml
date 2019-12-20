@@ -21,11 +21,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.x'
-
       - name: Set up Rust
         shell: bash
         run: |
@@ -48,6 +43,12 @@ jobs:
         with:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Set up Ruby
+        shel:: bash
+        run: |
+          which rbenv || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
+          test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
 
       - name: Set up just
         shell: bash
