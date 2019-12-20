@@ -51,7 +51,7 @@ jobs:
           key: ${{ runner.os }}-rbenv-versions
 
       - name: Set up Ruby
-        shel:: bash
+        shell: bash
         run: |
           which rbenv || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
           test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
