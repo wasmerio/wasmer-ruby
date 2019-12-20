@@ -13,7 +13,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
-      fail-fast: true
+      fail-fast: false
 
     runs-on: ${{ matrix.os }}
 
@@ -51,11 +51,12 @@ jobs:
           key: ${{ runner.os }}-rbenv-versions
 
       - name: Set up `rbenv` (with `rbenv-installer`)
-        if: matrix.os != 'macos-latest'
+        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
           export PATH="$HOME/.rbenv/bin:$PATH"
           export PATH="$HOME/.rbenv/shims:$PATH"
+          apt-get install -y libreadline-dev
           test -d $HOME/.rbenv/bin || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
 
       - name: Set up `rbenv` (with `brew`)
