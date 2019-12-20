@@ -44,6 +44,12 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Cache Ruby versions
+        uses: actions/cache@v1
+        with:
+          path: ~/.rbenv/versions/
+          key: ${{ runner.os }}-rbenv-versions
+
       - name: Set up Ruby
         shel:: bash
         run: |
