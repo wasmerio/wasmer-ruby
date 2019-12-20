@@ -21,6 +21,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.x'
+
       - name: Set up Rust
         shell: bash
         run: |
