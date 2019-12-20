@@ -54,6 +54,7 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.rbenv/bin:$PATH"
+          export PATH="$HOME/.rbenv/shims:$PATH"
           test -d $HOME/.rbenv/bin || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
           test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
 
