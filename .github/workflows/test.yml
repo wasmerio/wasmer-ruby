@@ -47,13 +47,14 @@ jobs:
       - name: Cache Ruby versions
         uses: actions/cache@v1
         with:
-          path: ~/.rbenv/versions/
+          path: ~/.rbenv/
           key: ${{ runner.os }}-rbenv-versions
 
       - name: Set up Ruby
         shell: bash
         run: |
-          which rbenv || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
+          export PATH="$HOME/.rbenv/bin:$PATH"
+          test -d $HOME/.rbenv/bin || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
           test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
 
       - name: Set up just
