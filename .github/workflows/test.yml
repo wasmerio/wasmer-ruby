@@ -85,6 +85,7 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          export GEM_HOME="$HOME/.gem"
           gem install rake
           just build
 
@@ -92,5 +93,6 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          export GEM_HOME="$HOME/.gem"
           gem install bundler
           just test
