@@ -85,6 +85,7 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
           export GEM_HOME="$HOME/.gem"
           gem install rake
           gem install bundler
@@ -94,5 +95,6 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
           export GEM_HOME="$HOME/.gem"
           just test
