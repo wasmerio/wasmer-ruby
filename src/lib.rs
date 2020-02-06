@@ -37,13 +37,13 @@ pub extern "C" fn Init_wasmer() {
             // Declare the `respond_to_missing?` method.
             itself.def(
                 "respond_to_missing?",
-                instance::ruby_exported_functions_method_exists,
+                instance::exports::ruby_exported_functions_method_exists,
             );
 
             // Declare the `method_missing` method.
             itself.def(
                 "method_missing",
-                instance::ruby_exported_functions_method_missing,
+                instance::exports::ruby_exported_functions_method_missing,
             );
         });
 

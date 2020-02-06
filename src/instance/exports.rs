@@ -1,20 +1,17 @@
-//! The `Instance` WebAssembly class.
+//! The `ExportedFunctions` WebAssembly class.
 
-use crate::{
-    error::unwrap_or_raise,
-    memory::{Memory, RubyMemory, MEMORY_WRAPPER},
-};
+use crate::error::unwrap_or_raise;
 use lazy_static::lazy_static;
 use rutie::{
     class, methods,
     rubysys::{class, value::ValueType},
     types::{Argc, Value},
     util::str_to_cstring,
-    wrappable_struct, AnyException, AnyObject, Array, Boolean, Exception, Fixnum, Float, Module,
-    NilClass, Object, RString, Symbol,
+    wrappable_struct, AnyException, AnyObject, Array, Boolean, Exception, Fixnum, Float, NilClass,
+    Object, Symbol,
 };
 use std::rc::Rc;
-use wasmer_runtime::{self as runtime, imports, Export};
+use wasmer_runtime::{self as runtime};
 use wasmer_runtime_core::types::Type;
 
 /// The `ExportedFunctions` Ruby class.
@@ -217,101 +214,3 @@ pub extern "C" fn ruby_exported_functions_method_missing(
             .method_missing(method_name, arguments)
     })
 }
-
-/// The `Instance` Ruby class.
-pub struct Instance {
-    /// The WebAssembly instance.
-    instance: Rc<runtime::Instance>,
-}
-
-impl Instance {
-    /// Create a new instance of the `Instance` Ruby class.
-    /// The constructor receives bytes from a string.
-    pub fn new(bytes: &[u8]) -> Result<Self, AnyException> {
-        let import_object = imports! {};
-
-        Ok(Self {
-            instance: Rc::new(runtime::instantiate(bytes, &import_object).map_err(|e| {
-                AnyException::new(
-                    "RuntimeError",
-                    Some(&format!("Failed to instantiate the module:\n    {}", e)),
-                )
-            })?),
-        })
-    }
-}
-
-wrappable_struct!(Instance, InstanceWrapper, INSTANCE_WRAPPER);
-
-class!(RubyInstance);
-
-#[rustfmt::skip]
-methods!(
-    RubyInstance,
-    _itself,
-
-    // Glue code to call the `Instance.new` method.
-    fn ruby_instance_new(bytes: RString) -> AnyObject {
-        unwrap_or_raise(|| {
-            let instance = Instance::new(
-                bytes
-                    .map_err(|_| {
-                        AnyException::new(
-                            "ArgumentError",
-                            Some("WebAssembly module must be represented by Ruby bytes only."),
-                        )
-                    })?
-                    .to_bytes_unchecked(),
-            )?;
-            let exported_functions = ExportedFunctions::new(instance.instance.clone());
-
-            let memory = instance
-                .instance
-                .exports()
-                .find_map(|(_, export)| match export {
-                    Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
-                    _ => None,
-                })
-                .ok_or_else(|| {
-                    AnyException::new(
-                        "RuntimeError",
-                        Some("The WebAssembly module has no exported memory."),
-                    )
-                })?;
-
-            let wasmer_module = Module::from_existing("Wasmer");
-
-            let mut ruby_instance: AnyObject = wasmer_module
-                .get_nested_class("Instance")
-                .wrap_data(instance, &*INSTANCE_WRAPPER);
-
-            let ruby_exported_functions: RubyExportedFunctions = wasmer_module
-                .get_nested_class("ExportedFunctions")
-                .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
-
-            ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
-
-            let ruby_memory: RubyMemory = wasmer_module
-                .get_nested_class("Memory")
-                .wrap_data(memory, &*MEMORY_WRAPPER);
-
-            ruby_instance.instance_variable_set("@memory", ruby_memory);
-
-            Ok(ruby_instance)
-        })
-    }
-
-    // Glue code to call the `Instance.exports` getter method.
-    fn ruby_instance_exported_functions() -> RubyExportedFunctions {
-        unsafe {
-            _itself
-                .instance_variable_get("@exports")
-                .to::<RubyExportedFunctions>()
-        }
-    }
-
-    // Glue code to call the `Instance.memory` getter method.
-    fn ruby_instance_memory() -> RubyMemory {
-        unsafe { _itself.instance_variable_get("@memory").to::<RubyMemory>() }
-    }
-);
