@@ -182,9 +182,9 @@ methods!(
     fn ruby_exported_functions_method_exists(symbol: Symbol, _include_private: Boolean) -> Boolean {
         unwrap_or_raise(|| {
             let symbol = symbol?;
-            let instance = itself.get_data(&*EXPORTED_FUNCTIONS_WRAPPER);
+            let exported_functions = itself.get_data(&*EXPORTED_FUNCTIONS_WRAPPER);
 
-            Ok(Boolean::new(instance.respond_to_missing(symbol.to_str())))
+            Ok(Boolean::new(exported_functions.respond_to_missing(symbol.to_str())))
         })
     }
 );
