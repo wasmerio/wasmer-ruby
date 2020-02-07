@@ -24,6 +24,9 @@ pub extern "C" fn Init_wasmer() {
             // Declare the `exports` getter method.
             itself.def("exports", instance::ruby_instance_exported_functions);
 
+            // Declare the `globals` getter method.
+            itself.def("globals", instance::ruby_instance_exported_globals);
+
             // Declare the `memory` getter method.
             itself.def("memory", instance::ruby_instance_memory);
         });
@@ -45,6 +48,41 @@ pub extern "C" fn Init_wasmer() {
                 "method_missing",
                 instance::exports::ruby_exported_functions_method_missing,
             );
+        });
+
+    let exported_globals_data_class = Class::from_existing("Object");
+
+    // Declare the `ExportedGlobals` Ruby class.
+    wasmer_module
+        .define_nested_class("ExportedGlobals", Some(&exported_globals_data_class))
+        .define(|itself| {
+            // Declare the `respond_to_missing?` method.
+            itself.def(
+                "respond_to_missing?",
+                instance::globals::ruby_exported_globals_method_exists,
+            );
+
+            // Declare the `method_missing` method.
+            itself.def(
+                "method_missing",
+                instance::globals::ruby_exported_globals_method_missing,
+            );
+        });
+
+    let exported_global_data_class = Class::from_existing("Object");
+
+    // Declare the `ExportedGlobal` Ruby class.
+    wasmer_module
+        .define_nested_class("ExportedGlobal", Some(&exported_global_data_class))
+        .define(|itself| {
+            // Declare the `value` getter.
+            itself.def("value", instance::globals::ruby_exported_global_get_value);
+
+            // Declare the `value` setter.
+            itself.def("value=", instance::globals::ruby_exported_global_set_value);
+
+            // Declare the `mutable` getter.
+            itself.def("mutable", instance::globals::ruby_exported_global_mutable);
         });
 
     let module_data_class = Class::from_existing("Object");

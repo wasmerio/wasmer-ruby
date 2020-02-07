@@ -1,10 +1,14 @@
 //! The `Instance` WebAssembly class.
 
 pub mod exports;
+pub mod globals;
 
 use crate::{
     error::unwrap_or_raise,
-    instance::exports::{ExportedFunctions, RubyExportedFunctions, EXPORTED_FUNCTIONS_WRAPPER},
+    instance::{
+        exports::{ExportedFunctions, RubyExportedFunctions, EXPORTED_FUNCTIONS_WRAPPER},
+        globals::{ExportedGlobals, RubyExportedGlobals, EXPORTED_GLOBALS_WRAPPER},
+    },
     memory::{Memory, RubyMemory, MEMORY_WRAPPER},
 };
 use lazy_static::lazy_static;
@@ -60,6 +64,7 @@ methods!(
                     .to_bytes_unchecked(),
             )?;
             let exported_functions = ExportedFunctions::new(instance.instance.clone());
+            let exported_globals = ExportedGlobals::new(instance.instance.clone());
             let exported_memory =
                 instance
                     .instance
@@ -79,7 +84,12 @@ methods!(
                 .get_nested_class("ExportedFunctions")
                 .wrap_data(exported_functions, &*EXPORTED_FUNCTIONS_WRAPPER);
 
+            let ruby_exported_globals: RubyExportedGlobals = wasmer_module
+                .get_nested_class("ExportedGlobals")
+                .wrap_data(exported_globals, &*EXPORTED_GLOBALS_WRAPPER);
+
             ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
+            ruby_instance.instance_variable_set("@globals", ruby_exported_globals);
 
             if let Some(exported_memory) = exported_memory {
                 let ruby_exported_memory: RubyMemory = wasmer_module
@@ -98,6 +108,15 @@ methods!(
             _itself
                 .instance_variable_get("@exports")
                 .to::<RubyExportedFunctions>()
+        }
+    }
+
+    // Glue code to call the `Instance.globals` getter method.
+    fn ruby_instance_exported_globals() -> RubyExportedGlobals {
+        unsafe {
+            _itself
+                .instance_variable_get("@globals")
+                .to::<RubyExportedGlobals>()
         }
     }
 
