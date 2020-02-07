@@ -13,7 +13,8 @@ use crate::{
 };
 use lazy_static::lazy_static;
 use rutie::{
-    class, methods, wrappable_struct, AnyException, AnyObject, Exception, Module, Object, RString,
+    class, methods, wrappable_struct, AnyException, AnyObject, Exception, Module, NilClass, Object,
+    RString,
 };
 use std::rc::Rc;
 use wasmer_runtime::{self as runtime, imports, Export};
@@ -96,6 +97,8 @@ methods!(
                     .get_nested_class("Memory")
                     .wrap_data(exported_memory, &*MEMORY_WRAPPER);
                 ruby_instance.instance_variable_set("@memory", ruby_exported_memory);
+            } else {
+                ruby_instance.instance_variable_set("@memory", NilClass::new());
             }
 
             Ok(ruby_instance)
