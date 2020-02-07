@@ -60,20 +60,14 @@ methods!(
                     .to_bytes_unchecked(),
             )?;
             let exported_functions = ExportedFunctions::new(instance.instance.clone());
-
-            let memory = instance
-                .instance
-                .exports()
-                .find_map(|(_, export)| match export {
-                    Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
-                    _ => None,
-                })
-                .ok_or_else(|| {
-                    AnyException::new(
-                        "RuntimeError",
-                        Some("The WebAssembly module has no exported memory."),
-                    )
-                })?;
+            let exported_memory =
+                instance
+                    .instance
+                    .exports()
+                    .find_map(|(_, export)| match export {
+                        Export::Memory(memory) => Some(Memory::new(Rc::new(memory))),
+                        _ => None,
+                    });
 
             let wasmer_module = Module::from_existing("Wasmer");
 
@@ -87,11 +81,12 @@ methods!(
 
             ruby_instance.instance_variable_set("@exports", ruby_exported_functions);
 
-            let ruby_memory: RubyMemory = wasmer_module
-                .get_nested_class("Memory")
-                .wrap_data(memory, &*MEMORY_WRAPPER);
-
-            ruby_instance.instance_variable_set("@memory", ruby_memory);
+            if let Some(exported_memory) = exported_memory {
+                let ruby_exported_memory: RubyMemory = wasmer_module
+                    .get_nested_class("Memory")
+                    .wrap_data(exported_memory, &*MEMORY_WRAPPER);
+                ruby_instance.instance_variable_set("@memory", ruby_exported_memory);
+            }
 
             Ok(ruby_instance)
         })
@@ -108,6 +103,17 @@ methods!(
 
     // Glue code to call the `Instance.memory` getter method.
     fn ruby_instance_memory() -> RubyMemory {
-        unsafe { _itself.instance_variable_get("@memory").to::<RubyMemory>() }
+        unwrap_or_raise(|| {
+            let memory = _itself.instance_variable_get("@memory");
+
+            if !memory.is_nil() {
+                Ok(unsafe { memory.to::<RubyMemory>() })
+            } else {
+                Err(AnyException::new(
+                    "RuntimeError",
+                    Some("The WebAssembly module has no exported memory."),
+                ))
+            }
+        })
     }
 );

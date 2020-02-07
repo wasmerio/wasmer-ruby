@@ -20,10 +20,10 @@ class InstanceTest < Minitest::Test
     assert_equal "WebAssembly module must be represented by Ruby bytes only.", error.message
   end
 
-  def test_module_must_have_an_exported_memory
+  def test_module_without_an_exported_memory
+    bytes = IO.read File.expand_path("no_memory.wasm", File.dirname(__FILE__)), mode: "rb"
     error = assert_raises(RuntimeError) {
-      bytes = IO.read File.expand_path("no_memory.wasm", File.dirname(__FILE__)), mode: "rb"
-      Wasmer::Instance.new bytes
+      Wasmer::Instance.new(bytes).memory
     }
     assert_equal "The WebAssembly module has no exported memory.", error.message
   end
