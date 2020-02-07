@@ -9,19 +9,19 @@ class GlobalTest < Minitest::Test
   def test_global_mutable
     globals = Wasmer::Instance.new(self.bytes).globals
 
-    assert globals.x.mutable == true
-    assert globals.y.mutable == true
-    assert globals.z.mutable == false
+    assert_equal globals.x.mutable, true
+    assert_equal globals.y.mutable, true
+    assert_equal globals.z.mutable, false
   end
 
   def test_global_read_write
     y = Wasmer::Instance.new(self.bytes).globals.y
 
-    assert y.value == 7
+    assert_equal y.value, 7
 
     y.value = 8
 
-    assert y.value == 8
+    assert_equal y.value, 8
   end
 
   def test_global_write_invalid_type
@@ -38,24 +38,24 @@ class GlobalTest < Minitest::Test
     exports = instance.exports
     x = instance.globals.x
 
-    assert x.value == 0
-    assert exports.get_x == 0
+    assert_equal x.value, 0
+    assert_equal exports.get_x, 0
 
     x.value = 1
 
-    assert x.value == 1
-    assert exports.get_x == 1
+    assert_equal x.value, 1
+    assert_equal exports.get_x, 1
 
     exports.increment_x
 
-    assert x.value == 2
-    assert exports.get_x == 2
+    assert_equal x.value, 2
+    assert_equal exports.get_x, 2
   end
 
   def test_global_read_write_constants
     z = Wasmer::Instance.new(self.bytes).globals.z
 
-    assert z.value == 42
+    assert_equal z.value, 42
 
     error = assert_raises(RuntimeError) {
       z.value = 153
