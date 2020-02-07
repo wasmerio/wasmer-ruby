@@ -11,8 +11,7 @@ use rutie::{
     Object, Symbol,
 };
 use std::rc::Rc;
-use wasmer_runtime::{self as runtime};
-use wasmer_runtime_core::types::Type;
+use wasmer_runtime::{self as runtime, types::Type};
 
 /// The `ExportedFunctions` Ruby class.
 pub struct ExportedFunctions {

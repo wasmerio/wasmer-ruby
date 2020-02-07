@@ -20,8 +20,7 @@ use crate::{
 use lazy_static::lazy_static;
 use rutie::{class, methods, wrappable_struct, AnyException, Exception, Integer, Module, Object};
 use std::rc::Rc;
-use wasmer_runtime as runtime;
-use wasmer_runtime_core::units::Pages;
+use wasmer_runtime::{self as runtime, units::Pages};
 
 pub struct Memory {
     memory: Rc<runtime::Memory>,
