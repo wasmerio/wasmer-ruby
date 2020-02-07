@@ -182,8 +182,19 @@ methods!(
     // Glue code to call the `ExportedGlobal.set_value` method.
     fn ruby_exported_global_set_value(value: AnyObject) -> NilClass {
         unwrap_or_raise(|| {
-            let value = value?;
             let exported_global = itself.get_data(&*EXPORTED_GLOBAL_WRAPPER);
+
+            if !exported_global.mutable() {
+                return Err(AnyException::new(
+                    "RuntimeError",
+                    Some(&format!(
+                        "The global variable `{}` is not mutable, cannot set a new value.",
+                        exported_global.global_name
+                    )),
+                ));
+            }
+
+            let value = value?;
 
             let wasm_type = exported_global.ty();
             let wasm_value = match wasm_type {
