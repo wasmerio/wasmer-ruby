@@ -11,6 +11,8 @@ jobs:
       matrix:
         # The job runs on 2 different OS.
         os: [ubuntu-latest] # , macos-latest, removed temporarily
+        # The job runs on 2 different Ruby versions.
+        ruby: [2.6.5, 2.7.0]
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
       fail-fast: true
@@ -68,12 +70,12 @@ jobs:
           export PATH="$HOME/.rbenv/shims:$PATH"
           test -d $HOME/.rbenv/bin || brew install rbenv
 
-      - name: Set up Ruby
+      - name: Set up Ruby version ${{ matrix.ruby }}
         shell: bash
         run: |
           export PATH="$HOME/.rbenv/bin:$PATH"
           export PATH="$HOME/.rbenv/shims:$PATH"
-          test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
+          test -d $HOME/.rbenv/versions/${{ matrix.ruby }}/ || rbenv install ${{ matrix.ruby }}
 
       - name: Set up just
         shell: bash
@@ -85,7 +87,7 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
+          export PATH="$HOME/.rbenv/versions/${{ matrix.ruby }}/bin:$PATH"
           export GEM_HOME="$HOME/.gem"
           gem install rake
           gem install bundler
@@ -95,6 +97,6 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
+          export PATH="$HOME/.rbenv/versions/${{ matrix.ruby }}/bin:$PATH"
           export GEM_HOME="$HOME/.gem"
           just test
