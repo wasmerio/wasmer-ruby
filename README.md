@@ -76,7 +76,8 @@ $ ruby simple.rb
 
 ## The `Instance` class
 
-Instantiates a WebAssembly module represented by bytes, and calls exported functions on it:
+Instantiates a WebAssembly module represented by bytes, and calls
+exported functions on it:
 
 ```ruby
 require "wasmer"
@@ -93,9 +94,13 @@ result = instance.exports.sum 1, 2
 puts result # 3
 ```
 
+### Exported functions
+
 All exported functions are accessible on the `exports`
 getter. Arguments of these functions are automatically casted to
 WebAssembly values.
+
+### Exported memory
 
 The `memory` getter exposes the `Memory` class representing the memory
 of that particular instance, e.g.:
@@ -104,7 +109,29 @@ of that particular instance, e.g.:
 view = instance.memory.uint8_view
 ```
 
+`Instance.memory` throws an exception if no memory is exported.
+
 See below for more information.
+
+### Exported globals
+
+The `globals` getter exposes the `ExportedGlobal` class represented an
+exported global variable, e.g.:
+
+```ruby
+# Get the `x` global.
+x = instance.globals.x
+
+# Check whether the global is mutable.
+assert x.mutable
+assert_equal x.value, 7
+
+# Update its value.
+x.value = 42
+
+# Tada!
+assert_equal x.value, 42
+```
 
 ## The `Memory` class
 
