@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Run WebAssembly binaries."
   spec.description   = "Wasmer is a Ruby extension to run WebAssembly binaries."
   spec.homepage      = "https://github.com/wasmerio/ruby-ext-wasm"
-  spec.license       = "BSD-3-Clause"
+  spec.license       = "MIT"
 
   spec.extensions    = %w(Rakefile)
 
