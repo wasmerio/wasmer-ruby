@@ -57,7 +57,7 @@ jobs:
           export PATH="$HOME/.rbenv/bin:$PATH"
           export PATH="$HOME/.rbenv/shims:$PATH"
           sudo apt-get install -y libreadline-dev
-          test -d $HOME/.rbenv/bin || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
+          sudo apt-get install rbenv ruby-build
           sudo apt-get install rubygems
 
       - name: Set up `rbenv` (with `brew`)
