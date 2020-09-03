@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Support exported global variables
-  ([#32](https://github.com/wasmerio/ruby-ext-wasm/pull/32) by
+  ([#32](https://github.com/wasmerio/wasmer-ruby/pull/32) by
   [@Hywan])
 
   ```ruby
@@ -32,34 +32,34 @@ All notable changes to this project will be documented in this file.
   ```
 
 * Support memory without an exported memory
-  ([#31](https://github.com/wasmerio/ruby-ext-wasm/pull/31) by
+  ([#31](https://github.com/wasmerio/wasmer-ruby/pull/31) by
   [@Hywan])
 
 ### Changed
 
 * Set `@memory` to `nil` if none is exported
-  ([#33](https://github.com/wasmerio/ruby-ext-wasm/pull/33) by
+  ([#33](https://github.com/wasmerio/wasmer-ruby/pull/33) by
   [@Hywan])
 * Migrate CI from CircleCI to Github Actions
-  ([#28](https://github.com/wasmerio/ruby-ext-wasm/pull/28) by
+  ([#28](https://github.com/wasmerio/wasmer-ruby/pull/28) by
   [@Hywan])
 * Format code
-  ([#26](https://github.com/wasmerio/ruby-ext-wasm/pull/26) by
+  ([#26](https://github.com/wasmerio/wasmer-ruby/pull/26) by
   [@Atul9])
 * Update Rutie to 0.7.0 (Rust) and 0.0.4 (Ruby)
-  ([#23](https://github.com/wasmerio/ruby-ext-wasm/pull/23) by
+  ([#23](https://github.com/wasmerio/wasmer-ruby/pull/23) by
   [@Hywan])
 * Update Wasmer from 0.6.0 to 0.14.0
-  ([#23](https://github.com/wasmerio/ruby-ext-wasm/pull/23),
-  [#24](https://github.com/wasmerio/ruby-ext-wasm/pull/24),
-  [#25](https://github.com/wasmerio/ruby-ext-wasm/pull/25),
-  [#35](https://github.com/wasmerio/ruby-ext-wasm/pull/35),
+  ([#23](https://github.com/wasmerio/wasmer-ruby/pull/23),
+  [#24](https://github.com/wasmerio/wasmer-ruby/pull/24),
+  [#25](https://github.com/wasmerio/wasmer-ruby/pull/25),
+  [#35](https://github.com/wasmerio/wasmer-ruby/pull/35),
   by [@Hywan])
 
 ### Security
 
 * Update `rake` and other dependencies
-  ([#36](https://github.com/wasmerio/ruby-ext-wasm/pull/36) by
+  ([#36](https://github.com/wasmerio/wasmer-ruby/pull/36) by
   [@Hywan])
 
 ## [0.3.0] - 2019-07-16
@@ -67,11 +67,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Add the `Memory.grow` method
-  ([#19](https://github.com/wasmerio/ruby-ext-wasm/pull/19) by
+  ([#19](https://github.com/wasmerio/wasmer-ruby/pull/19) by
   [@Hywan])
 * Typed arrays implement [the `Enumerable`
   mixin](https://docs.ruby-lang.org/en/2.6.0/Enumerable.html)
-  ([#15](https://github.com/wasmerio/ruby-ext-wasm/pull/15) by
+  ([#15](https://github.com/wasmerio/wasmer-ruby/pull/15) by
   [@irxground])
 
   ```ruby
@@ -86,7 +86,7 @@ All notable changes to this project will be documented in this file.
   ```
 * Implement `instance.exports.respond_to?` to test whether an exported
   function exists
-  ([#9](https://github.com/wasmerio/ruby-ext-wasm/pull/9) by
+  ([#9](https://github.com/wasmerio/wasmer-ruby/pull/9) by
   [@irxground])
 
    ```ruby
@@ -95,32 +95,32 @@ All notable changes to this project will be documented in this file.
    assert instance.exports.respond_to?(:foo)
    ```
 * Handle exported functions that return nothing, aka void functions
-  ([#8](https://github.com/wasmerio/ruby-ext-wasm/pull/8) by [@Hywan])
+  ([#8](https://github.com/wasmerio/wasmer-ruby/pull/8) by [@Hywan])
 * Add the `greet` eaxmple
-  ([#12](https://github.com/wasmerio/ruby-ext-wasm/pull/12) by
+  ([#12](https://github.com/wasmerio/wasmer-ruby/pull/12) by
   [@Hywan])
 * Set up Bors
-  ([#10](https://github.com/wasmerio/ruby-ext-wasm/pull/10) by
+  ([#10](https://github.com/wasmerio/wasmer-ruby/pull/10) by
   [@Hywan])
 
 ### Changed
 
 * Improve Ruby exception raising
-  ([#5](https://github.com/wasmerio/ruby-ext-wasm/pull/5) by
+  ([#5](https://github.com/wasmerio/wasmer-ruby/pull/5) by
   [@irxground])
 * Update Wasmer to 0.5.5
-  ([#20](https://github.com/wasmerio/ruby-ext-wasm/pull/20) by
+  ([#20](https://github.com/wasmerio/wasmer-ruby/pull/20) by
   [@Hywan])
 * Update Wasmer to 0.4.2
-  ([#11](https://github.com/wasmerio/ruby-ext-wasm/pull/11) by
+  ([#11](https://github.com/wasmerio/wasmer-ruby/pull/11) by
   [@Hywan])
 * Update Wasmer to 0.4.1
-  ([#7](https://github.com/wasmerio/ruby-ext-wasm/pull/7) by [@Hywan])
+  ([#7](https://github.com/wasmerio/wasmer-ruby/pull/7) by [@Hywan])
 * Update Rutie
-  ([#16](https://github.com/wasmerio/ruby-ext-wasm/pull/16) by
+  ([#16](https://github.com/wasmerio/wasmer-ruby/pull/16) by
   [@edvakf])
 * Move all symbols inside the `Wasmer` module
-  ([#4](https://github.com/wasmerio/ruby-ext-wasm/pull/4) by
+  ([#4](https://github.com/wasmerio/wasmer-ruby/pull/4) by
   [@irxground])
 
   ```ruby
@@ -129,18 +129,18 @@ All notable changes to this project will be documented in this file.
   ```
 
 * Improve documentation
-  ([#14](https://github.com/wasmerio/ruby-ext-wasm/pull/14) by
+  ([#14](https://github.com/wasmerio/wasmer-ruby/pull/14) by
   [@denniscollective])
 * Use `assert_nil` instead of `assert_equal_nil` in tests
-  ([#13](https://github.com/wasmerio/ruby-ext-wasm/pull/13) by
+  ([#13](https://github.com/wasmerio/wasmer-ruby/pull/13) by
   [@Hywan])
 
 ## [0.2.0] - 2019-05-01
 
-[Unreleased]: https://github.com/wasmerio/ruby-ext-wasm/compare/0.4.0...HEAD
-[0.4.0]: https://github.com/wasmerio/ruby-ext-wasm/compare/0.3.0...0.4.0
-[0.3.0]: https://github.com/wasmerio/ruby-ext-wasm/compare/0.2.0...0.3.0
-[0.2.0]: https://github.com/wasmerio/ruby-ext-wasm/compare/0.1.0...0.2.0
+[Unreleased]: https://github.com/wasmerio/wasmer-ruby/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.1.0...0.2.0
 [@Hywan]: https://github.com/Hywan
 [@irxground]: https://github.com/irxground
 [@edvakf]: https://github.com/edvakf
