@@ -1,26 +1,22 @@
-<p align="center">
-  <a href="https://wasmer.io" target="_blank" rel="noopener">
-    <img width="300" src="https://raw.githubusercontent.com/wasmerio/wasmer/master/assets/logo.png" alt="Wasmer logo">
-  </a>
-</p>
+# <img height="48" src="https://wasmer.io/static/icons/favicon-96x96.png" alt="Wasmer logo" valign="middle"> Wasmer Ruby [![Wasmer Ruby Gem version](https://img.shields.io/gem/v/wasmer.svg)](https://rubygems.org/gems/wasmer) [![Wasmer Ruby Gem Documentation](https://img.shields.io/badge/docs-read-green)](https://www.rubydoc.info/gems/wasmer/) [![Wasmer Ruby Gem downloads](https://img.shields.io/gem/dt/wasmer.svg)](https://rubygems.org/gems/wasmer) [![Wasmer Slack Channel](https://img.shields.io/static/v1?label=chat&message=on%20Slack&color=green)](https://slack.wasmer.io)
 
-<p align="center">
-  <a href="https://spectrum.chat/wasmer">
-    <img src="https://withspectrum.github.io/badge/badge.svg" alt="Join the Wasmer Community"></a>
-  <a href="https://rubygems.org/gems/wasmer">
-    <img src="https://img.shields.io/gem/v/wasmer.svg" alt="Gem"></a>
-  <a href="https://rubygems.org/gems/wasmer">
-    <img src="https://img.shields.io/gem/dt/wasmer.svg" alt="Number of gem downloads"></a>
-  <a href="https://github.com/wasmerio/wasmer/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/wasmerio/wasmer.svg" alt="License"></a>
-</p>
+A complete and mature WebAssembly runtime for Ruby based on [Wasmer].
 
-Wasmer is a Ruby library for executing WebAssembly binaries:
+Features:
 
- * **Easy to use**: The `wasmer` API mimics the standard WebAssembly API,
- * **Fast**: `wasmer` executes the WebAssembly modules as fast as possible,
- * **Safe**: All calls to WebAssembly will be fast, but more
-   importantly, completely safe and sandboxed.
+  * **Easy to use**: The `wasmer` API mimics the standard WebAssembly API,
+  * **Fast**: `wasmer` executes the WebAssembly modules as fast as
+    possible, close to **native speed**,
+  * **Safe**: All calls to WebAssembly will be fast, but more
+    importantly, completely safe and sandboxed.
+
+> Note: [Rust][rust] is required to install the Ruby library (Cargo
+—the build tool for Rust— is used to compile the extension). See [how
+to install Rust][install-rust].
+
+[Wasmer]: https://github.com/wasmerio/wasmer
+[rust]: https://www.rust-lang.org/
+[install-rust]: https://www.rust-lang.org/tools/install
 
 # Install
 
@@ -30,20 +26,14 @@ To install the `wasmer` Ruby gem, just run this command in your shell:
 $ gem install wasmer
 ```
 
-**Note**: [Rust][rust] is required to install the Ruby library (Cargo
-—the build tool for Rust— is used to compile the extension). See [how
-to install Rust][install-rust].
-
 [View the `wasmer` gem on RubyGems][wasmer-gem].
 
-[rust]: https://www.rust-lang.org/
-[install-rust]: https://www.rust-lang.org/tools/install
 [wasmer-gem]: https://rubygems.org/gems/wasmer
 
 # Example
 
 There is a toy program in `examples/simple.rs`, written in Rust (or
-any other language that compiles to Wasm):
+any other language that compiles to WebAssembly):
 
 ```rust
 #[no_mangle]
@@ -52,8 +42,10 @@ pub extern fn sum(x: i32, y: i32) -> i32 {
 }
 ```
 
-Once this program compiled to WebAssembly, we end up with a
-`examples/simple.wasm` binary file.
+After compilation to WebAssembly, the
+[`examples/simple.wasm`](https://github.com/wasmerio/wasmer-ruby/blob/master/examples/simple.wasm)
+binary file is generated. ([Download
+it](https://github.com/wasmerio/wasmer-ruby/raw/master/examples/simple.wasm)).
 
 Then, we can execute it in Ruby (!) with the `examples/simple.rb` file:
 
@@ -72,7 +64,9 @@ $ ruby simple.rb
 3
 ```
 
-# API documentation
+# Documentation
+
+Browse Wasmer Ruby Gem docs at https://www.rubydoc.info/gems/wasmer/.
 
 ## The `Instance` class
 
