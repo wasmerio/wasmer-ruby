@@ -11,6 +11,7 @@ jobs:
       matrix:
         # The job runs on 2 different OS.
         os: [ubuntu-latest] # , macos-latest, removed temporarily
+        ruby: [2.6, 2.7, 3.0]
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
       fail-fast: true
@@ -18,13 +19,25 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: set up ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Set up Rust
-        shell: bash
+      - name: install ruby dependencies
         run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          gem install bundler
+          bundle install
+
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
 
       - name: Cache Cargo registry
         uses: actions/cache@v1
@@ -44,57 +57,17 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Cache Ruby versions
-        uses: actions/cache@v1
-        with:
-          path: ~/.rbenv/
-          key: ${{ runner.os }}-rbenv-versions
-
-      - name: Set up `rbenv` (with `rbenv-installer`)
-        if: matrix.os == 'ubuntu-latest'
-        shell: bash
-        run: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          sudo apt-get install -y libreadline-dev
-          test -d $HOME/.rbenv/bin || curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
-          sudo apt-get install rubygems
-
-      - name: Set up `rbenv` (with `brew`)
-        if: matrix.os == 'macos-latest'
-        shell: bash
-        run: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          test -d $HOME/.rbenv/bin || brew install rbenv
-
-      - name: Set up Ruby
-        shell: bash
-        run: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          test -d $HOME/.rbenv/versions/2.6.5/ || rbenv install 2.6.5
-
       - name: Set up just
         shell: bash
         run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          test -f $HOME/.cargo/bin/just || cargo install just
+          which just || cargo install just
 
       - name: Compile the library
         shell: bash
         run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
-          export GEM_HOME="$HOME/.gem"
-          gem install rake
-          gem install bundler
           just build
 
       - name: Run all the tests
         shell: bash
         run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/2.6.5/bin:$PATH"
-          export GEM_HOME="$HOME/.gem"
           just test
