@@ -11,7 +11,7 @@ use rutie::{
     Object, Symbol,
 };
 use std::rc::Rc;
-use wasmer_runtime::{self as runtime, types::Type};
+use wasmer_runtime::{self as runtime, types::Type, DynFunc};
 
 /// The `ExportedFunctions` Ruby class.
 pub struct ExportedFunctions {
@@ -27,7 +27,7 @@ impl ExportedFunctions {
 
     /// Check that an exported function exists.
     pub fn respond_to_missing(&self, method_name: &str) -> bool {
-        self.instance.dyn_func(method_name).is_ok()
+        self.instance.exports.get::<DynFunc>(method_name).is_ok()
     }
 
     /// Call an exported function on the given WebAssembly instance.
@@ -36,7 +36,7 @@ impl ExportedFunctions {
         method_name: &str,
         arguments: Array,
     ) -> Result<AnyObject, AnyException> {
-        let function = self.instance.dyn_func(method_name).map_err(|_| {
+        let function = self.instance.exports.get::<DynFunc>(method_name).map_err(|_| {
             AnyException::new(
                 "RuntimeError",
                 Some(&format!("Function `{}` does not exist.", method_name)),
@@ -189,6 +189,7 @@ methods!(
     }
 );
 
+#[allow(improper_ctypes_definitions)]
 /// Glue code to call the `ExportedFunctions.method_missing` method.
 pub extern "C" fn ruby_exported_functions_method_missing(
     argc: Argc,

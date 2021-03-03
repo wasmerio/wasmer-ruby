@@ -15,6 +15,6 @@ name = "wasmer"
 crate-type = ["dylib"]
 
 [dependencies]
-wasmer-runtime = "0.14"
-rutie = "0.7"
+wasmer-runtime = "0.17"
+rutie = {version="0.8.2", features=["no-link"]}
 lazy_static = "1.4"
