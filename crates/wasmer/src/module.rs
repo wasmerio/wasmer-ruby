@@ -1,6 +1,6 @@
 use crate::{
     error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
-    rubyclass,
+    prelude::*,
     store::RubyStore,
 };
 use lazy_static::lazy_static;
@@ -21,43 +21,38 @@ impl Module {
     }
 }
 
+#[rubymethods]
+impl Module {
+    pub fn new(store: RubyStore, bytes: AnyObject) -> RubyResult<AnyObject> {
+        let module = match bytes.try_convert_to::<RString>() {
+            Ok(bytes) => wasmer::Module::new(store.unwrap().inner(), bytes.to_str_unchecked()),
+            _ => {
+                return Err(to_ruby_err::<TypeError, _>(
+                    "`Module` accepts Wasm bytes or a WAT string",
+                ))
+            }
+        };
+
+        Ok(Module::wrap(Module {
+            inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
+        }))
+    }
+
+    pub fn validate(store: RubyStore, bytes: AnyObject) -> RubyResult<Boolean> {
+        Ok(Boolean::new(match bytes.try_convert_to::<RString>() {
+            Ok(bytes) => wasmer::Module::validate(
+                store.unwrap().inner(),
+                bytes.to_str_unchecked().as_bytes(),
+            )
+            .is_ok(),
+            _ => false,
+        }))
+    }
+}
+
 methods!(
     RubyModule,
     _ruby_module,
-    fn ruby_validate(store: RubyStore, bytes: AnyObject) -> Boolean {
-        unwrap_or_raise(|| {
-            let store = store?;
-            let bytes = bytes?;
-
-            Ok(Boolean::new(match bytes.try_convert_to::<RString>() {
-                Ok(bytes) => wasmer::Module::validate(
-                    store.unwrap().inner(),
-                    bytes.to_str_unchecked().as_bytes(),
-                )
-                .is_ok(),
-                _ => false,
-            }))
-        })
-    },
-    fn ruby_new(store: RubyStore, bytes: AnyObject) -> AnyObject {
-        unwrap_or_raise(|| {
-            let store = store?;
-            let bytes = bytes?;
-
-            let module = match bytes.try_convert_to::<RString>() {
-                Ok(bytes) => wasmer::Module::new(store.unwrap().inner(), bytes.to_str_unchecked()),
-                _ => {
-                    return Err(to_ruby_err::<TypeError, _>(
-                        "`Module` accepts Wasm bytes or a WAT string",
-                    ))
-                }
-            };
-
-            Ok(Module::wrap(Module {
-                inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
-            }))
-        })
-    },
     fn ruby_get_name() -> AnyObject {
         _ruby_module.unwrap().inner().name().map_or_else(
             || NilClass::new().to_any_object(),

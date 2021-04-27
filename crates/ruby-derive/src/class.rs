@@ -5,7 +5,7 @@ use syn::{
     MetaNameValue, NestedMeta,
 };
 
-pub fn rubyclass(
+pub fn entry(
     attr: proc_macro::TokenStream,
     input: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
@@ -37,7 +37,7 @@ pub fn rubyclass(
     }
 
     let derived = match derive_input.data {
-        Data::Struct(ref struct_data) => derive_rubyclass_for_struct(
+        Data::Struct(ref struct_data) => derive_for_struct(
             &derive_input.ident,
             struct_data,
             &derive_input.generics,
@@ -54,7 +54,7 @@ pub fn rubyclass(
     (quote! { #input #derived }).into()
 }
 
-fn derive_rubyclass_for_struct(
+fn derive_for_struct(
     struct_name: &Ident,
     _data: &DataStruct,
     generics: &Generics,

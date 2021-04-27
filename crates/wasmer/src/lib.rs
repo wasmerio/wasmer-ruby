@@ -2,9 +2,9 @@
 
 mod error;
 mod module;
+mod prelude;
 mod store;
 
-pub use ruby_derive::rubyclass;
 use rutie::{Class, Module, Object};
 
 #[allow(non_snake_case)]
@@ -19,7 +19,7 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("Store", Some(&data_class))
             .define(|this| {
-                this.def_self("new", store::ruby_new);
+                this.def_self("new", store::ruby::new);
             });
     }
 
@@ -30,8 +30,8 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("Module", Some(&data_class))
             .define(|this| {
-                this.def_self("validate", module::ruby_validate);
-                this.def_self("new", module::ruby_new);
+                this.def_self("validate", module::ruby::validate);
+                this.def_self("new", module::ruby::new);
                 this.def("name", module::ruby_get_name);
                 this.def("name=", module::ruby_set_name);
             });

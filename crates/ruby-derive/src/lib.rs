@@ -1,9 +1,18 @@
-mod rubyclass;
+mod class;
+mod methods;
 
 #[proc_macro_attribute]
 pub fn rubyclass(
     attr: proc_macro::TokenStream,
     input: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    rubyclass::rubyclass(attr, input)
+    class::entry(attr, input)
+}
+
+#[proc_macro_attribute]
+pub fn rubymethods(
+    attr: proc_macro::TokenStream,
+    input: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
+    methods::entry(attr, input)
 }

@@ -1,6 +1,6 @@
-use crate::rubyclass;
+use crate::prelude::*;
 use lazy_static::lazy_static;
-use rutie::{methods, AnyObject};
+use rutie::AnyObject;
 
 #[rubyclass(module = "Wasmer")]
 pub struct Store {
@@ -13,12 +13,11 @@ impl Store {
     }
 }
 
-methods!(
-    RubyStore,
-    _ruby_store,
-    fn ruby_new() -> AnyObject {
-        Store::wrap(Store {
+#[rubymethods]
+impl Store {
+    pub fn new() -> RubyResult<AnyObject> {
+        Ok(Store::wrap(Store {
             inner: Default::default(),
-        })
+        }))
     }
-);
+}
