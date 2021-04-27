@@ -1,0 +1,19 @@
+[package]
+name = "ruby-derive"
+version = "1.0.0"
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
+edition = "2018"
+description = "Ruby extension to run WebAssembly binaries"
+readme = "README.md"
+repository = "https://github.com/wasmerio/wasmer-ruby"
+keywords = ["ruby", "extension", "webassembly"]
+categories = ["wasm"]
+publish = false
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0", features = ["full"] }
+quote = "1.0"
+paste = "1.0"

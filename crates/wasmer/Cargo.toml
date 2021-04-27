@@ -1,0 +1,21 @@
+[package]
+name = "wasmer"
+version = "1.0.0"
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
+edition = "2018"
+description = "Ruby extension to run WebAssembly binaries"
+readme = "README.md"
+repository = "https://github.com/wasmerio/wasmer-ruby"
+keywords = ["ruby", "extension", "webassembly"]
+categories = ["wasm"]
+publish = false
+
+[lib]
+name = "wasmer"
+crate-type = ["dylib"]
+
+[dependencies]
+wasmer = "1.0"
+rutie = "0.8"
+ruby-derive = { path = "../ruby-derive", version = "1.0" }
+lazy_static = "1.4"

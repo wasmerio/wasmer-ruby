@@ -1,7 +1,41 @@
-#![deny(warnings)]
+//#![deny(warnings)]
 
+mod error;
+mod module;
+mod store;
+
+pub use ruby_derive::RubyClass;
 use rutie::{Class, Module, Object};
 
+#[allow(non_snake_case)]
+#[no_mangle]
+pub extern "C" fn Init_wasmer() {
+    let mut wasmer_module = Module::from_existing("Wasmer");
+
+    // Declare the `Store` Ruby class.
+    {
+        let data_class = Class::from_existing("Object");
+
+        wasmer_module
+            .define_nested_class("Store", Some(&data_class))
+            .define(|this| {
+                this.def_self("new", store::ruby_new);
+            });
+    }
+
+    // Declare the `Module` Ruby class.
+    {
+        let data_class = Class::from_existing("Object");
+
+        wasmer_module
+            .define_nested_class("Module", Some(&data_class))
+            .define(|this| {
+                this.def_self("new", module::ruby_new);
+            });
+    }
+}
+
+/*
 pub mod error;
 pub mod instance;
 pub mod memory;
@@ -160,3 +194,4 @@ pub extern "C" fn Init_wasmer() {
     memory_view!(Uint32Array in uint32array);
     memory_view!(Int32Array in int32array);
 }
+*/
