@@ -4,7 +4,7 @@ use crate::{
     store::RubyStore,
 };
 use lazy_static::lazy_static;
-use rutie::{methods, AnyObject, Boolean, NilClass, Object, RString};
+use rutie::{AnyObject, Boolean, NilClass, Object, RString};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Module {
@@ -62,5 +62,3 @@ impl Module {
         Ok(NilClass::new())
     }
 }
-
-methods!(RubyModule, _ruby_module,);
