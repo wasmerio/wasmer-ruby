@@ -4,7 +4,7 @@ mod error;
 mod module;
 mod store;
 
-pub use ruby_derive::RubyClass;
+pub use ruby_derive::rubyclass;
 use rutie::{Class, Module, Object};
 
 #[allow(non_snake_case)]

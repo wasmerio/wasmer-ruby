@@ -606,6 +606,7 @@ name = "ruby-derive"
 version = "1.0.0"
 dependencies = [
  "paste",
+ "proc-macro2",
  "quote",
  "syn",
 ]

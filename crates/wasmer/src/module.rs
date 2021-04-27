@@ -1,12 +1,12 @@
 use crate::{
     error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
+    rubyclass,
     store::{RubyStore, STORE_WRAPPER},
-    RubyClass,
 };
 use lazy_static::lazy_static;
 use rutie::{methods, AnyObject, Object, RString};
 
-#[derive(RubyClass)]
+#[rubyclass(module = "Wasmer")]
 pub struct Module {
     inner: wasmer::Module,
 }

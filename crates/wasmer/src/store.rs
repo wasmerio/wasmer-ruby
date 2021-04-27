@@ -1,8 +1,8 @@
-use crate::RubyClass;
+use crate::rubyclass;
 use lazy_static::lazy_static;
 use rutie::{methods, AnyObject};
 
-#[derive(RubyClass)]
+#[rubyclass(module = "Wasmer")]
 pub struct Store {
     inner: wasmer::Store,
 }
