@@ -2,7 +2,8 @@
 
 use rutie::{AnyException, Exception, VM};
 
-pub fn unwrap_or_raise<Output, Function>(f: Function) -> Output
+#[allow(unused)]
+pub(crate) fn unwrap_or_raise<Output, Function>(f: Function) -> Output
 where
     Function: FnOnce() -> Result<Output, AnyException>,
 {

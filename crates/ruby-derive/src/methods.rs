@@ -1,4 +1,5 @@
-use quote::quote;
+use proc_macro2::{Group, Ident, TokenStream, TokenTree};
+use quote::{quote, ToTokens};
 use syn::{punctuated::Punctuated, token::Colon2, *};
 
 pub fn entry(
@@ -56,6 +57,9 @@ pub fn entry(
                 let ruby_method_block = &method.block;
                 let ruby_method_visibility = &method.vis;
 
+                let mut need_self = false;
+                let mut need_mut_self = false;
+
                 let ruby_arguments_parsing = {
                     let (ruby_input_names, ruby_input_types): (
                         Vec<Ident>,
@@ -64,11 +68,13 @@ pub fn entry(
                         .sig
                         .inputs
                         .iter()
-                        .map(|input| match input {
-                            FnArg::Receiver(_) => panic!(
-                                "Receive input is not yet supported (method `{}`)",
-                                method_name
-                            ),
+                        .filter_map(|input| match input {
+                            FnArg::Receiver(Receiver { mutability, .. }) => {
+                                need_self = true;
+                                need_mut_self = mutability.is_some();
+
+                                None
+                            }
                             FnArg::Typed(PatType { pat, ty, .. }) => match (&**pat, &**ty) {
                                 (
                                     Pat::Ident(ident),
@@ -76,7 +82,7 @@ pub fn entry(
                                         qself: None,
                                         path: Path { segments: ty, .. },
                                     }),
-                                ) => (ident.ident.clone(), ty.clone()),
+                                ) => Some((ident.ident.clone(), ty.clone())),
                                 _ => panic!(
                                     "Typed input has an unsupported form (method `{}`)",
                                     method_name
@@ -125,6 +131,12 @@ pub fn entry(
                     }
                 };
 
+                let ruby_input_receiver = if need_mut_self {
+                    quote! { mut _slf: #ruby_ty_name }
+                } else {
+                    quote! { _slf: #ruby_ty_name }
+                };
+
                 let ruby_output = match method.sig.output {
                     ReturnType::Type(_, ty) => match *ty {
                         Type::Path(TypePath {
@@ -150,16 +162,28 @@ pub fn entry(
                     _ => panic!("Method must have an output of the form `RubyResult<T>`"),
                 };
 
+                let ruby_method_block = if need_self {
+                    rename_self(ruby_method_block.into_token_stream())
+                } else {
+                    ruby_method_block.into_token_stream()
+                };
+
+                let ruby_block_visibility = if need_mut_self {
+                    quote! { mut }
+                } else {
+                    quote! {}
+                };
+
                 ruby_items.push(quote! {
                     #[allow(improper_ctypes_definitions)] // Not ideal but that's how Rutie works.
                     #ruby_method_visibility extern "C" fn #ruby_method_name(
                         argc: rutie::types::Argc,
                         argv: *const rutie::AnyObject,
-                        mut itself: #ruby_ty_name
+                        #ruby_input_receiver,
                     ) -> #ruby_output {
                         #ruby_arguments_parsing
 
-                        let block = || -> Result<_, rutie::AnyException> {
+                        let #ruby_block_visibility block = || -> Result<_, rutie::AnyException> {
                             #ruby_method_block
                         };
 
@@ -186,4 +210,30 @@ pub fn entry(
         }
     })
     .into()
+}
+
+fn rename_self(stream: TokenStream) -> TokenStream {
+    let mut output_stream = TokenStream::new();
+
+    output_stream.extend(
+        stream
+            .into_iter()
+            .map(|token| match token {
+                TokenTree::Group(group) => {
+                    TokenTree::Group(Group::new(group.delimiter(), rename_self(group.stream())))
+                }
+                TokenTree::Ident(ident) => {
+                    if ident.to_string() == "self" {
+                        TokenTree::Ident(Ident::new("_slf", ident.span()))
+                    } else {
+                        TokenTree::Ident(ident)
+                    }
+                }
+                TokenTree::Punct(punct) => TokenTree::Punct(punct),
+                TokenTree::Literal(literal) => TokenTree::Literal(literal),
+            })
+            .collect::<Vec<TokenTree>>(),
+    );
+
+    output_stream
 }

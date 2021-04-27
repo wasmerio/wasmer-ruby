@@ -1,5 +1,5 @@
 use crate::{
-    error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
+    error::{to_ruby_err, RuntimeError, TypeError},
     prelude::*,
     store::RubyStore,
 };
@@ -48,27 +48,19 @@ impl Module {
             _ => false,
         }))
     }
-}
 
-methods!(
-    RubyModule,
-    _ruby_module,
-    fn ruby_get_name() -> AnyObject {
-        _ruby_module.unwrap().inner().name().map_or_else(
+    pub fn get_name(&self) -> RubyResult<AnyObject> {
+        Ok(self.unwrap().inner().name().map_or_else(
             || NilClass::new().to_any_object(),
             |name| RString::new_utf8(name).to_any_object(),
-        )
-    },
-    fn ruby_set_name(name: RString) -> NilClass {
-        unwrap_or_raise(|| {
-            let name = name?;
-
-            _ruby_module
-                .unwrap_mut()
-                .inner_mut()
-                .set_name(name.to_str());
-
-            Ok(NilClass::new())
-        })
+        ))
     }
-);
+
+    pub fn set_name(&mut self, name: RString) -> RubyResult<NilClass> {
+        self.unwrap_mut().inner_mut().set_name(name.to_str());
+
+        Ok(NilClass::new())
+    }
+}
+
+methods!(RubyModule, _ruby_module,);
