@@ -1,10 +1,10 @@
 use crate::{
     error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
     rubyclass,
-    store::{RubyStore, STORE_WRAPPER},
+    store::RubyStore,
 };
 use lazy_static::lazy_static;
-use rutie::{methods, AnyObject, Object, RString};
+use rutie::{methods, AnyObject, Boolean, Object, RString};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Module {
@@ -14,15 +14,28 @@ pub struct Module {
 methods!(
     RubyModule,
     _ruby_module,
+    fn ruby_validate(store: RubyStore, bytes: AnyObject) -> Boolean {
+        unwrap_or_raise(|| {
+            let store = store?;
+            let bytes = bytes?;
+
+            Ok(Boolean::new(match bytes.try_convert_to::<RString>() {
+                Ok(bytes) => wasmer::Module::validate(
+                    store.unwrap().inner(),
+                    bytes.to_str_unchecked().as_bytes(),
+                )
+                .is_ok(),
+                _ => false,
+            }))
+        })
+    },
     fn ruby_new(store: RubyStore, bytes: AnyObject) -> AnyObject {
         unwrap_or_raise(|| {
             let store = store?;
             let bytes = bytes?;
 
-            let store = store.get_data(&*STORE_WRAPPER).inner();
-
             let module = match bytes.try_convert_to::<RString>() {
-                Ok(bytes) => wasmer::Module::new(store, bytes.to_str_unchecked()),
+                Ok(bytes) => wasmer::Module::new(store.unwrap().inner(), bytes.to_str_unchecked()),
                 _ => {
                     return Err(to_ruby_err::<TypeError, _>(
                         "`Module` accepts Wasm bytes or a WAT string",
