@@ -3,11 +3,10 @@ name = "rutie-derive"
 version = "0.1.0"
 authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
 edition = "2018"
-description = "Ruby extension to run WebAssembly binaries"
+description = "Procedural macros on top of `rutie` to write Ruby extensions faster and safer"
 readme = "README.md"
 repository = "https://github.com/wasmerio/wasmer-ruby"
-keywords = ["ruby", "extension", "webassembly"]
-categories = ["wasm"]
+keywords = ["ruby", "extension"]
 publish = false
 
 [lib]
