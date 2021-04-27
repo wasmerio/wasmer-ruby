@@ -15,7 +15,7 @@ impl Store {
 
 methods!(
     RubyStore,
-    _itself,
+    _ruby_store,
     fn ruby_new() -> AnyObject {
         Store::wrap(Store {
             inner: Default::default(),

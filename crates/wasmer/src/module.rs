@@ -1,10 +1,10 @@
 use crate::{
-    error::{to_ruby_err, unwrap_or_raise, RuntimeError},
+    error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
     store::{RubyStore, STORE_WRAPPER},
     RubyClass,
 };
 use lazy_static::lazy_static;
-use rutie::{methods, AnyObject, Object};
+use rutie::{methods, AnyObject, Object, RString};
 
 #[derive(RubyClass)]
 pub struct Module {
@@ -13,17 +13,25 @@ pub struct Module {
 
 methods!(
     RubyModule,
-    _itself,
-    fn ruby_new(store: RubyStore) -> AnyObject {
+    _ruby_module,
+    fn ruby_new(store: RubyStore, bytes: AnyObject) -> AnyObject {
         unwrap_or_raise(|| {
             let store = store?;
+            let bytes = bytes?;
+
             let store = store.get_data(&*STORE_WRAPPER).inner();
 
-            dbg!(&store);
+            let module = match bytes.try_convert_to::<RString>() {
+                Ok(bytes) => wasmer::Module::new(store, bytes.to_str_unchecked()),
+                _ => {
+                    return Err(to_ruby_err::<TypeError, _>(
+                        "`Module` accepts Wasm bytes or a WAT string",
+                    ))
+                }
+            };
 
             Ok(Module::wrap(Module {
-                inner: wasmer::Module::new(store, "(module)")
-                    .map_err(|e| to_ruby_err::<RuntimeError, _>(e))?,
+                inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
             }))
         })
     }
