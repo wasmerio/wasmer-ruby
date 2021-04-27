@@ -1,1 +1,1 @@
-pub use ruby_derive::{rubyclass, rubymethods};
+pub use rutie_derive::{rubyclass, rubymethods};

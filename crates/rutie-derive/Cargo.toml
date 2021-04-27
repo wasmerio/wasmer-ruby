@@ -1,6 +1,6 @@
 [package]
-name = "ruby-derive"
-version = "1.0.0"
+name = "rutie-derive"
+version = "0.1.0"
 authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
 edition = "2018"
 description = "Ruby extension to run WebAssembly binaries"

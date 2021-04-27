@@ -602,16 +602,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ruby-derive"
-version = "1.0.0"
-dependencies = [
- "paste",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -631,6 +621,16 @@ checksum = "678217ed742ca819057a79c0146703d1278afbb38896eb0283c410a6cab7c28c"
 dependencies = [
  "lazy_static",
  "libc",
+]
+
+[[package]]
+name = "rutie-derive"
+version = "0.1.0"
+dependencies = [
+ "paste",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -792,8 +792,8 @@ name = "wasmer"
 version = "1.0.0"
 dependencies = [
  "lazy_static",
- "ruby-derive",
  "rutie",
+ "rutie-derive",
  "wasmer 1.0.2",
 ]
 
