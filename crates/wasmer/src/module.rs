@@ -4,11 +4,21 @@ use crate::{
     store::RubyStore,
 };
 use lazy_static::lazy_static;
-use rutie::{methods, AnyObject, Boolean, Object, RString};
+use rutie::{methods, AnyObject, Boolean, NilClass, Object, RString};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Module {
     inner: wasmer::Module,
+}
+
+impl Module {
+    pub(crate) fn inner(&self) -> &wasmer::Module {
+        &self.inner
+    }
+
+    fn inner_mut(&mut self) -> &mut wasmer::Module {
+        &mut self.inner
+    }
 }
 
 methods!(
@@ -46,6 +56,24 @@ methods!(
             Ok(Module::wrap(Module {
                 inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
             }))
+        })
+    },
+    fn ruby_get_name() -> AnyObject {
+        _ruby_module.unwrap().inner().name().map_or_else(
+            || NilClass::new().to_any_object(),
+            |name| RString::new_utf8(name).to_any_object(),
+        )
+    },
+    fn ruby_set_name(name: RString) -> NilClass {
+        unwrap_or_raise(|| {
+            let name = name?;
+
+            _ruby_module
+                .unwrap_mut()
+                .inner_mut()
+                .set_name(name.to_str());
+
+            Ok(NilClass::new())
         })
     }
 );

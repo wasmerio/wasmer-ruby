@@ -24,4 +24,26 @@ class ModuleTest < Minitest::Test
   def test_compile_wat
     assert Wasmer::Module.new Wasmer::Store.new, "(module)"
   end
+
+  def test_failed_to_compile
+    assert_raises(RuntimeError) {
+      Wasmer::Module.new Wasmer::Store.new, self.invalid_bytes
+    }
+  end
+
+  def test_name_some
+    assert_equal Wasmer::Module.new(Wasmer::Store.new, "(module $moduleName)").name, "moduleName"
+  end
+
+  def test_name_none
+    assert Wasmer::Module.new(Wasmer::Store.new, "(module)").name.nil?
+  end
+
+  def test_name_set
+    module_ = Wasmer::Module.new Wasmer::Store.new, "(module)"
+    assert module_.name.nil?
+
+    module_.name = "hello"
+    assert_equal module_.name, "hello"
+  end
 end

@@ -94,6 +94,12 @@ fn derive_rubyclass_for_struct(
 
                 self.get_data(&*#wrapper_const_name)
             }
+
+            pub(crate) fn unwrap_mut(&mut self) -> &mut #struct_name {
+                use rutie::Object;
+
+                self.get_data_mut(&*#wrapper_const_name)
+            }
         }
 
         impl #impl_generics rutie::VerifiedObject for #ruby_struct_name #ty_generics
