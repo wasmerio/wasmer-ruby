@@ -79,7 +79,8 @@ fn derive_for_struct(
         // Implement the `RubyXXX` class.
         rutie::class!(#ruby_struct_name);
 
-        // Implement `rutie::VerifiedObject`.
+        // Implement `rutie::VerifiedObject` so that we can cast from
+        // `RubyXXX` to `XXX` with `rutie::Object::try_convert_to`.
         impl #impl_generics rutie::VerifiedObject for #ruby_struct_name #ty_generics
         #where_clause
         {
@@ -94,16 +95,19 @@ fn derive_for_struct(
             }
         }
 
+        // Implement custom `rutie_derive::ClassInfo` for `XXX`.
         impl rutie_derive::ClassInfo for #struct_name {
             type Class = #struct_name;
             type RubyClass = #ruby_struct_name;
         }
 
+        // Implement custom `rutie_derive::ClassInfo` for `RubyXXX`.
         impl rutie_derive::ClassInfo for #ruby_struct_name {
             type Class = #struct_name;
             type RubyClass = #ruby_struct_name;
         }
 
+        // Allow to unwrap from `RubyXXX` to `XXX`.
         impl #impl_generics rutie_derive::UpcastRubyClass<#struct_name #ty_generics> for #ruby_struct_name
         #where_clause
         {
@@ -116,7 +120,7 @@ fn derive_for_struct(
             }
         }
 
-        // Custom logic to support `wrap` and `uwnrap`.
+        // Temporary helper to instantiate a `RubyXXX` with a `XXX`.
         impl #impl_generics #struct_name #ty_generics
         #where_clause
         {
