@@ -56,4 +56,17 @@ pub extern "C" fn Init_wasmer() {
                 this.const_set("FUNC_REF", &Integer::new(7));
             });
     }
+
+    // Declare the `FunctionType` class.
+    {
+        let data_class = Class::from_existing("Object");
+
+        wasmer_module
+            .define_nested_class("FunctionType", Some(&data_class))
+            .define(|this| {
+                this.def_self("new", r#type::ruby_functiontype::new);
+                this.def("params", r#type::ruby_functiontype::params);
+                this.def("results", r#type::ruby_functiontype::results);
+            });
+    }
 }

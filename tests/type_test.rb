@@ -1,6 +1,7 @@
 require "prelude"
 
 Type = Wasmer::Type
+FunctionType = Wasmer::FunctionType
 
 class TypeTest < Minitest::Test
   def test_type
@@ -11,5 +12,13 @@ class TypeTest < Minitest::Test
     assert_equal Type::V128, 5
     assert_equal Type::EXTERN_REF, 6
     assert_equal Type::FUNC_REF, 7
+  end
+end
+
+class FunctionTypeTest < Minitest::Test
+  def test_functiontype
+    function_type = FunctionType.new [Type::I32, Type::I64], [Type::I32]
+    assert_equal function_type.params, [Type::I32, Type::I64]
+    assert_equal function_type.results, [Type::I32]
   end
 end
