@@ -1,1 +1,1 @@
-pub use rutie_derive::{rubyclass, rubymethods};
+pub use rutie_derive::{rubyclass, rubymethods, ClassInfo, UpcastRubyClass};

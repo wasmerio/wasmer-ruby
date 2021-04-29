@@ -1,7 +1,7 @@
 use crate::{
     error::{to_ruby_err, RuntimeError, TypeError},
     prelude::*,
-    store::RubyStore,
+    store::Store,
 };
 use lazy_static::lazy_static;
 use rutie::{AnyObject, Boolean, NilClass, Object, RString};
@@ -23,9 +23,9 @@ impl Module {
 
 #[rubymethods]
 impl Module {
-    pub fn new(store: RubyStore, bytes: AnyObject) -> RubyResult<AnyObject> {
+    pub fn new(store: &Store, bytes: &AnyObject) -> RubyResult<AnyObject> {
         let module = match bytes.try_convert_to::<RString>() {
-            Ok(bytes) => wasmer::Module::new(store.unwrap().inner(), bytes.to_str_unchecked()),
+            Ok(bytes) => wasmer::Module::new(store.inner(), bytes.to_str_unchecked()),
             _ => {
                 return Err(to_ruby_err::<TypeError, _>(
                     "`Module` accepts Wasm bytes or a WAT string",
@@ -38,13 +38,11 @@ impl Module {
         }))
     }
 
-    pub fn validate(store: RubyStore, bytes: AnyObject) -> RubyResult<Boolean> {
+    pub fn validate(store: &Store, bytes: &AnyObject) -> RubyResult<Boolean> {
         Ok(Boolean::new(match bytes.try_convert_to::<RString>() {
-            Ok(bytes) => wasmer::Module::validate(
-                store.unwrap().inner(),
-                bytes.to_str_unchecked().as_bytes(),
-            )
-            .is_ok(),
+            Ok(bytes) => {
+                wasmer::Module::validate(store.inner(), bytes.to_str_unchecked().as_bytes()).is_ok()
+            }
             _ => false,
         }))
     }
@@ -56,7 +54,7 @@ impl Module {
         ))
     }
 
-    pub fn set_name(&mut self, name: RString) -> RubyResult<NilClass> {
+    pub fn set_name(&mut self, name: &RString) -> RubyResult<NilClass> {
         self.unwrap_mut().inner_mut().set_name(name.to_str());
 
         Ok(NilClass::new())

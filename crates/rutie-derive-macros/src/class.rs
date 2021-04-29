@@ -73,10 +73,50 @@ fn derive_for_struct(
     quote! {
         use rutie::{wrappable_struct, typed_data::DataTypeWrapper};
 
+        // Create the `XXXWrapper` wrapper class.
         wrappable_struct!(#struct_name, #wrapper_struct_name, #wrapper_const_name);
 
+        // Implement the `RubyXXX` class.
         rutie::class!(#ruby_struct_name);
 
+        // Implement `rutie::VerifiedObject`.
+        impl #impl_generics rutie::VerifiedObject for #ruby_struct_name #ty_generics
+        #where_clause
+        {
+            fn is_correct_type<T>(object: &T) -> bool
+            where T: rutie::Object
+            {
+                object.class() == rutie::Module::from_existing(#ruby_module).get_nested_class(stringify!(#struct_name))
+            }
+
+            fn error_message() -> &'static str {
+                concat!("Error converting to `", stringify!(#struct_name), "`")
+            }
+        }
+
+        impl rutie_derive::ClassInfo for #struct_name {
+            type Class = #struct_name;
+            type RubyClass = #ruby_struct_name;
+        }
+
+        impl rutie_derive::ClassInfo for #ruby_struct_name {
+            type Class = #struct_name;
+            type RubyClass = #ruby_struct_name;
+        }
+
+        impl #impl_generics rutie_derive::UpcastRubyClass<#struct_name #ty_generics> for #ruby_struct_name
+        #where_clause
+        {
+            fn upcast(&self) -> &#struct_name {
+                rutie::Object::get_data(self, &*#wrapper_const_name)
+            }
+
+            fn upcast_mut(&mut self) -> &mut #struct_name {
+                rutie::Object::get_data_mut(self, &*#wrapper_const_name)
+            }
+        }
+
+        // Custom logic to support `wrap` and `uwnrap`.
         impl #impl_generics #struct_name #ty_generics
         #where_clause
         {
@@ -94,20 +134,6 @@ fn derive_for_struct(
 
             pub(crate) fn unwrap_mut(&mut self) -> &mut #struct_name {
                 rutie::Object::get_data_mut(self, &*#wrapper_const_name)
-            }
-        }
-
-        impl #impl_generics rutie::VerifiedObject for #ruby_struct_name #ty_generics
-        #where_clause
-        {
-            fn is_correct_type<T>(object: &T) -> bool
-            where T: rutie::Object
-            {
-                object.class() == rutie::Module::from_existing(#ruby_module).get_nested_class(stringify!(#struct_name))
-            }
-
-            fn error_message() -> &'static str {
-                concat!("Error converting to `", stringify!(#struct_name), "`")
             }
         }
     }

@@ -1,5 +1,6 @@
 [workspace]
 members = [
-    "crates/wasmer",
     "crates/rutie-derive",
+    "crates/rutie-derive-macros",
+    "crates/wasmer",
 ]

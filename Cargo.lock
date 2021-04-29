@@ -627,6 +627,14 @@ dependencies = [
 name = "rutie-derive"
 version = "0.1.0"
 dependencies = [
+ "rutie",
+ "rutie-derive-macros",
+]
+
+[[package]]
+name = "rutie-derive-macros"
+version = "0.1.0"
+dependencies = [
  "paste",
  "proc-macro2",
  "quote",

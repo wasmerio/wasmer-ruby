@@ -78,13 +78,19 @@ pub fn entry(
                             FnArg::Typed(PatType { pat, ty, .. }) => match (&**pat, &**ty) {
                                 (
                                     Pat::Ident(ident),
+                                    Type::Reference(TypeReference { elem, .. }),
+                                ) => match &**elem {
                                     Type::Path(TypePath {
                                         qself: None,
                                         path: Path { segments: ty, .. },
-                                    }),
-                                ) => Some((ident.ident.clone(), ty.clone())),
+                                    }) => Some((ident.ident.clone(), ty.clone())),
+                                    _ => panic!(
+                                        "Typed input has an unsupported form (method `{}`)",
+                                        method_name
+                                    ),
+                                },
                                 _ => panic!(
-                                    "Typed input has an unsupported form (method `{}`)",
+                                    "Typed input has an unsupported form (method `{}`), it must be a reference type",
                                     method_name
                                 ),
                             },
@@ -113,7 +119,7 @@ pub fn entry(
                                                     })
                                                     .and_then(|argument| {
                                                         <rutie::AnyObject as rutie::Object>
-                                                            ::try_convert_to::< #ruby_input_types >(argument)
+                                                            ::try_convert_to::<< #ruby_input_types as rutie_derive::ClassInfo>::RubyClass>(argument)
                                                     })
                                                     .unwrap_or_else(|error| {
                                                         rutie::VM::raise_ex(error);
@@ -127,6 +133,17 @@ pub fn entry(
                                         ),*
                                     )
                                 };
+
+                            let ( #( #ruby_input_names ),* ) =
+                                (
+                                    #(
+                                        rutie_derive::UpcastRubyClass::<
+                                            <
+                                                < #ruby_input_types as rutie_derive::ClassInfo>::RubyClass as rutie_derive::ClassInfo
+                                            >::Class
+                                        >::upcast(&#ruby_input_names)
+                                    ),*
+                                );
                         }
                     }
                 };
