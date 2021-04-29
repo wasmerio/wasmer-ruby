@@ -2,7 +2,7 @@ use crate::{
     error::{to_ruby_err, TypeError},
     prelude::*,
 };
-use rutie::{AnyException, AnyObject, Array, Integer, Object};
+use rutie::{AnyException, AnyObject, Array, Boolean, Integer, NilClass, Object};
 use std::convert::TryFrom;
 
 #[derive(Debug, Copy, Clone)]
@@ -119,5 +119,42 @@ impl FunctionType {
             .iter()
             .map(|ty| Type::to_integer(ty).to_any_object())
             .collect())
+    }
+}
+
+#[rubyclass(module = "Wasmer")]
+pub struct MemoryType {
+    pub minimum: u32,
+    pub maximum: Option<u32>,
+    pub shared: bool,
+}
+
+#[rubymethods]
+impl MemoryType {
+    pub fn new(minimum: &Integer, maximum: &AnyObject, shared: &Boolean) -> RubyResult<AnyObject> {
+        Ok(MemoryType::ruby_new(MemoryType {
+            minimum: minimum.to_u64() as _,
+            maximum: if maximum.is_nil() {
+                None
+            } else {
+                Some(maximum.try_convert_to::<Integer>()?.to_u64() as _)
+            },
+            shared: shared.to_bool(),
+        }))
+    }
+
+    pub fn minimum(&self) -> RubyResult<Integer> {
+        Ok(Integer::new(self.minimum.into()))
+    }
+
+    pub fn maximum(&self) -> RubyResult<AnyObject> {
+        Ok(match self.maximum {
+            Some(maximum) => Integer::new(maximum.into()).to_any_object(),
+            None => NilClass::new().to_any_object(),
+        })
+    }
+
+    pub fn shared(&self) -> RubyResult<Boolean> {
+        Ok(Boolean::new(self.shared))
     }
 }

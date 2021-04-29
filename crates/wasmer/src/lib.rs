@@ -69,4 +69,18 @@ pub extern "C" fn Init_wasmer() {
                 this.def("results", r#type::ruby_functiontype::results);
             });
     }
+
+    // Declare the `MemoryType` class.
+    {
+        let data_class = Class::from_existing("Object");
+
+        wasmer_module
+            .define_nested_class("MemoryType", Some(&data_class))
+            .define(|this| {
+                this.def_self("new", r#type::ruby_memorytype::new);
+                this.def("minimum", r#type::ruby_memorytype::minimum);
+                this.def("maximum", r#type::ruby_memorytype::maximum);
+                this.def("shared", r#type::ruby_memorytype::shared);
+            });
+    }
 }
