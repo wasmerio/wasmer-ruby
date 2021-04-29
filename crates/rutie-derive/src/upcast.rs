@@ -32,4 +32,15 @@ macro_rules! id_impl {
     }
 }
 
-id_impl!(rutie::AnyObject, rutie::RString);
+id_impl!(
+    rutie::AnyObject,
+    rutie::RString,
+    rutie::Array,
+    rutie::Boolean,
+    rutie::Fixnum,
+    rutie::Float,
+    rutie::Hash,
+    rutie::Integer,
+    rutie::NilClass,
+    rutie::Symbol,
+);

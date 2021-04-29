@@ -1,4 +1,4 @@
-mod wrapper;
+mod upcast;
 
 pub use rutie_derive_macros::{rubyclass, rubymethods};
-pub use wrapper::*;
+pub use upcast::*;
