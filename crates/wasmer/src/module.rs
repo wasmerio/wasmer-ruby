@@ -48,14 +48,14 @@ impl Module {
     }
 
     pub fn get_name(&self) -> RubyResult<AnyObject> {
-        Ok(self.unwrap().inner().name().map_or_else(
+        Ok(self.inner().name().map_or_else(
             || NilClass::new().to_any_object(),
             |name| RString::new_utf8(name).to_any_object(),
         ))
     }
 
     pub fn set_name(&mut self, name: &RString) -> RubyResult<NilClass> {
-        self.unwrap_mut().inner_mut().set_name(name.to_str());
+        self.inner_mut().set_name(name.to_str());
 
         Ok(NilClass::new())
     }

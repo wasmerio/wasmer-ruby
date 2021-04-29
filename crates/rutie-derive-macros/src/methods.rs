@@ -180,7 +180,18 @@ pub fn entry(
                 };
 
                 let ruby_method_block = if need_self {
-                    rename_self(ruby_method_block.into_token_stream())
+                    let slf_declaration = if need_mut_self {
+                        quote! { let _slf = _slf.unwrap_mut(); }
+                    } else {
+                        quote! { let _slf = _slf.unwrap(); }
+                    };
+                    let block = rename_self(ruby_method_block.into_token_stream());
+
+                    quote! {
+                        #slf_declaration
+
+                        #block
+                    }
                 } else {
                     ruby_method_block.into_token_stream()
                 };
