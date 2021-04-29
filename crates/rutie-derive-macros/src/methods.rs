@@ -181,9 +181,9 @@ pub fn entry(
 
                 let ruby_method_block = if need_self {
                     let slf_declaration = if need_mut_self {
-                        quote! { let _slf = _slf.unwrap_mut(); }
+                        quote! { let _slf = _slf.upcast_mut(); }
                     } else {
-                        quote! { let _slf = _slf.unwrap(); }
+                        quote! { let _slf = _slf.upcast(); }
                     };
                     let block = rename_self(ruby_method_block.into_token_stream());
 

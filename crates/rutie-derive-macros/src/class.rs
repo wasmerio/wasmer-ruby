@@ -126,15 +126,5 @@ fn derive_for_struct(
                     .wrap_data(this, &*#wrapper_const_name)
             }
         }
-
-        impl #ruby_struct_name {
-            pub(crate) fn unwrap(&self) -> &#struct_name {
-                rutie::Object::get_data(self, &*#wrapper_const_name)
-            }
-
-            pub(crate) fn unwrap_mut(&mut self) -> &mut #struct_name {
-                rutie::Object::get_data_mut(self, &*#wrapper_const_name)
-            }
-        }
     }
 }
