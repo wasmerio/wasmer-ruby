@@ -1,4 +1,4 @@
-use proc_macro2::{Group, Ident, TokenStream, TokenTree};
+use proc_macro2::{Group, Ident, Span, TokenStream, TokenTree};
 use quote::{quote, ToTokens};
 use syn::{punctuated::Punctuated, token::Colon2, *};
 
@@ -16,6 +16,10 @@ pub fn entry(
         _ => panic!("`impl` block must target a simple identifier, e.g. `impl T`"),
     };
 
+    let ruby_rust_module_name = Ident::new(
+        &format!("ruby_{}", ty_name.to_string().to_lowercase()),
+        Span::call_site(),
+    );
     let ruby_ty_name = Ident::new(&format!("Ruby{}", ty_name), ty_name.span());
 
     let mut ruby_items = Vec::with_capacity(impl_block.items.len());
@@ -231,7 +235,7 @@ pub fn entry(
     }
 
     (quote! {
-        pub(crate) mod ruby {
+        pub(crate) mod #ruby_rust_module_name {
             use super::*;
 
             #(#ruby_items)*

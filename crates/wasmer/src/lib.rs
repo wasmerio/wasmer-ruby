@@ -20,7 +20,7 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("Store", Some(&data_class))
             .define(|this| {
-                this.def_self("new", store::ruby::new);
+                this.def_self("new", store::ruby_store::new);
             });
     }
 
@@ -31,12 +31,12 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("Module", Some(&data_class))
             .define(|this| {
-                this.def_self("validate", module::ruby::validate);
-                this.def_self("new", module::ruby::new);
-                this.def("name", module::ruby::get_name);
-                this.def("name=", module::ruby::set_name);
-                this.def("custom_sections", module::ruby::custom_sections);
-                this.def("serialize", module::ruby::serialize);
+                this.def_self("validate", module::ruby_module::validate);
+                this.def_self("new", module::ruby_module::new);
+                this.def("name", module::ruby_module::get_name);
+                this.def("name=", module::ruby_module::set_name);
+                this.def("custom_sections", module::ruby_module::custom_sections);
+                this.def("serialize", module::ruby_module::serialize);
             });
     }
 

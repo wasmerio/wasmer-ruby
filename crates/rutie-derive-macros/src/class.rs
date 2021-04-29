@@ -70,7 +70,7 @@ fn derive_for_struct(
     );
     let ruby_struct_name = Ident::new(&format!("Ruby{}", struct_name), span);
     let ruby_sub_module_hack = Ident::new(
-        &format!("ruby_{}", struct_name.to_string().to_lowercase()),
+        &format!("ruby_{}_hack", struct_name.to_string().to_lowercase()),
         span,
     );
 
