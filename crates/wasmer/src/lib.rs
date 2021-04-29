@@ -4,7 +4,7 @@ mod error;
 mod module;
 mod prelude;
 mod store;
-mod r#type;
+mod types;
 
 use rutie::{Class, Integer, Module, Object};
 
@@ -64,9 +64,9 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("FunctionType", Some(&data_class))
             .define(|this| {
-                this.def_self("new", r#type::ruby_functiontype::new);
-                this.def("params", r#type::ruby_functiontype::params);
-                this.def("results", r#type::ruby_functiontype::results);
+                this.def_self("new", types::ruby_functiontype::new);
+                this.def("params", types::ruby_functiontype::params);
+                this.def("results", types::ruby_functiontype::results);
             });
     }
 
@@ -77,10 +77,10 @@ pub extern "C" fn Init_wasmer() {
         wasmer_module
             .define_nested_class("MemoryType", Some(&data_class))
             .define(|this| {
-                this.def_self("new", r#type::ruby_memorytype::new);
-                this.def("minimum", r#type::ruby_memorytype::minimum);
-                this.def("maximum", r#type::ruby_memorytype::maximum);
-                this.def("shared", r#type::ruby_memorytype::shared);
+                this.def_self("new", types::ruby_memorytype::new);
+                this.def("minimum", types::ruby_memorytype::minimum);
+                this.def("maximum", types::ruby_memorytype::maximum);
+                this.def("shared", types::ruby_memorytype::shared);
             });
     }
 }
