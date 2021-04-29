@@ -69,12 +69,23 @@ fn derive_for_struct(
         span,
     );
     let ruby_struct_name = Ident::new(&format!("Ruby{}", struct_name), span);
+    let ruby_sub_module_hack = Ident::new(
+        &format!("ruby_{}", struct_name.to_string().to_lowercase()),
+        span,
+    );
 
     quote! {
-        use rutie::{wrappable_struct, typed_data::DataTypeWrapper};
-
         // Create the `XXXWrapper` wrapper class.
-        wrappable_struct!(#struct_name, #wrapper_struct_name, #wrapper_const_name);
+        //
+        // Do that in a specific module because `wrappable_struct` must be imported to work correctly.
+        mod #ruby_sub_module_hack {
+            use super::*; // to get `lazy_static`, imported by the user.
+            use rutie::{wrappable_struct};
+
+            wrappable_struct!(#struct_name, #wrapper_struct_name, #wrapper_const_name);
+        }
+
+        pub use #ruby_sub_module_hack::*;
 
         // Implement the `RubyXXX` class.
         rutie::class!(#ruby_struct_name);
