@@ -62,4 +62,14 @@ impl Module {
             })
             .collect())
     }
+
+    pub fn serialize(&self) -> RubyResult<RString> {
+        Ok(RString::from_bytes(
+            self.inner()
+                .serialize()
+                .map_err(to_ruby_err::<RuntimeError, _>)?
+                .as_slice(),
+            &Encoding::us_ascii(),
+        ))
+    }
 }
