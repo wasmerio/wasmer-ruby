@@ -46,4 +46,13 @@ class ModuleTest < Minitest::Test
     module_.name = "hello"
     assert_equal module_.name, "hello"
   end
+
+  def test_custom_section
+    bytes = IO.read File.expand_path("custom_sections.wasm", File.dirname(__FILE__)), mode: "rb"
+    module_ = Wasmer::Module.new Wasmer::Store.new, bytes
+
+    assert_equal module_.custom_sections("easter_egg"), ["Wasmer"]
+    assert_equal module_.custom_sections("hello"), ["World!"]
+    assert_equal module_.custom_sections("foo"), []
+  end
 end

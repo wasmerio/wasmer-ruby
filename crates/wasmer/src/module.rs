@@ -4,7 +4,7 @@ use crate::{
     store::Store,
 };
 use lazy_static::lazy_static;
-use rutie::{AnyObject, Boolean, NilClass, Object, RString};
+use rutie::{AnyObject, Array, Boolean, Encoding, NilClass, Object, RString};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Module {
@@ -51,5 +51,15 @@ impl Module {
         self.inner_mut().set_name(name.to_str());
 
         Ok(NilClass::new())
+    }
+
+    pub fn custom_sections(&self, name: &RString) -> RubyResult<Array> {
+        Ok(self
+            .inner()
+            .custom_sections(name.to_str())
+            .map(|custom_section| {
+                RString::from_bytes(&custom_section, &Encoding::us_ascii()).to_any_object()
+            })
+            .collect())
     }
 }

@@ -34,6 +34,7 @@ pub extern "C" fn Init_wasmer() {
                 this.def_self("new", module::ruby::new);
                 this.def("name", module::ruby::get_name);
                 this.def("name=", module::ruby::set_name);
+                this.def("custom_sections", module::ruby::custom_sections);
             });
     }
 }
