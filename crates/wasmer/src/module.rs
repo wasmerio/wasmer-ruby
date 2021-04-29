@@ -1,5 +1,5 @@
 use crate::{
-    error::{to_ruby_err, RuntimeError, TypeError},
+    error::{to_ruby_err, RuntimeError},
     prelude::*,
     store::Store,
 };
@@ -23,15 +23,8 @@ impl Module {
 
 #[rubymethods]
 impl Module {
-    pub fn new(store: &Store, bytes: &AnyObject) -> RubyResult<AnyObject> {
-        let module = match bytes.try_convert_to::<RString>() {
-            Ok(bytes) => wasmer::Module::new(store.inner(), bytes.to_str_unchecked()),
-            _ => {
-                return Err(to_ruby_err::<TypeError, _>(
-                    "`Module` accepts Wasm bytes or a WAT string",
-                ))
-            }
-        };
+    pub fn new(store: &Store, bytes: &RString) -> RubyResult<AnyObject> {
+        let module = wasmer::Module::new(store.inner(), bytes.to_str_unchecked());
 
         Ok(Module::ruby_new(Module {
             inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
