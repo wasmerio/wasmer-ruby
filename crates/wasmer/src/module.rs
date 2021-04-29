@@ -3,7 +3,6 @@ use crate::{
     prelude::*,
     store::Store,
 };
-use lazy_static::lazy_static;
 use rutie::{AnyObject, Array, Boolean, Encoding, NilClass, Object, RString};
 
 #[rubyclass(module = "Wasmer")]

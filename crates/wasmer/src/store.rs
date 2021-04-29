@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use lazy_static::lazy_static;
 use rutie::AnyObject;
 
 #[rubyclass(module = "Wasmer")]
