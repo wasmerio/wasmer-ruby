@@ -120,7 +120,7 @@ fn derive_for_struct(
         impl #impl_generics #struct_name #ty_generics
         #where_clause
         {
-            pub(crate) fn wrap(this: Self) -> rutie::AnyObject {
+            pub(crate) fn ruby_new(this: Self) -> rutie::AnyObject {
                 rutie::Module::from_existing(#ruby_module)
                     .get_nested_class(stringify!(#struct_name))
                     .wrap_data(this, &*#wrapper_const_name)

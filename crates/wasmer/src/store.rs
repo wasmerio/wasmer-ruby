@@ -16,7 +16,7 @@ impl Store {
 #[rubymethods]
 impl Store {
     pub fn new() -> RubyResult<AnyObject> {
-        Ok(Store::wrap(Store {
+        Ok(Store::ruby_new(Store {
             inner: Default::default(),
         }))
     }

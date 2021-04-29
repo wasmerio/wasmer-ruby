@@ -33,7 +33,7 @@ impl Module {
             }
         };
 
-        Ok(Module::wrap(Module {
+        Ok(Module::ruby_new(Module {
             inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
         }))
     }
