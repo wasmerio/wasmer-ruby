@@ -3,6 +3,7 @@ require "prelude"
 Type = Wasmer::Type
 FunctionType = Wasmer::FunctionType
 MemoryType = Wasmer::MemoryType
+GlobalType = Wasmer::GlobalType
 
 class TypeTest < Minitest::Test
   def test_type
@@ -37,5 +38,13 @@ class MemoryTypeTest < Minitest::Test
     assert_equal memory_type.minimum, 1
     assert_nil memory_type.maximum
     assert_equal memory_type.shared, false
+  end
+end
+
+class GlobalTypeTest < Minitest::Test
+  def test_globaltype
+    global_type = GlobalType.new Type::I32, true
+    assert_equal global_type.type, Type::I32
+    assert_equal global_type.mutable, true
   end
 end

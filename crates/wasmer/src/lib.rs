@@ -80,5 +80,11 @@ pub extern "C" fn Init_wasmer() {
                 def (maximum) "maximum";
                 def (shared) "shared";
             };
+
+            class (types::ruby_globaltype) GlobalType {
+                def_self (new) "new";
+                def (r#type) "type";
+                def (mutable) "mutable";
+            };
     };
 }

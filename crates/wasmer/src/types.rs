@@ -59,10 +59,10 @@ impl Into<wasmer::Type> for Type {
     }
 }
 
-impl TryFrom<Integer> for Type {
+impl TryFrom<&Integer> for Type {
     type Error = &'static str;
 
-    fn try_from(value: Integer) -> Result<Self, Self::Error> {
+    fn try_from(value: &Integer) -> Result<Self, Self::Error> {
         Ok(match value.to_i32() {
             1 => Type::I32,
             2 => Type::I64,
@@ -90,7 +90,7 @@ impl FunctionType {
             .map(|param| {
                 param
                     .try_convert_to::<Integer>()
-                    .and_then(|param| Type::try_from(param).map_err(to_ruby_err::<TypeError, _>))
+                    .and_then(|param| Type::try_from(&param).map_err(to_ruby_err::<TypeError, _>))
             })
             .collect::<Result<Vec<Type>, AnyException>>()?;
         let results = unsafe { results.to_any_object().to::<Array>() }
@@ -98,7 +98,7 @@ impl FunctionType {
             .map(|result| {
                 result
                     .try_convert_to::<Integer>()
-                    .and_then(|result| Type::try_from(result).map_err(to_ruby_err::<TypeError, _>))
+                    .and_then(|result| Type::try_from(&result).map_err(to_ruby_err::<TypeError, _>))
             })
             .collect::<Result<Vec<Type>, AnyException>>()?;
 
@@ -156,5 +156,29 @@ impl MemoryType {
 
     pub fn shared(&self) -> RubyResult<Boolean> {
         Ok(Boolean::new(self.shared))
+    }
+}
+
+#[rubyclass(module = "Wasmer")]
+pub struct GlobalType {
+    pub ty: Type,
+    pub mutable: bool,
+}
+
+#[rubymethods]
+impl GlobalType {
+    pub fn new(ty: &Integer, mutable: &Boolean) -> RubyResult<AnyObject> {
+        Ok(GlobalType::ruby_new(GlobalType {
+            ty: Type::try_from(ty).map_err(to_ruby_err::<TypeError, _>)?,
+            mutable: mutable.to_bool(),
+        }))
+    }
+
+    pub fn r#type(&self) -> RubyResult<Integer> {
+        Ok(self.ty.to_integer())
+    }
+
+    pub fn mutable(&self) -> RubyResult<Boolean> {
+        Ok(Boolean::new(self.mutable))
     }
 }
