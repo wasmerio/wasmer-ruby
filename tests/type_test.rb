@@ -77,4 +77,10 @@ class ExportTypeTest < Minitest::Test
     assert_equal function_type.params, [Type::I32]
     assert_equal function_type.results, []
   end
+
+  def test_exporttype_invalid_type
+    assert_raises(TypeError) {
+      ExportType.new "foo", Wasmer::Store.new
+    }
+  end
 end
