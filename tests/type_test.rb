@@ -4,6 +4,7 @@ Type = Wasmer::Type
 FunctionType = Wasmer::FunctionType
 MemoryType = Wasmer::MemoryType
 GlobalType = Wasmer::GlobalType
+TableType = Wasmer::TableType
 
 class TypeTest < Minitest::Test
   def test_type
@@ -46,5 +47,21 @@ class GlobalTypeTest < Minitest::Test
     global_type = GlobalType.new Type::I32, true
     assert_equal global_type.type, Type::I32
     assert_equal global_type.mutable, true
+  end
+end
+
+class TableTypeTest < Minitest::Test
+  def test_tabletype
+    table_type = TableType.new Type::I32, 1, 2
+    assert_equal table_type.type, Type::I32
+    assert_equal table_type.minimum, 1
+    assert_equal table_type.maximum, 2
+  end
+
+  def test_unbound_tabletype
+    table_type = TableType.new Type::I32, 1, nil
+    assert_equal table_type.type, Type::I32
+    assert_equal table_type.minimum, 1
+    assert_nil table_type.maximum
   end
 end

@@ -86,5 +86,12 @@ pub extern "C" fn Init_wasmer() {
                 def (r#type) "type";
                 def (mutable) "mutable";
             };
+
+            class (types::ruby_tabletype) TableType {
+                def_self (new) "new";
+                def (r#type) "type";
+                def (minimum) "minimum";
+                def (maximum) "maximum";
+            };
     };
 }

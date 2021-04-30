@@ -182,3 +182,40 @@ impl GlobalType {
         Ok(Boolean::new(self.mutable))
     }
 }
+
+#[rubyclass(module = "Wasmer")]
+pub struct TableType {
+    pub ty: Type,
+    pub minimum: u32,
+    pub maximum: Option<u32>,
+}
+
+#[rubymethods]
+impl TableType {
+    pub fn new(ty: &Integer, minimum: &Integer, maximum: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(TableType::ruby_new(TableType {
+            ty: Type::try_from(ty).map_err(to_ruby_err::<TypeError, _>)?,
+            minimum: minimum.to_u64() as _,
+            maximum: if maximum.is_nil() {
+                None
+            } else {
+                Some(maximum.try_convert_to::<Integer>()?.to_u64() as _)
+            },
+        }))
+    }
+
+    pub fn r#type(&self) -> RubyResult<Integer> {
+        Ok(self.ty.to_integer())
+    }
+
+    pub fn minimum(&self) -> RubyResult<Integer> {
+        Ok(Integer::new(self.minimum.into()))
+    }
+
+    pub fn maximum(&self) -> RubyResult<AnyObject> {
+        Ok(match self.maximum {
+            Some(maximum) => Integer::new(maximum.into()).to_any_object(),
+            None => NilClass::new().to_any_object(),
+        })
+    }
+}
