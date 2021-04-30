@@ -296,12 +296,7 @@ impl TryFrom<wasmer::ExportType> for ExportType {
     fn try_from(value: wasmer::ExportType) -> Result<Self, Self::Error> {
         Ok(ExportType {
             name: value.name().to_string(),
-            ty: match value.ty() {
-                wasmer::ExternType::Function(t) => FunctionType::ruby_new(FunctionType::from(t)),
-                wasmer::ExternType::Memory(t) => MemoryType::ruby_new(MemoryType::from(t)),
-                wasmer::ExternType::Global(t) => GlobalType::ruby_new(GlobalType::from(t)),
-                wasmer::ExternType::Table(t) => TableType::ruby_new(TableType::from(t)),
-            },
+            ty: extern_type_to_ruby_any_object(value.ty()),
         })
     }
 }
@@ -341,5 +336,26 @@ impl ImportType {
 
     pub fn r#type(&self) -> RubyResult<AnyObject> {
         Ok(self.ty.clone())
+    }
+}
+
+impl TryFrom<wasmer::ImportType> for ImportType {
+    type Error = AnyException;
+
+    fn try_from(value: wasmer::ImportType) -> Result<Self, Self::Error> {
+        Ok(ImportType {
+            module: value.module().to_string(),
+            name: value.name().to_string(),
+            ty: extern_type_to_ruby_any_object(value.ty()),
+        })
+    }
+}
+
+fn extern_type_to_ruby_any_object(value: &wasmer::ExternType) -> AnyObject {
+    match value {
+        wasmer::ExternType::Function(t) => FunctionType::ruby_new(FunctionType::from(t)),
+        wasmer::ExternType::Memory(t) => MemoryType::ruby_new(MemoryType::from(t)),
+        wasmer::ExternType::Global(t) => GlobalType::ruby_new(GlobalType::from(t)),
+        wasmer::ExternType::Table(t) => TableType::ruby_new(TableType::from(t)),
     }
 }

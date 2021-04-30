@@ -55,6 +55,7 @@ pub extern "C" fn Init_wasmer() {
                 def (set_name) "name=";
                 def (get_name) "name";
                 def (exports) "exports";
+                def (imports) "imports";
                 def (custom_sections) "custom_sections";
                 def (serialize) "serialize";
             };

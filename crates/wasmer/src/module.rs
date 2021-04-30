@@ -2,7 +2,7 @@ use crate::{
     error::{to_ruby_err, RuntimeError},
     prelude::*,
     store::Store,
-    types::ExportType,
+    types::{ExportType, ImportType},
 };
 use rutie::{AnyObject, Array, Boolean, Encoding, NilClass, Object, RString};
 use std::convert::TryFrom;
@@ -60,6 +60,17 @@ impl Module {
 
         for export_type in exports.map(|export_type| ExportType::try_from(export_type)) {
             array.push(ExportType::ruby_new(export_type?));
+        }
+
+        Ok(array)
+    }
+
+    pub fn imports(&self) -> RubyResult<Array> {
+        let imports = self.inner.imports();
+        let mut array = Array::with_capacity(imports.len());
+
+        for import_type in imports.map(|import_type| ImportType::try_from(import_type)) {
+            array.push(ImportType::ruby_new(import_type?));
         }
 
         Ok(array)

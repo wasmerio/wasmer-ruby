@@ -85,6 +85,48 @@ class ModuleTest < Minitest::Test
     assert_equal exports[3].type.shared, false
   end
 
+  def test_imports
+    imports = Module.new(
+        Store.new,
+        (<<~WAST)
+        (module
+          (import "ns" "function" (func))
+          (import "ns" "global" (global f32))
+          (import "ns" "table" (table 1 2 anyfunc))
+          (import "ns" "memory" (memory 3 4)))
+        WAST
+    ).imports
+
+    assert_equal imports.length, 4
+    assert_kind_of ImportType, imports[0]
+
+    assert_equal imports[0].module, "ns"
+    assert_equal imports[0].name, "function"
+    assert_kind_of FunctionType, imports[0].type
+    assert_equal imports[0].type.params, []
+    assert_equal imports[0].type.results, [] 
+
+    assert_equal imports[1].module, "ns"
+    assert_equal imports[1].name, "global"
+    assert_kind_of GlobalType, imports[1].type
+    assert_equal imports[1].type.type, Type::F32
+    assert_equal imports[1].type.mutable, false
+
+    assert_equal imports[2].module, "ns"
+    assert_equal imports[2].name, "table"
+    assert_kind_of TableType, imports[2].type
+    assert_equal imports[2].type.type, Type::FUNC_REF
+    assert_equal imports[2].type.minimum, 1
+    assert_equal imports[2].type.maximum, 2
+
+    assert_equal imports[3].module, "ns"
+    assert_equal imports[3].name, "memory"
+    assert_kind_of MemoryType, imports[3].type
+    assert_equal imports[3].type.minimum, 3
+    assert_equal imports[3].type.maximum, 4
+    assert_equal imports[3].type.shared, false
+  end
+
   def test_custom_section
     bytes = IO.read File.expand_path("custom_sections.wasm", File.dirname(__FILE__)), mode: "rb"
     module_ = Module.new Store.new, bytes
