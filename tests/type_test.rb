@@ -6,6 +6,7 @@ MemoryType = Wasmer::MemoryType
 GlobalType = Wasmer::GlobalType
 TableType = Wasmer::TableType
 ExportType = Wasmer::ExportType
+ImportType = Wasmer::ImportType
 
 class TypeTest < Minitest::Test
   def test_type
@@ -81,6 +82,25 @@ class ExportTypeTest < Minitest::Test
   def test_exporttype_invalid_type
     assert_raises(TypeError) {
       ExportType.new "foo", Wasmer::Store.new
+    }
+  end
+end
+
+class ImportTypeTest < Minitest::Test
+  def test_importtype
+    import_type = ImportType.new "foo", "bar", (FunctionType.new [Type::I32], [])
+    assert_equal import_type.module, "foo"
+    assert_equal import_type.name, "bar"
+
+    function_type = import_type.type
+    assert_kind_of FunctionType, function_type
+    assert_equal function_type.params, [Type::I32]
+    assert_equal function_type.results, []
+  end
+
+  def test_importtype_invalid_type
+    assert_raises(TypeError) {
+      ImportType.new "foo", "bar", Wasmer::Store.new
     }
   end
 end

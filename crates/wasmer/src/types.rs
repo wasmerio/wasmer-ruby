@@ -251,3 +251,41 @@ impl ExportType {
         Ok(self.ty.clone())
     }
 }
+
+#[rubyclass(module = "Wasmer")]
+pub struct ImportType {
+    pub module: String,
+    pub name: String,
+    pub ty: AnyObject,
+}
+
+#[rubymethods]
+impl ImportType {
+    pub fn new(module: &RString, name: &RString, ty: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(ImportType::ruby_new(ImportType {
+            module: module.to_string(),
+            name: name.to_string(),
+            ty: if ty.try_convert_to::<RubyFunctionType>().is_ok()
+                || ty.try_convert_to::<RubyMemoryType>().is_ok()
+                || ty.try_convert_to::<RubyGlobalType>().is_ok()
+                || ty.try_convert_to::<RubyTableType>().is_ok()
+            {
+                unsafe { ty.to::<AnyObject>() }
+            } else {
+                return Err(to_ruby_err::<TypeError, _>("Argument #3 of `ImportType.new` must be of kind `FunctionType`, `MemoryType`, `GlobalType` or `TableType`"));
+            },
+        }))
+    }
+
+    pub fn module(&self) -> RubyResult<RString> {
+        Ok(RString::new_utf8(&self.module))
+    }
+
+    pub fn name(&self) -> RubyResult<RString> {
+        Ok(RString::new_utf8(&self.name))
+    }
+
+    pub fn r#type(&self) -> RubyResult<AnyObject> {
+        Ok(self.ty.clone())
+    }
+}

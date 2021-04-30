@@ -99,5 +99,12 @@ pub extern "C" fn Init_wasmer() {
                 def (name) "name";
                 def (r#type) "type";
             };
+
+            class (types::ruby_importtype) ImportType {
+                def_self (new) "new";
+                def (module) "module";
+                def (name) "name";
+                def (r#type) "type";
+            };
     };
 }
