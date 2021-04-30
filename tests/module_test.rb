@@ -49,14 +49,14 @@ class ModuleTest < Minitest::Test
 
   def test_exports
     exports = Module.new(
-        Store.new,
-        (<<~WAST)
-        (module
-          (func (export "function") (param i32 i64))
-          (global (export "global") i32 (i32.const 7))
-          (table (export "table") 0 funcref)
-          (memory (export "memory") 1))
-        WAST
+      Store.new,
+      (<<~WAST)
+      (module
+        (func (export "function") (param i32 i64))
+        (global (export "global") i32 (i32.const 7))
+        (table (export "table") 0 funcref)
+        (memory (export "memory") 1))
+      WAST
     ).exports
 
     assert_equal exports.length, 4
@@ -87,14 +87,14 @@ class ModuleTest < Minitest::Test
 
   def test_imports
     imports = Module.new(
-        Store.new,
-        (<<~WAST)
-        (module
-          (import "ns" "function" (func))
-          (import "ns" "global" (global f32))
-          (import "ns" "table" (table 1 2 anyfunc))
-          (import "ns" "memory" (memory 3 4)))
-        WAST
+      Store.new,
+      (<<~WAST)
+      (module
+        (import "ns" "function" (func))
+        (import "ns" "global" (global f32))
+        (import "ns" "table" (table 1 2 anyfunc))
+        (import "ns" "memory" (memory 3 4)))
+      WAST
     ).imports
 
     assert_equal imports.length, 4
@@ -139,5 +139,28 @@ class ModuleTest < Minitest::Test
   def test_serialize
     module_ = Module.new Store.new, "(module)"
     assert_kind_of String, module_.serialize
+  end
+
+  def test_deserialize
+    store = Store.new
+
+    serialized_module = Module.new(
+      store,
+      (<<~WAST)
+      (module
+        (func (export "function") (param i32 i64)))
+      WAST
+    ).serialize
+
+    module_ = Module.deserialize store, serialized_module
+    serialized_module = nil
+
+    exports = module_.exports
+
+    assert_equal exports.length(), 1
+    assert_equal exports[0].name, "function"
+    assert_kind_of FunctionType, exports[0].type
+    assert_equal exports[0].type.params, [Type::I32, Type::I64]
+    assert_equal exports[0].type.results, []
   end
 end

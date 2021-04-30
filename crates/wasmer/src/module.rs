@@ -25,7 +25,7 @@ impl Module {
 #[rubymethods]
 impl Module {
     pub fn new(store: &Store, bytes: &RString) -> RubyResult<AnyObject> {
-        let module = wasmer::Module::new(store.inner(), bytes.to_str_unchecked());
+        let module = wasmer::Module::new(store.inner(), bytes.to_bytes_unchecked());
 
         Ok(Module::ruby_new(Module {
             inner: module.map_err(to_ruby_err::<RuntimeError, _>)?,
@@ -35,7 +35,7 @@ impl Module {
     pub fn validate(store: &Store, bytes: &AnyObject) -> RubyResult<Boolean> {
         Ok(Boolean::new(match bytes.try_convert_to::<RString>() {
             Ok(bytes) => {
-                wasmer::Module::validate(store.inner(), bytes.to_str_unchecked().as_bytes()).is_ok()
+                wasmer::Module::validate(store.inner(), bytes.to_bytes_unchecked()).is_ok()
             }
             _ => false,
         }))
@@ -94,5 +94,13 @@ impl Module {
                 .as_slice(),
             &Encoding::us_ascii(),
         ))
+    }
+
+    pub fn deserialize(store: &Store, bytes: &RString) -> RubyResult<AnyObject> {
+        let module =
+            unsafe { wasmer::Module::deserialize(store.inner(), bytes.to_bytes_unchecked()) }
+                .map_err(to_ruby_err::<RuntimeError, _>)?;
+
+        Ok(Module::ruby_new(Module { inner: module }))
     }
 }

@@ -58,6 +58,7 @@ pub extern "C" fn Init_wasmer() {
                 def (imports) "imports";
                 def (custom_sections) "custom_sections";
                 def (serialize) "serialize";
+                def_self (deserialize) "deserialize";
             };
 
             class (types) Type {
