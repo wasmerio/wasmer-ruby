@@ -122,6 +122,15 @@ impl FunctionType {
     }
 }
 
+impl From<&wasmer::FunctionType> for FunctionType {
+    fn from(value: &wasmer::FunctionType) -> Self {
+        Self {
+            params: value.params().iter().map(Into::into).collect(),
+            results: value.results().iter().map(Into::into).collect(),
+        }
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct MemoryType {
     pub minimum: u32,
@@ -159,6 +168,16 @@ impl MemoryType {
     }
 }
 
+impl From<&wasmer::MemoryType> for MemoryType {
+    fn from(value: &wasmer::MemoryType) -> Self {
+        Self {
+            minimum: value.minimum.0,
+            maximum: value.maximum.map(|pages| pages.0),
+            shared: value.shared,
+        }
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct GlobalType {
     pub ty: Type,
@@ -180,6 +199,15 @@ impl GlobalType {
 
     pub fn mutable(&self) -> RubyResult<Boolean> {
         Ok(Boolean::new(self.mutable))
+    }
+}
+
+impl From<&wasmer::GlobalType> for GlobalType {
+    fn from(value: &wasmer::GlobalType) -> Self {
+        Self {
+            ty: (&value.ty).into(),
+            mutable: value.mutability.is_mutable(),
+        }
     }
 }
 
@@ -220,6 +248,16 @@ impl TableType {
     }
 }
 
+impl From<&wasmer::TableType> for TableType {
+    fn from(value: &wasmer::TableType) -> Self {
+        Self {
+            ty: (&value.ty).into(),
+            minimum: value.minimum,
+            maximum: value.maximum,
+        }
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct ExportType {
     pub name: String,
@@ -249,6 +287,22 @@ impl ExportType {
 
     pub fn r#type(&self) -> RubyResult<AnyObject> {
         Ok(self.ty.clone())
+    }
+}
+
+impl TryFrom<wasmer::ExportType> for ExportType {
+    type Error = AnyException;
+
+    fn try_from(value: wasmer::ExportType) -> Result<Self, Self::Error> {
+        Ok(ExportType {
+            name: value.name().to_string(),
+            ty: match value.ty() {
+                wasmer::ExternType::Function(t) => FunctionType::ruby_new(FunctionType::from(t)),
+                wasmer::ExternType::Memory(t) => MemoryType::ruby_new(MemoryType::from(t)),
+                wasmer::ExternType::Global(t) => GlobalType::ruby_new(GlobalType::from(t)),
+                wasmer::ExternType::Table(t) => TableType::ruby_new(TableType::from(t)),
+            },
+        })
     }
 }
 

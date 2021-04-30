@@ -2,8 +2,10 @@ use crate::{
     error::{to_ruby_err, RuntimeError},
     prelude::*,
     store::Store,
+    types::ExportType,
 };
 use rutie::{AnyObject, Array, Boolean, Encoding, NilClass, Object, RString};
+use std::convert::TryFrom;
 
 #[rubyclass(module = "Wasmer")]
 pub struct Module {
@@ -50,6 +52,17 @@ impl Module {
         self.inner_mut().set_name(name.to_str());
 
         Ok(NilClass::new())
+    }
+
+    pub fn exports(&self) -> RubyResult<Array> {
+        let exports = self.inner.exports();
+        let mut array = Array::with_capacity(exports.len());
+
+        for export_type in exports.map(|export_type| ExportType::try_from(export_type)) {
+            array.push(ExportType::ruby_new(export_type?));
+        }
+
+        Ok(array)
     }
 
     pub fn custom_sections(&self, name: &RString) -> RubyResult<Array> {

@@ -1,13 +1,5 @@
 require "prelude"
 
-Type = Wasmer::Type
-FunctionType = Wasmer::FunctionType
-MemoryType = Wasmer::MemoryType
-GlobalType = Wasmer::GlobalType
-TableType = Wasmer::TableType
-ExportType = Wasmer::ExportType
-ImportType = Wasmer::ImportType
-
 class TypeTest < Minitest::Test
   def test_type
     assert_equal Type::I32 , 1
