@@ -5,6 +5,7 @@ FunctionType = Wasmer::FunctionType
 MemoryType = Wasmer::MemoryType
 GlobalType = Wasmer::GlobalType
 TableType = Wasmer::TableType
+ExportType = Wasmer::ExportType
 
 class TypeTest < Minitest::Test
   def test_type
@@ -63,5 +64,17 @@ class TableTypeTest < Minitest::Test
     assert_equal table_type.type, Type::I32
     assert_equal table_type.minimum, 1
     assert_nil table_type.maximum
+  end
+end
+
+class ExportTypeTest < Minitest::Test
+  def test_exporttype
+    export_type = ExportType.new "foo", (FunctionType.new [Type::I32], [])
+    assert_equal export_type.name, "foo"
+
+    function_type = export_type.type
+    assert_kind_of FunctionType, function_type
+    assert_equal function_type.params, [Type::I32]
+    assert_equal function_type.results, []
   end
 end

@@ -102,7 +102,7 @@ fn derive_for_struct(
             }
 
             fn error_message() -> &'static str {
-                concat!("Error converting to `", stringify!(#struct_name), "`")
+                concat!("Error converting to `", stringify!(#ruby_struct_name), "`")
             }
         }
 

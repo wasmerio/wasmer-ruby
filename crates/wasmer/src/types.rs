@@ -2,7 +2,7 @@ use crate::{
     error::{to_ruby_err, TypeError},
     prelude::*,
 };
-use rutie::{AnyException, AnyObject, Array, Boolean, Integer, NilClass, Object};
+use rutie::{AnyException, AnyObject, Array, Boolean, Integer, NilClass, Object, RString};
 use std::convert::TryFrom;
 
 #[derive(Debug, Copy, Clone)]
@@ -217,5 +217,37 @@ impl TableType {
             Some(maximum) => Integer::new(maximum.into()).to_any_object(),
             None => NilClass::new().to_any_object(),
         })
+    }
+}
+
+#[rubyclass(module = "Wasmer")]
+pub struct ExportType {
+    pub name: String,
+    pub ty: AnyObject,
+}
+
+#[rubymethods]
+impl ExportType {
+    pub fn new(name: &RString, ty: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(ExportType::ruby_new(ExportType {
+            name: name.to_string(),
+            ty: if ty.try_convert_to::<RubyFunctionType>().is_ok()
+                || ty.try_convert_to::<RubyMemoryType>().is_ok()
+                || ty.try_convert_to::<RubyGlobalType>().is_ok()
+                || ty.try_convert_to::<RubyTableType>().is_ok()
+            {
+                unsafe { ty.to::<AnyObject>() }
+            } else {
+                return Err(to_ruby_err::<TypeError, _>("Argument #2 of `ExportType.new` must be of kind `FunctionType`, `MemoryType`, `GlobalType` or `TableType`"));
+            },
+        }))
+    }
+
+    pub fn name(&self) -> RubyResult<RString> {
+        Ok(RString::new_utf8(&self.name))
+    }
+
+    pub fn r#type(&self) -> RubyResult<AnyObject> {
+        Ok(self.ty.clone())
     }
 }

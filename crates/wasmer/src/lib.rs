@@ -93,5 +93,11 @@ pub extern "C" fn Init_wasmer() {
                 def (minimum) "minimum";
                 def (maximum) "maximum";
             };
+
+            class (types::ruby_exporttype) ExportType {
+                def_self (new) "new";
+                def (name) "name";
+                def (r#type) "type";
+            };
     };
 }
