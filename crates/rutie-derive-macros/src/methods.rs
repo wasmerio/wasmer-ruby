@@ -118,7 +118,7 @@ pub fn entry(
                                                     .ok_or_else(|| {
                                                         <rutie::AnyException as rutie::Exception>::new(
                                                             "ArgumentError",
-                                                            Some(&format!(concat!("Argument #{} (`", stringify!( #ruby_input_types ), "`) of method `", stringify!( #ruby_method_name ), "` is missing"), argument_nth)),
+                                                            Some(&format!(concat!("Argument #{} (`", stringify!( #ruby_input_types ), "`) of method `", stringify!( #ty_name ), ".", stringify!( #ruby_method_name ), "` is missing"), argument_nth)),
                                                         )
                                                     })
                                                     .and_then(|argument| {

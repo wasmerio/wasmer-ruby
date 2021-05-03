@@ -1,16 +1,20 @@
 //#![deny(warnings)]
 
 mod error;
+mod exports;
+mod externals;
+mod instance;
 mod module;
 mod prelude;
 mod store;
 mod types;
+mod values;
 
 use rutie::{Class, Integer, Module, Object};
 
 macro_rules! ruby_define {
     (in $module:ident
-        $( class ($class_rust_module:path) $class_name:ident {
+        $( class ( $( $class_rust_module:path ),+ ) $class_name:ident {
            $( @const $constant_name:ident = $constant_value:expr; )*
            $( $ruby_definition:ident ($method_rust_name:ident) $method_name:expr; )*
         }; )*
@@ -22,8 +26,10 @@ macro_rules! ruby_define {
                 $module
                     .define_nested_class(stringify!($class_name), Some(&data_class))
                     .define(|this| {
-                        #[allow(unused_imports)]
-                        use $class_rust_module::*;
+                        $(
+                            #[allow(unused_imports)]
+                            use $class_rust_module::*;
+                        )+
 
                         $(
                             this.$ruby_definition($method_name, $method_rust_name);
@@ -59,6 +65,20 @@ pub extern "C" fn Init_wasmer() {
                 def (custom_sections) "custom_sections";
                 def (serialize) "serialize";
                 def_self (deserialize) "deserialize";
+            };
+
+            class (instance::ruby_instance) Instance {
+                def_self (new) "new";
+                def (exports) "exports";
+            };
+
+            class (exports::ruby_exports) Exports {
+                def (respond_to_missing) "respond_to_missing?";
+            };
+
+            class (externals::function::ruby_function, externals::function::ruby_function_extra) Function {
+                def_self (new) "new";
+                def (call) "call";
             };
 
             class (types) Type {

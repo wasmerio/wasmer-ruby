@@ -2,6 +2,8 @@
 
 use rutie::{AnyException, Exception, VM};
 
+pub type RubyResult<T> = Result<T, AnyException>;
+
 #[allow(unused)]
 pub(crate) fn unwrap_or_raise<Output, Function>(f: Function) -> Output
 where

@@ -7,9 +7,12 @@ require 'color_pound_spec_reporter'
 Minitest::Reporters.use! [ColorPoundSpecReporter.new]   
 
 ExportType = Wasmer::ExportType
+Exports = Wasmer::Exports
+Function = Wasmer::Function
 FunctionType = Wasmer::FunctionType
 GlobalType = Wasmer::GlobalType
 ImportType = Wasmer::ImportType
+Instance = Wasmer::Instance
 MemoryType = Wasmer::MemoryType
 Module = Wasmer::Module
 Store = Wasmer::Store
