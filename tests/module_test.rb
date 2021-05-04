@@ -70,7 +70,7 @@ class ModuleTest < Minitest::Test
     assert_equal exports[1].name, "global"
     assert_kind_of GlobalType, exports[1].type
     assert_equal exports[1].type.type, Type::I32
-    assert_equal exports[1].type.mutable, false
+    assert_equal exports[1].type.mutable?, false
 
     assert_equal exports[2].name, "table"
     assert_kind_of TableType, exports[2].type
@@ -82,7 +82,7 @@ class ModuleTest < Minitest::Test
     assert_kind_of MemoryType, exports[3].type
     assert_equal exports[3].type.minimum, 1
     assert_nil exports[3].type.maximum
-    assert_equal exports[3].type.shared, false
+    assert_equal exports[3].type.shared?, false
   end
 
   def test_imports
@@ -110,7 +110,7 @@ class ModuleTest < Minitest::Test
     assert_equal imports[1].name, "global"
     assert_kind_of GlobalType, imports[1].type
     assert_equal imports[1].type.type, Type::F32
-    assert_equal imports[1].type.mutable, false
+    assert_equal imports[1].type.mutable?, false
 
     assert_equal imports[2].module, "ns"
     assert_equal imports[2].name, "table"
@@ -124,7 +124,7 @@ class ModuleTest < Minitest::Test
     assert_kind_of MemoryType, imports[3].type
     assert_equal imports[3].type.minimum, 3
     assert_equal imports[3].type.maximum, 4
-    assert_equal imports[3].type.shared, false
+    assert_equal imports[3].type.shared?, false
   end
 
   def test_custom_section

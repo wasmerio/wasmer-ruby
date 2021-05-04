@@ -25,14 +25,14 @@ class MemoryTypeTest < Minitest::Test
     memory_type = MemoryType.new 1, 2, true
     assert_equal memory_type.minimum, 1
     assert_equal memory_type.maximum, 2
-    assert_equal memory_type.shared, true
+    assert_equal memory_type.shared?, true
   end
 
   def test_unbound_memorytype
     memory_type = MemoryType.new 1, nil, false
     assert_equal memory_type.minimum, 1
     assert_nil memory_type.maximum
-    assert_equal memory_type.shared, false
+    assert_equal memory_type.shared?, false
   end
 end
 
@@ -40,7 +40,7 @@ class GlobalTypeTest < Minitest::Test
   def test_globaltype
     global_type = GlobalType.new Type::I32, true
     assert_equal global_type.type, Type::I32
-    assert_equal global_type.mutable, true
+    assert_equal global_type.mutable?, true
   end
 end
 

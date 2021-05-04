@@ -117,13 +117,13 @@ pub extern "C" fn Init_wasmer() {
                 def_self (new) "new";
                 def (minimum) "minimum";
                 def (maximum) "maximum";
-                def (shared) "shared";
+                def (shared) "shared?";
             };
 
             class (types::ruby_globaltype) GlobalType {
                 def_self (new) "new";
                 def (r#type) "type";
-                def (mutable) "mutable";
+                def (mutable) "mutable?";
             };
 
             class (types::ruby_tabletype) TableType {
