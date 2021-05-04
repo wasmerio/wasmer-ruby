@@ -35,6 +35,10 @@ class InstanceTest < Minitest::Test
     assert_kind_of Memory, exports.mem
     assert_kind_of Global, exports.glob
     assert_kind_of Table, exports.tab
+  end
+
+  def test_export_does_not_exist
+    exports = Instance.new(Module.new(Store.new, "(module)"), nil).exports
 
     assert_raises(NameError) {
       exports.foo
