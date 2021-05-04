@@ -86,6 +86,10 @@ pub extern "C" fn Init_wasmer() {
                 def_self (new) "new";
             };
 
+            class (externals::global::ruby_global) Global {
+                def_self (new) "new";
+            };
+
             class (types) Type {
                 @const I32 = Integer::new(1);
                 @const I64 = Integer::new(2);

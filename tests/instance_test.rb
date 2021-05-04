@@ -33,5 +33,6 @@ class InstanceTest < Minitest::Test
 
     assert_kind_of Function, exports.func
     assert_kind_of Memory, exports.mem
+    assert_kind_of Global, exports.glob
   end
 end
