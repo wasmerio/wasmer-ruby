@@ -72,8 +72,9 @@ pub extern "C" fn Init_wasmer() {
                 def (exports) "exports";
             };
 
-            class (exports::ruby_exports) Exports {
+            class (exports::ruby_exports, exports::ruby_exports_extra) Exports {
                 def (respond_to_missing) "respond_to_missing?";
+                def (method_missing) "method_missing";
             };
 
             class (externals::function::ruby_function, externals::function::ruby_function_extra) Function {
