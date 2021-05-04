@@ -1,6 +1,11 @@
 require "prelude"
 
 class InstanceTest < Minitest::Test
+  def test_version
+    assert_kind_of String, Wasmer::VERSION
+    assert Wasmer::VERSION, "foo"
+  end
+  
   def test_new
     assert Instance.new Module.new(Store.new, "(module)"), nil
   end

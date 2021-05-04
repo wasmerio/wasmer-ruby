@@ -10,7 +10,7 @@ mod store;
 mod types;
 mod values;
 
-use rutie::{Class, Integer, Module, Object};
+use rutie::{Class, Integer, Module, Object, RString};
 
 macro_rules! ruby_define {
     (in $module:ident
@@ -48,6 +48,8 @@ macro_rules! ruby_define {
 #[no_mangle]
 pub extern "C" fn Init_wasmer() {
     let mut wasmer_module = Module::from_existing("Wasmer");
+
+    wasmer_module.const_set("VERSION", &RString::new_utf8(env!("CARGO_PKG_VERSION")));
 
     ruby_define! {
         in wasmer_module

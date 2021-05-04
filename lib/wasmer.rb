@@ -1,4 +1,3 @@
-require 'wasmer/version'
 require 'rutie'
 
 module Wasmer
