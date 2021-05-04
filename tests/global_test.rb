@@ -20,11 +20,27 @@ class ModuleTest < Minitest::Test
     store = Store.new
     global = Global.new store, Value.i32(42), false
 
-    assert global.value, 42
+    assert_equal global.value, 42
 
     type = global.type
 
     assert_equal type.type, Type::I32
     assert_equal type.mutable?, false
+  end
+
+  def test_constructor_mutable
+    store = Store.new
+    global = Global.new store, Value.i32(42), true
+
+    assert_equal global.value, 42
+
+    type = global.type
+
+    assert_equal type.type, Type::I32
+    assert_equal type.mutable?, true
+
+    global.value = 153
+
+    assert_equal global.value, 153
   end
 end

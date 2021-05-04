@@ -1,10 +1,11 @@
 use crate::{
+    error::{to_ruby_err, RuntimeError},
     prelude::*,
     store::Store,
     types::GlobalType,
-    values::{to_ruby_object, Value},
+    values::{to_ruby_object, to_wasm_value, Value},
 };
-use rutie::{AnyObject, Boolean};
+use rutie::{AnyObject, Boolean, NilClass};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Global {
@@ -35,8 +36,24 @@ impl Global {
         Ok(Boolean::new(self.inner().ty().mutability.is_mutable()))
     }
 
-    pub fn value(&self) -> RubyResult<AnyObject> {
+    pub fn get_value(&self) -> RubyResult<AnyObject> {
         Ok(to_ruby_object(&self.inner.get()))
+    }
+
+    pub fn set_value(&self, value: &AnyObject) -> RubyResult<NilClass> {
+        let ty = self.inner().ty();
+
+        if !ty.mutability.is_mutable() {
+            return Err(to_ruby_err::<RuntimeError, _>(
+                "The global variable is not mutable, cannot set a new value",
+            ));
+        }
+
+        self.inner()
+            .set(to_wasm_value((value, ty.ty))?)
+            .map_err(to_ruby_err::<RuntimeError, _>)?;
+
+        Ok(NilClass::new())
     }
 
     pub fn r#type(&self) -> RubyResult<AnyObject> {

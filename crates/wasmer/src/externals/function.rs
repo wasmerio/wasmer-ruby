@@ -111,7 +111,7 @@ pub(crate) mod ruby_function_extra {
             let arguments: Vec<wasmer::Value> = Array::from(arguments)
                 .into_iter()
                 .zip(function.inner().ty().params().iter().cloned())
-                .map(to_wasm_value)
+                .map(|(value, ty)| to_wasm_value((&value, ty)))
                 .collect::<RubyResult<_>>()?;
             function.inner().call(&arguments);
 

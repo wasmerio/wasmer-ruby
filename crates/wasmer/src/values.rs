@@ -5,7 +5,7 @@ use crate::{
 use rutie::{AnyObject, Fixnum, Float, Object};
 use std::convert::TryInto;
 
-pub(crate) fn to_wasm_value((any, ty): (AnyObject, wasmer::Type)) -> RubyResult<wasmer::Value> {
+pub(crate) fn to_wasm_value((any, ty): (&AnyObject, wasmer::Type)) -> RubyResult<wasmer::Value> {
     Ok(match ty {
         wasmer::Type::I32 => wasmer::Value::I32(
             any.try_convert_to::<Fixnum>()?
