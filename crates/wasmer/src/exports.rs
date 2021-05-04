@@ -29,9 +29,8 @@ impl Exports {
 
 pub(crate) mod ruby_exports_extra {
     use crate::{
-        error::{unwrap_or_raise, RubyResult},
+        error::{to_ruby_err, unwrap_or_raise, NameError},
         externals::{Function, Global, Memory, Table},
-        values::to_wasm_value,
     };
     use rutie::{
         rubysys::class,
@@ -59,8 +58,9 @@ pub(crate) mod ruby_exports_extra {
             let exports = itself.upcast();
             let mut arguments = Array::from(arguments);
             let extern_name = arguments.shift().try_convert_to::<Symbol>()?;
+            let extern_name = extern_name.to_str();
 
-            Ok(match exports.inner().get_extern(extern_name.to_str()) {
+            Ok(match exports.inner().get_extern(extern_name) {
                 Some(wasmer::Extern::Function(function)) => {
                     Function::ruby_new(Function::raw_new(function.clone())).to_any_object()
                 }
@@ -73,7 +73,12 @@ pub(crate) mod ruby_exports_extra {
                 Some(wasmer::Extern::Table(table)) => {
                     Table::ruby_new(Table::raw_new(table.clone())).to_any_object()
                 }
-                _ => unimplemented!(),
+                None => {
+                    return Err(to_ruby_err::<NameError, _>(format!(
+                        "Export `{}` does not exist",
+                        extern_name
+                    )))
+                }
             })
         })
     }

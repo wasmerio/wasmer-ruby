@@ -35,5 +35,9 @@ class InstanceTest < Minitest::Test
     assert_kind_of Memory, exports.mem
     assert_kind_of Global, exports.glob
     assert_kind_of Table, exports.tab
+
+    assert_raises(NameError) {
+      exports.foo
+    }
   end
 end
