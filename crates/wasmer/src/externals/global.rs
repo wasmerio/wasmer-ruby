@@ -1,10 +1,4 @@
-use crate::{
-    error::{to_ruby_err, RuntimeError},
-    prelude::*,
-    store::Store,
-    types::GlobalType,
-    values::Value,
-};
+use crate::{prelude::*, store::Store, values::Value};
 use rutie::{AnyObject, Boolean};
 
 #[rubyclass(module = "Wasmer")]

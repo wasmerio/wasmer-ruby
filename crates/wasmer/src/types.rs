@@ -281,6 +281,12 @@ impl From<&wasmer::TableType> for TableType {
     }
 }
 
+impl Into<wasmer::TableType> for &TableType {
+    fn into(self) -> wasmer::TableType {
+        wasmer::TableType::new(self.ty.into(), self.minimum, self.maximum)
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct ExportType {
     pub name: String,
