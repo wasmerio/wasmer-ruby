@@ -37,6 +37,21 @@ class InstanceTest < Minitest::Test
     assert_kind_of Table, exports.tab
   end
 
+  def test_exports_len()
+    module_ = Module.new(
+      Store.new,
+      (<<~WAST)
+      (module
+        (func (export "func") (param i32 i64))
+        (global (export "glob") i32 (i32.const 7)))
+      WAST
+    )
+    instance = Instance.new module_, nil
+    exports = instance.exports
+
+    assert exports.length, 2
+  end
+
   def test_export_does_not_exist
     exports = Instance.new(Module.new(Store.new, "(module)"), nil).exports
 

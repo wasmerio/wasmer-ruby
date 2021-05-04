@@ -1,5 +1,9 @@
-use crate::prelude::*;
-use rutie::{Boolean, Symbol};
+use crate::{
+    error::{to_ruby_err, RuntimeError},
+    prelude::*,
+};
+use rutie::{Boolean, Fixnum, Symbol};
+use std::convert::TryInto;
 
 #[rubyclass(module = "Wasmer")]
 pub struct Exports {
@@ -24,6 +28,15 @@ impl Exports {
         _include_private: &Boolean,
     ) -> RubyResult<Boolean> {
         Ok(Boolean::new(self.inner().contains(symbol.to_str())))
+    }
+
+    pub fn length(&self) -> RubyResult<Fixnum> {
+        Ok(Fixnum::new(
+            self.inner()
+                .len()
+                .try_into()
+                .map_err(to_ruby_err::<RuntimeError, _>)?,
+        ))
     }
 }
 
