@@ -19,3 +19,4 @@ Module = Wasmer::Module
 Store = Wasmer::Store
 TableType = Wasmer::TableType
 Type = Wasmer::Type
+Value = Wasmer::Value

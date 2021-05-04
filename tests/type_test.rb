@@ -73,7 +73,7 @@ class ExportTypeTest < Minitest::Test
 
   def test_exporttype_invalid_type
     assert_raises(TypeError) {
-      ExportType.new "foo", Wasmer::Store.new
+      ExportType.new "foo", Store.new
     }
   end
 end
@@ -92,7 +92,7 @@ class ImportTypeTest < Minitest::Test
 
   def test_importtype_invalid_type
     assert_raises(TypeError) {
-      ImportType.new "foo", "bar", Wasmer::Store.new
+      ImportType.new "foo", "bar", Store.new
     }
   end
 end

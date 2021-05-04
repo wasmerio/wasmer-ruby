@@ -134,5 +134,12 @@ pub extern "C" fn Init_wasmer() {
                 def (name) "name";
                 def (r#type) "type";
             };
+
+            class (values::ruby_value) Value {
+                def_self (i32) "i32";
+                def_self (i64) "i64";
+                def_self (f32) "f32";
+                def_self (f64) "f64";
+            };
     };
 }
