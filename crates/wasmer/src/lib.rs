@@ -91,6 +91,9 @@ pub extern "C" fn Init_wasmer() {
 
             class (externals::global::ruby_global) Global {
                 def_self (new) "new";
+                def (mutable) "mutable?";
+                def (value) "value";
+                def (r#type) "type";
             };
 
             class (externals::table::ruby_table) Table {

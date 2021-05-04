@@ -25,6 +25,16 @@ pub(crate) fn to_wasm_value((any, ty): (AnyObject, wasmer::Type)) -> RubyResult<
     })
 }
 
+pub(crate) fn to_ruby_object(value: &wasmer::Value) -> AnyObject {
+    match value {
+        wasmer::Value::I32(value) => Fixnum::new((*value).into()).to_any_object(),
+        wasmer::Value::I64(value) => Fixnum::new(*value).to_any_object(),
+        wasmer::Value::F32(value) => Float::new((*value).into()).to_any_object(),
+        wasmer::Value::F64(value) => Float::new(*value).to_any_object(),
+        _ => unimplemented!(),
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct Value {
     inner: wasmer::Value,

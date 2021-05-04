@@ -1,4 +1,9 @@
-use crate::{prelude::*, store::Store, values::Value};
+use crate::{
+    prelude::*,
+    store::Store,
+    types::GlobalType,
+    values::{to_ruby_object, Value},
+};
 use rutie::{AnyObject, Boolean};
 
 #[rubyclass(module = "Wasmer")]
@@ -24,5 +29,17 @@ impl Global {
         } else {
             wasmer::Global::new(store.inner(), value.inner().clone())
         })))
+    }
+
+    pub fn mutable(&self) -> RubyResult<Boolean> {
+        Ok(Boolean::new(self.inner().ty().mutability.is_mutable()))
+    }
+
+    pub fn value(&self) -> RubyResult<AnyObject> {
+        Ok(to_ruby_object(&self.inner.get()))
+    }
+
+    pub fn r#type(&self) -> RubyResult<AnyObject> {
+        Ok(GlobalType::ruby_new(self.inner().ty().into()))
     }
 }
