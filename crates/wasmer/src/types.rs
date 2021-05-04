@@ -195,6 +195,12 @@ impl From<&wasmer::MemoryType> for MemoryType {
     }
 }
 
+impl Into<wasmer::MemoryType> for &MemoryType {
+    fn into(self) -> wasmer::MemoryType {
+        wasmer::MemoryType::new(self.minimum, self.maximum, self.shared)
+    }
+}
+
 #[rubyclass(module = "Wasmer")]
 pub struct GlobalType {
     pub ty: Type,

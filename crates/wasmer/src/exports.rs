@@ -30,7 +30,7 @@ impl Exports {
 pub(crate) mod ruby_exports_extra {
     use crate::{
         error::{unwrap_or_raise, RubyResult},
-        externals::Function,
+        externals::{Function, Memory},
         values::to_wasm_value,
     };
     use rutie::{
@@ -63,6 +63,9 @@ pub(crate) mod ruby_exports_extra {
             Ok(match exports.inner().get_extern(extern_name.to_str()) {
                 Some(wasmer::Extern::Function(function)) => {
                     Function::ruby_new(Function::raw_new(function.clone())).to_any_object()
+                }
+                Some(wasmer::Extern::Memory(memory)) => {
+                    Memory::ruby_new(Memory::raw_new(memory.clone())).to_any_object()
                 }
                 _ => unimplemented!(),
             })

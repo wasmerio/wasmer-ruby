@@ -13,6 +13,7 @@ FunctionType = Wasmer::FunctionType
 GlobalType = Wasmer::GlobalType
 ImportType = Wasmer::ImportType
 Instance = Wasmer::Instance
+Memory = Wasmer::Memory
 MemoryType = Wasmer::MemoryType
 Module = Wasmer::Module
 Store = Wasmer::Store

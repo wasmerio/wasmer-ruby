@@ -82,6 +82,10 @@ pub extern "C" fn Init_wasmer() {
                 def (call) "call";
             };
 
+            class (externals::memory::ruby_memory) Memory {
+                def_self (new) "new";
+            };
+
             class (types) Type {
                 @const I32 = Integer::new(1);
                 @const I64 = Integer::new(2);

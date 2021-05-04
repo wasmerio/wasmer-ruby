@@ -32,5 +32,6 @@ class InstanceTest < Minitest::Test
     assert not(exports.respond_to? :foo)
 
     assert_kind_of Function, exports.func
+    assert_kind_of Memory, exports.mem
   end
 end
