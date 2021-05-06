@@ -4,7 +4,7 @@ use crate::{
     store::Store,
     types::FunctionType,
 };
-use rutie::{AnyException, AnyObject, Array, NilClass, Object, Proc, Symbol};
+use rutie::{AnyObject, Object, Proc, Symbol};
 use std::sync::Arc;
 
 #[derive(Clone)]
@@ -77,18 +77,22 @@ impl Function {
             inner: host_function,
         }))
     }
+
+    pub fn r#type(&self) -> RubyResult<AnyObject> {
+        Ok(FunctionType::ruby_new(self.inner().ty().into()))
+    }
 }
 
 pub(crate) mod ruby_function_extra {
     use crate::{
-        error::{unwrap_or_raise, RubyResult},
-        values::to_wasm_value,
+        error::{to_ruby_err, unwrap_or_raise, RubyResult, RuntimeError},
+        values::{to_ruby_object, to_wasm_value},
     };
     use rutie::{
         rubysys::class,
         types::{Argc, Value},
         util::str_to_cstring,
-        AnyObject, Array, Object,
+        AnyObject, Array, NilClass, Object,
     };
     use rutie_derive::UpcastRubyClass;
 
@@ -113,9 +117,22 @@ pub(crate) mod ruby_function_extra {
                 .zip(function.inner().ty().params().iter().cloned())
                 .map(|(value, ty)| to_wasm_value((&value, ty)))
                 .collect::<RubyResult<_>>()?;
-            function.inner().call(&arguments);
 
-            Ok(rutie::NilClass::new().to_any_object())
+            let results = function
+                .inner()
+                .call(&arguments)
+                .map(<[_]>::into_vec)
+                .map_err(to_ruby_err::<RuntimeError, _>)?;
+
+            Ok(match results.len() {
+                0 => NilClass::new().to_any_object(),
+                1 => to_ruby_object(&results[0]),
+                _ => results
+                    .iter()
+                    .map(to_ruby_object)
+                    .collect::<Array>()
+                    .to_any_object(),
+            })
         })
     }
 }

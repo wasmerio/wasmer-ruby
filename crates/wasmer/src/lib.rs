@@ -83,6 +83,7 @@ pub extern "C" fn Init_wasmer() {
             class (externals::function::ruby_function, externals::function::ruby_function_extra) Function {
                 def_self (new) "new";
                 def (call) "call";
+                def (r#type) "type";
             };
 
             class (externals::memory::ruby_memory) Memory {
