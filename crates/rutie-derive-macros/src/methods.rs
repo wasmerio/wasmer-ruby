@@ -13,6 +13,13 @@ pub fn entry(
             path.get_ident().unwrap().clone()
         }
 
+        Type::Group(TypeGroup { elem, .. }) => match *elem {
+            Type::Path(TypePath { qself: None, path }) if path.get_ident().is_some() => {
+                path.get_ident().unwrap().clone()
+            }
+            _ => panic!("`impl` block must target a simple grouped identifier"),
+        },
+
         _ => panic!("`impl` block must target a simple identifier, e.g. `impl T`"),
     };
 
