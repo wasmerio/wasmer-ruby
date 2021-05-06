@@ -69,8 +69,24 @@ class GlobalTest < Minitest::Test
     assert_equal y.value, 8
   end
 
-  #def test_global_read_write_and_exported_functions
-  #end
+  def test_global_read_write_and_exported_functions
+    exports = instance.exports
+    x = exports.x
+    get_x = exports.get_x
+
+    assert_equal x.value, 0
+    assert_equal get_x.(), 0
+
+    x.value = 1
+
+    assert_equal x.value, 1
+    assert_equal get_x.(), 1
+
+    exports.increment_x.()
+
+    assert_equal x.value, 2
+    assert_equal get_x.(), 2
+  end
 
   def test_global_read_write_constant
     z = instance.exports.z
