@@ -3,6 +3,7 @@
 mod error;
 mod exports;
 mod externals;
+mod import_object;
 mod instance;
 mod module;
 mod prelude;
@@ -78,6 +79,11 @@ pub extern "C" fn Init_wasmer() {
                 def (respond_to_missing) "respond_to_missing?";
                 def (method_missing) "method_missing";
                 def (length) "length";
+            };
+
+            class (import_object::ruby_importobject) ImportObject {
+                def_self (new) "new";
+                def (contains_namespace) "contains_namespace?";
             };
 
             class (externals::function::ruby_function, externals::function::ruby_function_extra) Function {
