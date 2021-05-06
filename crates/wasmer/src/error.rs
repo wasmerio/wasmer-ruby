@@ -38,7 +38,7 @@ macro_rules! declare_error {
     }
 }
 
-declare_error!(RuntimeError, TypeError, NameError);
+declare_error!(ArgumentError, NameError, RuntimeError, TypeError);
 
 pub fn to_ruby_err<Type, Error>(error: Error) -> AnyException
 where

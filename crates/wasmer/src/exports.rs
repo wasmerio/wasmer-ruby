@@ -42,7 +42,7 @@ impl Exports {
 
 pub(crate) mod ruby_exports_extra {
     use crate::{
-        error::{to_ruby_err, unwrap_or_raise, NameError},
+        error::{to_ruby_err, unwrap_or_raise, ArgumentError, NameError},
         externals::{Function, Global, Memory, Table},
     };
     use rutie::{
@@ -70,8 +70,17 @@ pub(crate) mod ruby_exports_extra {
 
             let exports = itself.upcast();
             let mut arguments = Array::from(arguments);
+
             let extern_name = arguments.shift().try_convert_to::<Symbol>()?;
             let extern_name = extern_name.to_str();
+
+            if arguments.length() > 1 {
+                return Err(to_ruby_err::<ArgumentError, _>(format!(
+                    "`Export::method_missing` has been called with more than one argument (`{name}` plus {number_of_arguments} extra argument(s)). If you are trying to call an exported WebAssembly function, use the following form: `exports.{name}.(arguments…)`",
+                    name = extern_name,
+                    number_of_arguments = arguments.length(),
+                )));
+            }
 
             Ok(match exports.inner().get_extern(extern_name) {
                 Some(wasmer::Extern::Function(function)) => {
