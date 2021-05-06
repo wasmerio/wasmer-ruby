@@ -34,7 +34,6 @@ macro_rules! id_impl {
 
 id_impl!(
     rutie::AnyObject,
-    rutie::RString,
     rutie::Array,
     rutie::Boolean,
     rutie::Fixnum,
@@ -42,5 +41,7 @@ id_impl!(
     rutie::Hash,
     rutie::Integer,
     rutie::NilClass,
+    rutie::Proc,
+    rutie::RString,
     rutie::Symbol,
 );
