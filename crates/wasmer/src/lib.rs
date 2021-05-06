@@ -5,6 +5,7 @@ mod exports;
 mod externals;
 mod import_object;
 mod instance;
+mod memory;
 mod module;
 mod prelude;
 mod store;
@@ -99,6 +100,60 @@ pub extern "C" fn Init_wasmer() {
                 def (size) "size";
                 def (data_size) "data_size";
                 def (grow) "grow";
+                def (uint8_view) "uint8_view";
+                def (int8_view) "int8_view";
+                def (uint16_view) "uint16_view";
+                def (int16_view) "int16_view";
+                def (uint32_view) "uint32_view";
+                def (int32_view) "int32_view";
+            };
+
+            class (memory::views::ruby_uint8array) Uint8Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
+            };
+
+            class (memory::views::ruby_int8array) Int8Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
+            };
+
+            class (memory::views::ruby_uint16array) Uint16Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
+            };
+
+            class (memory::views::ruby_int16array) Int16Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
+            };
+
+            class (memory::views::ruby_uint32array) Uint32Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
+            };
+
+            class (memory::views::ruby_int32array) Int32Array {
+                def (bytes_per_element) "bytes_per_element";
+                def (length) "length";
+                def (set) "[]=";
+                def (get) "[]";
+                def (each) "each";
             };
 
             class (externals::global::ruby_global) Global {

@@ -9,7 +9,7 @@ use rutie::{AnyObject, Object};
 
 #[rubyclass(module = "Wasmer")]
 pub struct Instance {
-    inner: wasmer::Instance,
+    _inner: wasmer::Instance,
     exports: AnyObject,
 }
 
@@ -34,7 +34,7 @@ impl Instance {
         let exports = Exports::ruby_new(Exports::new(instance.exports.clone()));
 
         Ok(Instance::ruby_new(Instance {
-            inner: instance,
+            _inner: instance,
             exports,
         }))
     }

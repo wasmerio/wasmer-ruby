@@ -1,10 +1,11 @@
 use crate::{
-    error::{to_ruby_err, RuntimeError},
+    error::{to_ruby_err, ArgumentError, RuntimeError},
+    memory::views::{Int16Array, Int32Array, Int8Array, Uint16Array, Uint32Array, Uint8Array},
     prelude::*,
     store::Store,
     types::MemoryType,
 };
-use rutie::{AnyObject, Fixnum};
+use rutie::{AnyObject, Fixnum, Integer, Object};
 use std::convert::{TryFrom, TryInto};
 
 #[rubyclass(module = "Wasmer")]
@@ -58,5 +59,95 @@ impl Memory {
                 .map_err(to_ruby_err::<RuntimeError, _>)
                 .and_then(|pages| pages.0.try_into().map_err(to_ruby_err::<RuntimeError, _>))?,
         ))
+    }
+
+    pub fn uint8_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Uint8Array::ruby_new(Uint8Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
+    }
+
+    pub fn int8_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Int8Array::ruby_new(Int8Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
+    }
+
+    pub fn uint16_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Uint16Array::ruby_new(Uint16Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
+    }
+
+    pub fn int16_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Int16Array::ruby_new(Int16Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
+    }
+
+    pub fn uint32_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Uint32Array::ruby_new(Uint32Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
+    }
+
+    pub fn int32_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
+        Ok(Int32Array::ruby_new(Int32Array::new(
+            self.inner().clone(),
+            if offset.is_nil() {
+                0
+            } else {
+                offset
+                    .try_convert_to::<Integer>()?
+                    .to_u64()
+                    .try_into()
+                    .map_err(to_ruby_err::<ArgumentError, _>)?
+            },
+        )))
     }
 }
