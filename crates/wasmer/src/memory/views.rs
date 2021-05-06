@@ -2,7 +2,7 @@ use crate::{
     error::{to_ruby_err, ArgumentError, TypeError},
     prelude::*,
 };
-use rutie::{Fixnum, Integer, NilClass, VM};
+use rutie::{Integer, NilClass, VM};
 use std::{
     convert::{TryFrom, TryInto},
     mem::size_of,
@@ -17,6 +17,8 @@ macro_rules! memory_view {
         }
 
         impl $class_name {
+            pub const BYTES_PER_ELEMENT: u32 = $bytes_per_element;
+
             pub fn new(memory: wasmer::Memory, offset: usize) -> Self {
                 Self { memory, offset }
             }
@@ -24,10 +26,6 @@ macro_rules! memory_view {
 
         #[rubymethods]
         impl $class_name {
-            pub fn bytes_per_element(&self) -> RubyResult<Fixnum> {
-                Ok(Fixnum::new($bytes_per_element))
-            }
-
             pub fn length(&self) -> RubyResult<Integer> {
                 Ok(Integer::new(
                     (self.memory.view::<$wasm_type>()[self.offset..].len()

@@ -23,6 +23,18 @@ impl Memory {
     }
 }
 
+fn unwrap_offset(offset: &AnyObject) -> RubyResult<usize> {
+    Ok(if offset.is_nil() {
+        0
+    } else {
+        offset
+            .try_convert_to::<Integer>()?
+            .to_u64()
+            .try_into()
+            .map_err(to_ruby_err::<ArgumentError, _>)?
+    })
+}
+
 #[rubymethods]
 impl Memory {
     pub fn new(store: &Store, memory_type: &MemoryType) -> RubyResult<AnyObject> {
@@ -64,90 +76,42 @@ impl Memory {
     pub fn uint8_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Uint8Array::ruby_new(Uint8Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 
     pub fn int8_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Int8Array::ruby_new(Int8Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 
     pub fn uint16_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Uint16Array::ruby_new(Uint16Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 
     pub fn int16_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Int16Array::ruby_new(Int16Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 
     pub fn uint32_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Uint32Array::ruby_new(Uint32Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 
     pub fn int32_view(&self, offset: &AnyObject) -> RubyResult<AnyObject> {
         Ok(Int32Array::ruby_new(Int32Array::new(
             self.inner().clone(),
-            if offset.is_nil() {
-                0
-            } else {
-                offset
-                    .try_convert_to::<Integer>()?
-                    .to_u64()
-                    .try_into()
-                    .map_err(to_ruby_err::<ArgumentError, _>)?
-            },
+            unwrap_offset(offset)?,
         )))
     }
 }
