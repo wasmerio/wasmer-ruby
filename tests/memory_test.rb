@@ -43,4 +43,37 @@ class MemoryTest < Minitest::Test
     assert_equal memory_size, 1179648
     assert_equal memory_size - old_memory_size, 65536
   end
+
+  def test_typed_arrays
+    memory = instance.exports.memory
+
+    assert_kind_of Int8Array, memory.int8_view(0)
+    assert_kind_of Uint8Array, memory.uint8_view(0)
+    assert_kind_of Int16Array, memory.int16_view(0)
+    assert_kind_of Uint16Array, memory.uint16_view(0)
+    assert_kind_of Int32Array, memory.int32_view(0)
+    assert_kind_of Uint32Array, memory.uint32_view(0)
+  end
+
+  def test_typed_arrays_bytes_per_element
+    assert_equal 1, Int8Array::BYTES_PER_ELEMENT
+    assert_equal 1, Uint8Array::BYTES_PER_ELEMENT
+    assert_equal 2, Int16Array::BYTES_PER_ELEMENT
+    assert_equal 2, Uint16Array::BYTES_PER_ELEMENT
+    assert_equal 4, Int32Array::BYTES_PER_ELEMENT
+    assert_equal 4, Uint32Array::BYTES_PER_ELEMENT
+  end
+
+  def test_typed_array_length
+    assert_equal instance.exports.memory.uint8_view(0).length, 1114112
+  end
+
+  def test_typed_array_get_index
+    memory = instance.exports.memory.uint8_view(0)
+    index = 7
+    value = 42
+    memory[index] = value
+
+    assert_equal memory[index], value
+  end
 end
