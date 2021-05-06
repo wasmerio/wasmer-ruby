@@ -1,6 +1,7 @@
 use crate::{
     error::{to_ruby_err, RuntimeError},
     exports::Exports,
+    import_object::RubyImportObject,
     module::Module,
     prelude::*,
 };
@@ -20,7 +21,13 @@ impl Instance {
         let instance = if import_object.is_nil() {
             wasmer::Instance::new(&module, &wasmer::imports! {})
         } else {
-            todo!()
+            wasmer::Instance::new(
+                &module,
+                import_object
+                    .try_convert_to::<RubyImportObject>()?
+                    .upcast()
+                    .inner(),
+            )
         };
 
         let instance = instance.map_err(to_ruby_err::<RuntimeError, _>)?;

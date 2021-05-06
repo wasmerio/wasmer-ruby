@@ -17,7 +17,7 @@ impl Table {
         Self { inner }
     }
 
-    fn inner(&self) -> &wasmer::Table {
+    pub(crate) fn inner(&self) -> &wasmer::Table {
         &self.inner
     }
 }

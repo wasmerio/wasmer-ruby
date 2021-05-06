@@ -17,7 +17,7 @@ impl Global {
         Self { inner }
     }
 
-    fn inner(&self) -> &wasmer::Global {
+    pub(crate) fn inner(&self) -> &wasmer::Global {
         &self.inner
     }
 }

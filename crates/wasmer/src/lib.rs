@@ -84,6 +84,7 @@ pub extern "C" fn Init_wasmer() {
             class (import_object::ruby_importobject) ImportObject {
                 def_self (new) "new";
                 def (contains_namespace) "contains_namespace?";
+                def (register) "register";
             };
 
             class (externals::function::ruby_function, externals::function::ruby_function_extra) Function {

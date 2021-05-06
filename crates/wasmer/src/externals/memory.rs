@@ -16,7 +16,7 @@ impl Memory {
         Self { inner }
     }
 
-    fn inner(&self) -> &wasmer::Memory {
+    pub(crate) fn inner(&self) -> &wasmer::Memory {
         &self.inner
     }
 }
