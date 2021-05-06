@@ -95,6 +95,10 @@ pub extern "C" fn Init_wasmer() {
 
             class (externals::memory::ruby_memory) Memory {
                 def_self (new) "new";
+                def (r#type) "type";
+                def (size) "size";
+                def (data_size) "data_size";
+                def (grow) "grow";
             };
 
             class (externals::global::ruby_global) Global {
