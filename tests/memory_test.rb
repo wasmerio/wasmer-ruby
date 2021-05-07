@@ -68,12 +68,36 @@ class MemoryTest < Minitest::Test
     assert_equal instance.exports.memory.uint8_view(0).length, 1114112
   end
 
-  def test_typed_array_get_index
+  def test_typed_array_get_set_index
     memory = instance.exports.memory.uint8_view(0)
     index = 7
     value = 42
     memory[index] = value
 
     assert_equal memory[index], value
+  end
+
+  def test_typed_array_get_out_of_bound
+    memory = instance.exports.memory.uint8_view(0)
+
+    assert_raises(IndexError) {
+      memory[-1]
+    }
+
+    assert_raises(IndexError) {
+      memory[memory.length]
+    }
+  end
+
+  def test_typed_array_set_out_of_bound
+    memory = instance.exports.memory.uint8_view(0)
+
+    assert_raises(IndexError) {
+      memory[-1] = 0
+    }
+
+    assert_raises(IndexError) {
+      memory[memory.length] = 0
+    }
   end
 end

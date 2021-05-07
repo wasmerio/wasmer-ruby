@@ -1,5 +1,5 @@
 use crate::{
-    error::{to_ruby_err, ArgumentError, TypeError},
+    error::{to_ruby_err, ArgumentError, IndexError, TypeError},
     prelude::*,
 };
 use rutie::{Integer, NilClass, VM};
@@ -45,7 +45,7 @@ macro_rules! memory_view {
                 let view = self.memory.view::<$wasm_type>();
 
                 if index < 0 {
-                    return Err(to_ruby_err::<ArgumentError, _>(
+                    return Err(to_ruby_err::<IndexError, _>(
                         "Out of bound: Index cannot be negative",
                     ));
                 }
@@ -53,7 +53,7 @@ macro_rules! memory_view {
                 let index = index as usize;
 
                 if view.len() <= offset + index {
-                    return Err(to_ruby_err::<ArgumentError, _>(format!(
+                    return Err(to_ruby_err::<IndexError, _>(format!(
                         "Out of bound: Maximum index {} is larger than the memory size {}",
                         offset + index,
                         view.len()
@@ -73,7 +73,7 @@ macro_rules! memory_view {
                 let view = self.memory.view::<$wasm_type>();
 
                 if index < 0 {
-                    return Err(to_ruby_err::<ArgumentError, _>(
+                    return Err(to_ruby_err::<IndexError, _>(
                         "Out of bound: Index cannot be negative.",
                     ));
                 }
@@ -81,7 +81,7 @@ macro_rules! memory_view {
                 let index = index as usize;
 
                 if view.len() <= offset + index {
-                    return Err(to_ruby_err::<ArgumentError, _>(format!(
+                    return Err(to_ruby_err::<IndexError, _>(format!(
                         "Out of bound: Maximum index {} is larger than the memory size {}.",
                         offset + index,
                         view.len()
