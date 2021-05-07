@@ -74,6 +74,10 @@ fn derive_for_struct(
         span,
     );
 
+    let mut ruby_module_parts = ruby_module.split("::");
+    let ruby_module = ruby_module_parts.next().unwrap();
+    let ruby_nested_modules = ruby_module_parts.collect::<Vec<_>>();
+
     quote! {
         // Create the `XXXWrapper` wrapper class.
         //
@@ -98,7 +102,11 @@ fn derive_for_struct(
             fn is_correct_type<T>(object: &T) -> bool
             where T: rutie::Object
             {
-                object.class() == rutie::Module::from_existing(#ruby_module).get_nested_class(stringify!(#struct_name))
+                object.class() == rutie::Module::from_existing(#ruby_module)
+                    #(
+                        .get_nested_module(#ruby_nested_modules)
+                    ),*
+                    .get_nested_class(stringify!(#struct_name))
             }
 
             fn error_message() -> &'static str {
@@ -137,6 +145,9 @@ fn derive_for_struct(
         {
             pub(crate) fn ruby_new(this: Self) -> rutie::AnyObject {
                 rutie::Module::from_existing(#ruby_module)
+                    #(
+                        .get_nested_module(#ruby_nested_modules)
+                    ),*
                     .get_nested_class(stringify!(#struct_name))
                     .wrap_data(this, &*#wrapper_const_name)
             }
