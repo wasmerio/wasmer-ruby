@@ -160,9 +160,9 @@ pub fn entry(
                 };
 
                 let ruby_input_receiver = if need_mut_self {
-                    quote! { mut _slf: #ruby_ty_name }
+                    quote! { mut _ruby_self: #ruby_ty_name }
                 } else {
-                    quote! { _slf: #ruby_ty_name }
+                    quote! { _ruby_self: #ruby_ty_name }
                 };
 
                 let ruby_output = match method.sig.output {
@@ -192,9 +192,13 @@ pub fn entry(
 
                 let ruby_method_block = if need_self {
                     let slf_declaration = if need_mut_self {
-                        quote! { let _slf = _slf.upcast_mut(); }
+                        quote! {
+                            let _slf = _ruby_self.upcast_mut();
+                        }
                     } else {
-                        quote! { let _slf = _slf.upcast(); }
+                        quote! {
+                            let _slf = _ruby_self.upcast();
+                        }
                     };
                     let block = rename_self(ruby_method_block.into_token_stream());
 
