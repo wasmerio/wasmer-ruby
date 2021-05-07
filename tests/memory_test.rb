@@ -100,4 +100,21 @@ class MemoryTest < Minitest::Test
       memory[memory.length] = 0
     }
   end
+
+  def test_hello_world
+    i = instance
+    pointer = i.exports.string.()
+    memory = i.exports.memory.uint8_view pointer
+    nth = 0
+    string = ""
+
+    memory.each do |char|
+      break if 0 == char
+      string << char.chr
+      nth += 1
+    end
+
+    assert_equal nth, 13
+    assert_equal string, "Hello, World!"
+  end
 end
