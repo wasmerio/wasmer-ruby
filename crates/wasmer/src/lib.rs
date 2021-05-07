@@ -249,10 +249,20 @@ pub extern "C" fn Init_wasmer() {
 
     ruby_define! {
         in wasmer_wasi_module
-            class (types) Version {
+            class (wasi) Version {
                 @const LATEST = Integer::new(1);
                 @const SNAPSHOT0 = Integer::new(2);
                 @const SNAPSHOT1 = Integer::new(3);
+            };
+
+            class (wasi::ruby_statebuilder) StateBuilder {
+                def_self (new) "new";
+                def (arguments) "arguments";
+                def (argument) "argument";
+                def (environments) "environments";
+                def (environment) "environment";
+                def (preopen_directories) "preopen_directories";
+                def (preopen_directory) "preopen_directory";
             };
     };
 }
