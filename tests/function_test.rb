@@ -82,29 +82,45 @@ class FunctionTest < Minitest::Test
     assert_nil instance.exports.void.()
   end
 
-  #def test_early_exit
-  #  store = Store.new
-  #  module_ = Module.new(
-  #    store,
-  #    (<<~WAST)
-  #    (module
-  #      (type $run_t (func (param i32 i32) (result i32)))
-  #      (type $early_exit_t (func (param) (result)))
+  def test_early_exit
+    store = Store.new
+    module_ = Module.new(
+      store,
+      (<<~WAST)
+      (module
+        (type $run_t (func (param i32 i32) (result i32)))
+        (type $early_exit_t (func (param) (result)))
 
-  #      (import "env" "early_exit" (func $early_exit (type $early_exit_t)))
+        (import "env" "early_exit" (func $early_exit (type $early_exit_t)))
 
-  #      (func $run (type $run_t) (param $x i32) (param $y i32) (result i32)
-  #        (call $early_exit)
-  #        (i32.add
-  #            local.get $x
-  #            local.get $y))
+        (func $run (type $run_t) (param $x i32) (param $y i32) (result i32)
+          (call $early_exit)
+          (i32.add
+              local.get $x
+              local.get $y))
 
-  #      (export "run" (func $run)))
-  #    WAST
-  #  )
+        (export "run" (func $run)))
+      WAST
+    )
 
-  #  def eary_exit(x)
-  #    raise "oops"
-  #  end
-  #end
+    def early_exit
+      raise "oops"
+    end
+
+    import_object = ImportObject.new
+    import_object.register(
+      "env",
+      {
+        :early_exit => Function.new(store, method(:early_exit), FunctionType.new([], []))
+      }
+    )
+
+    instance = Instance.new module_, import_object
+
+    error = assert_raises(RuntimeError) {
+      instance.exports.run.(1, 2)
+    }
+
+    assert_equal error.message, "oops"
+  end
 end
