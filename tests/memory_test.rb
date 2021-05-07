@@ -117,4 +117,36 @@ class MemoryTest < Minitest::Test
     assert_equal nth, 13
     assert_equal string, "Hello, World!"
   end
+
+  def test_typed_array_enumerable
+    memory = instance.exports.memory.int16_view(0)
+    memory[0] = 1
+    memory[1] = 10
+    memory[2] = 100
+    memory[3] = 1000
+    memory[5] = 2
+    sum = memory.take_while{|x| x > 0}.inject(0, &:+)
+
+    assert_equal sum, 1111
+  end
+
+  def test_typed_arrays_share_the_same_buffer
+    memory = instance.exports.memory
+    int8 = memory.int8_view(0)
+    int16 = memory.int16_view(0)
+    int32 = memory.int32_view(0)
+
+    int8[0] = 0b00000001
+    int8[1] = 0b00000100
+    int8[2] = 0b00010000
+    int8[3] = 0b01000000
+
+    assert_equal int8[0], 0b00000001
+    assert_equal int8[1], 0b00000100
+    assert_equal int8[2], 0b00010000
+    assert_equal int8[3], 0b01000000
+    assert_equal int16[0], 0b00000100_00000001
+    assert_equal int16[1], 0b01000000_00010000
+    assert_equal int32[0], 0b01000000_00010000_00000100_00000001
+  end
 end

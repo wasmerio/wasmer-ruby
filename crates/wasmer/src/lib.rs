@@ -19,7 +19,9 @@ use rutie::{Class, Integer, Module, Object, RString};
 
 macro_rules! ruby_define {
     (in $module:ident
-        $( class ( $( $class_rust_module:path ),+ ) $class_name:ident {
+     $( class ( $( $class_rust_module:path ),+ ) $class_name:ident
+        $( include $include_name:ident )*
+        {
            $( @const $constant_name:ident = $constant_value:expr; )*
            $( $ruby_definition:ident ($method_rust_name:ident) $method_name:expr; )*
         }; )*
@@ -43,7 +45,9 @@ macro_rules! ruby_define {
                         $(
                             this.const_set(stringify!($constant_name), &$constant_value);
                         )*
-                    });
+                    })
+                    $( .include( stringify!($include_name) ) )*
+                    ;
             }
         )*
     }
@@ -111,7 +115,9 @@ pub extern "C" fn Init_wasmer() {
                 def (int32_view) "int32_view";
             };
 
-            class (memory::views::ruby_uint8array) Uint8Array {
+            class (memory::views::ruby_uint8array) Uint8Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Uint8Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
@@ -119,7 +125,9 @@ pub extern "C" fn Init_wasmer() {
                 def (each) "each";
             };
 
-            class (memory::views::ruby_int8array) Int8Array {
+            class (memory::views::ruby_int8array) Int8Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Int8Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
@@ -127,7 +135,9 @@ pub extern "C" fn Init_wasmer() {
                 def (each) "each";
             };
 
-            class (memory::views::ruby_uint16array) Uint16Array {
+            class (memory::views::ruby_uint16array) Uint16Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Uint16Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
@@ -135,7 +145,9 @@ pub extern "C" fn Init_wasmer() {
                 def (each) "each";
             };
 
-            class (memory::views::ruby_int16array) Int16Array {
+            class (memory::views::ruby_int16array) Int16Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Int16Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
@@ -143,7 +155,9 @@ pub extern "C" fn Init_wasmer() {
                 def (each) "each";
             };
 
-            class (memory::views::ruby_uint32array) Uint32Array {
+            class (memory::views::ruby_uint32array) Uint32Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Uint32Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
@@ -151,7 +165,9 @@ pub extern "C" fn Init_wasmer() {
                 def (each) "each";
             };
 
-            class (memory::views::ruby_int32array) Int32Array {
+            class (memory::views::ruby_int32array) Int32Array
+            include Enumerable
+            {
                 @const BYTES_PER_ELEMENT = Integer::from(Int32Array::BYTES_PER_ELEMENT);
                 def (length) "length";
                 def (set) "[]=";
