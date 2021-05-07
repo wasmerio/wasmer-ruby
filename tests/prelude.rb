@@ -29,3 +29,4 @@ Uint16Array = Wasmer::Uint16Array
 Uint32Array = Wasmer::Uint32Array
 Uint8Array = Wasmer::Uint8Array
 Value = Wasmer::Value
+Wasi = Wasmer::Wasi

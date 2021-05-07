@@ -11,6 +11,7 @@ mod prelude;
 mod store;
 mod types;
 mod values;
+mod wasi;
 
 use crate::memory::views::{
     Int16Array, Int32Array, Int8Array, Uint16Array, Uint32Array, Uint8Array,
@@ -241,6 +242,17 @@ pub extern "C" fn Init_wasmer() {
                 def_self (i64) "i64";
                 def_self (f32) "f32";
                 def_self (f64) "f64";
+            };
+    };
+
+    let mut wasmer_wasi_module = wasmer_module.define_nested_module("Wasi");
+
+    ruby_define! {
+        in wasmer_wasi_module
+            class (types) Version {
+                @const LATEST = Integer::new(1);
+                @const SNAPSHOT0 = Integer::new(2);
+                @const SNAPSHOT1 = Integer::new(3);
             };
     };
 }
