@@ -38,8 +38,45 @@ class ImportObjectTest < Minitest::Test
     assert_equal instance.exports.add_one.(1), 2
   end
 
-  #def test_import_memory
-  #end
+  def test_import_memory
+    store = Store.new
+    module_ = Module.new(
+      store,
+      (<<~WAST)
+      (module
+        (import "env" "memory" (memory $memory 1))
+        (func (export "increment")
+          i32.const 0
+          i32.const 0
+          i32.load    ;; load 0
+          i32.const 1
+          i32.add     ;; add 1
+          i32.store   ;; store at 0
+          ))
+      WAST
+    )
+
+    memory = Memory.new store, MemoryType.new(1, nil, false)
+    view = memory.uint8_view(0)
+
+    import_object = ImportObject.new
+    import_object.register(
+      "env",
+      {
+        :memory => memory,
+      }
+    )
+
+    instance = Instance.new module_, import_object
+
+    assert_equal view[0], 0
+
+    instance.exports.increment.()
+    assert_equal view[0], 1
+
+    instance.exports.increment.()
+    assert_equal view[0], 2
+  end
 
   def test_import_global
     store = Store.new
