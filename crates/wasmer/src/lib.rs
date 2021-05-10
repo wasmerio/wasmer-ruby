@@ -1,5 +1,22 @@
-//#![deny(warnings)]
+#![deny(warnings)]
 
+//! # The `wasmer` Ruby package
+//!
+//! A complete and mature WebAssembly runtime for Ruby based on [Wasmer].
+//!
+//! ## Features
+//!
+//! * **Easy to use**: The `wasmer` API mimics the standard
+//!   WebAssembly API,
+//! * **Fast**: `wasmer` executes the WebAssembly modules as fast as
+//!   possible,
+//! * **Safe**: All calls to WebAssembly will be fast, but more
+//!   importantly, complete safe and sandboxed.
+//!
+//! [Wasmer]: https://github.com/wasmerio/wasmer
+
+#[cfg(doc)]
+mod doc;
 mod error;
 mod exports;
 mod externals;
@@ -13,6 +30,9 @@ mod types;
 mod values;
 mod wasi;
 mod wat;
+
+#[cfg(doc)]
+pub use doc::*;
 
 use crate::memory::views::{
     Int16Array, Int32Array, Int8Array, Uint16Array, Uint32Array, Uint8Array,
@@ -60,6 +80,7 @@ macro_rules! ruby_define {
     }
 }
 
+#[doc(hidden)]
 #[allow(non_snake_case)]
 #[no_mangle]
 pub extern "C" fn Init_wasmer() {

@@ -10,6 +10,10 @@ test:
 gem:
 	rake build
 
+# Generate the documentation.
+doc:
+	cargo doc --manifest-path crates/wasmer/Cargo.toml --no-deps
+
 # Clean the project.
 clean:
 	cargo clean
