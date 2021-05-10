@@ -12,6 +12,7 @@ mod store;
 mod types;
 mod values;
 mod wasi;
+mod wat;
 
 use crate::memory::views::{
     Int16Array, Int32Array, Int8Array, Uint16Array, Uint32Array, Uint8Array,
@@ -248,6 +249,9 @@ pub extern "C" fn Init_wasmer() {
                 def_self (f32) "f32";
                 def_self (f64) "f64";
             };
+
+            function (wat::wat2wasm) "wat2wasm";
+            function (wat::wasm2wat) "wasm2wat";
     };
 
     let mut wasmer_wasi_module = wasmer_module.define_nested_module("Wasi");

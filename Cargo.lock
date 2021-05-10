@@ -18,6 +18,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
+name = "anyhow"
+version = "1.0.40"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28b2cd92db5cbd74e8e5028f7e27dd7aa3090e89e4f2a197cc7c8dfb69c7063b"
+
+[[package]]
 name = "autocfg"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -901,6 +907,8 @@ dependencies = [
  "rutie-derive",
  "wasmer 1.0.2",
  "wasmer-wasi",
+ "wasmprinter",
+ "wat",
 ]
 
 [[package]]
@@ -940,7 +948,7 @@ dependencies = [
  "thiserror",
  "wasmer-types",
  "wasmer-vm",
- "wasmparser",
+ "wasmparser 0.65.0",
 ]
 
 [[package]]
@@ -1102,6 +1110,22 @@ name = "wasmparser"
 version = "0.65.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87cc2fe6350834b4e528ba0901e7aa405d78b89dc1fa3145359eb4de0e323fcf"
+
+[[package]]
+name = "wasmparser"
+version = "0.78.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c7a8b20306d43c09c2c34e0ef68bf2959a11b01a5cae35e4c5dc1e7145547b6"
+
+[[package]]
+name = "wasmprinter"
+version = "0.2.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2ccec894c70710c2e4669320a532cb2b9cfb97adb0429745642f8ce76916ed85"
+dependencies = [
+ "anyhow",
+ "wasmparser 0.78.0",
+]
 
 [[package]]
 name = "wast"

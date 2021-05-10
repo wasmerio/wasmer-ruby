@@ -54,7 +54,7 @@ class InstanceTest < Minitest::Test
     instance = Instance.new module_, nil
     exports = instance.exports
 
-    assert exports.length, 2
+    assert_equal exports.length, 2
   end
 
   def test_export_does_not_exist

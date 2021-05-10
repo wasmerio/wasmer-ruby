@@ -20,3 +20,5 @@ wasmer-wasi = "1.0"
 rutie = "0.8"
 rutie-derive = { path = "../rutie-derive", version = "0.1.0" }
 lazy_static = "1.4"
+wat = "1.0"
+wasmprinter = "0.2"
