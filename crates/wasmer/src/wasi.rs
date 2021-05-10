@@ -215,4 +215,12 @@ impl Environment {
         Ok(ImportObject::ruby_new(ImportObject::raw_new(import_object)))
     }
 }
+
+#[rubyfunction]
+pub fn get_version(module: &Module, strict: &Boolean) -> RubyResult<AnyObject> {
+    Ok(
+        wasmer_wasi::get_wasi_version(&module.inner(), strict.to_bool())
+            .map(|version| Version::from(&version).to_integer().to_any_object())
+            .unwrap_or_else(|| NilClass::new().to_any_object()),
+    )
 }

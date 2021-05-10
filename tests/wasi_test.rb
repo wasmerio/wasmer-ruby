@@ -1,10 +1,20 @@
 require "prelude"
 
 class WasiTest < Minitest::Test
+  def bytes
+    IO.read File.expand_path("wasi.wasm", File.dirname(__FILE__)), mode: "rb"
+  end
+
   def test_version
     assert_equal Wasi::Version::LATEST, 1
     assert_equal Wasi::Version::SNAPSHOT0, 2
     assert_equal Wasi::Version::SNAPSHOT1, 3
+  end
+
+  def test_get_version
+    module_ = Module.new(Store.new, bytes)
+
+    assert_equal Wasi::get_version(module_, true), Wasi::Version::SNAPSHOT1
   end
 
   def test_state_builder

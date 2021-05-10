@@ -25,7 +25,10 @@ macro_rules! ruby_define {
         {
            $( @const $constant_name:ident = $constant_value:expr; )*
            $( $ruby_definition:ident ($method_rust_name:ident) $method_name:expr; )*
-        }; )*
+        };
+     )*
+
+     $( function ( $function_rust_name:path ) $function_name:expr; )*
     ) => {
         $(
             {
@@ -51,6 +54,8 @@ macro_rules! ruby_define {
                     ;
             }
         )*
+
+        $( $module.define_module_function($function_name, $function_rust_name); )*
     }
 }
 
@@ -270,5 +275,7 @@ pub extern "C" fn Init_wasmer() {
             class (wasi::ruby_environment) Environment {
                 def (generate_import_object) "generate_import_object";
             };
+
+            function (wasi::get_version) "get_version";
     };
 }
