@@ -270,6 +270,7 @@ pub extern "C" fn Init_wasmer() {
                 def (preopen_directory) "preopen_directory";
                 def (map_directories) "map_directories";
                 def (map_directory) "map_directory";
+                def (finalize) "finalize";
             };
 
             class (wasi::ruby_environment) Environment {

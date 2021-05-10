@@ -25,4 +25,8 @@ class WasiTest < Minitest::Test
 
     assert_kind_of Wasi::StateBuilder, state_builder
   end
+
+  def test_environment
+    assert_kind_of Wasi::Environment, Wasi::StateBuilder.new("foo").finalize
+  end
 end
