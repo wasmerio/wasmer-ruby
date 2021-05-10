@@ -29,4 +29,29 @@ class WasiTest < Minitest::Test
   def test_environment
     assert_kind_of Wasi::Environment, Wasi::StateBuilder.new("foo").finalize
   end
+
+  def test_generate_import_object
+    store = Store.new
+    wasi_env = Wasi::StateBuilder.new("foo").finalize
+    import_object = wasi_env.generate_import_object store, Wasi::Version::LATEST
+
+    instance = Instance.new Module.new(store, bytes), import_object
+
+    assert_kind_of Instance, instance
+  end
+
+  def test_wasi
+    store = Store.new
+    module_ = Module.new store, bytes
+    wasi_version = Wasi::get_version module_, true
+    wasi_env = Wasi::StateBuilder.new("test-program")
+                 .argument("--foo")
+                 .environments({"ABC" => "DEF", "X" => "YZ"})
+                 .map_directory("the_host_directory", ".")
+                 .finalize
+    import_object = wasi_env.generate_import_object store, wasi_version
+    instance = Instance.new module_, import_object
+
+    instance.exports._start.()
+  end
 end
