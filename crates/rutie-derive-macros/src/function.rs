@@ -1,5 +1,5 @@
-use proc_macro2::{Group, Ident, Span, TokenStream, TokenTree};
-use quote::{quote, ToTokens};
+use proc_macro2::Ident;
+use quote::quote;
 use syn::{punctuated::Punctuated, token::Colon2, *};
 
 pub fn entry(
