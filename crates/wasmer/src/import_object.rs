@@ -11,6 +11,10 @@ pub struct ImportObject {
 }
 
 impl ImportObject {
+    pub(crate) fn raw_new(inner: wasmer::ImportObject) -> Self {
+        Self { inner }
+    }
+
     pub(crate) fn inner(&self) -> &wasmer::ImportObject {
         &self.inner
     }

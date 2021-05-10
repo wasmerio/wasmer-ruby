@@ -8,10 +8,11 @@ class WasiTest < Minitest::Test
   end
 
   def test_state_builder
-    state_builder = Wasi::StateBuilder.new "test-program"
-
-    state_builder
+    state_builder = Wasi::StateBuilder.new("test-program")
       .arguments(["--foo", "--bar"])
       .environments({"ABC" => "DEF", "X" => "YZ"})
+      .map_directory("the_host_current_dir", ".")
+
+    assert_kind_of Wasi::StateBuilder, state_builder
   end
 end

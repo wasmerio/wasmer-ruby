@@ -1,8 +1,11 @@
 use crate::{
-    error::{to_ruby_err, unwrap_or_raise, RuntimeError},
+    error::{to_ruby_err, unwrap_or_raise, RuntimeError, TypeError},
+    import_object::ImportObject,
+    module::Module,
     prelude::*,
+    store::Store,
 };
-use rutie::{AnyObject, Array, Hash, Integer, Object, RString};
+use rutie::{AnyObject, Array, Boolean, Hash, Integer, NilClass, Object, RString};
 use std::{convert::TryFrom, path::PathBuf};
 
 #[derive(Debug, Copy, Clone)]
@@ -104,6 +107,8 @@ impl StateBuilder {
             });
         });
 
+        self.inner.envs(environment_pairs);
+
         Ok(_ruby_self)
     }
 
@@ -143,4 +148,71 @@ impl StateBuilder {
 
         Ok(_ruby_self)
     }
+
+    pub fn map_directories(&mut self, map_directories: &Hash) -> RubyResult<RubyStateBuilder> {
+        let mut map_directory_pairs = Vec::with_capacity(map_directories.length());
+
+        map_directories.each(|key, value| {
+            unwrap_or_raise(|| {
+                map_directory_pairs.push((
+                    key.try_convert_to::<RString>()?.to_string(),
+                    PathBuf::from(value.try_convert_to::<RString>()?.to_str()),
+                ));
+
+                Ok(())
+            });
+        });
+
+        self.inner
+            .map_dirs(map_directory_pairs)
+            .map_err(to_ruby_err::<RuntimeError, _>)?;
+
+        Ok(_ruby_self)
+    }
+
+    pub fn map_directory(
+        &mut self,
+        alias: &RString,
+        directory: &RString,
+    ) -> RubyResult<RubyStateBuilder> {
+        self.inner
+            .map_dir(alias.to_str(), PathBuf::from(directory.to_str()))
+            .map_err(to_ruby_err::<RuntimeError, _>)?;
+
+        Ok(_ruby_self)
+    }
+
+    pub fn finalize(&mut self) -> RubyResult<AnyObject> {
+        Ok(Environment::ruby_new(Environment {
+            inner: self
+                .inner
+                .finalize()
+                .map_err(to_ruby_err::<RuntimeError, _>)?,
+        }))
+    }
+}
+
+#[rubyclass(module = "Wasmer::Wasi")]
+pub struct Environment {
+    inner: wasmer_wasi::WasiEnv,
+}
+
+#[rubymethods]
+impl Environment {
+    pub fn generate_import_object(
+        &self,
+        store: &Store,
+        wasi_version: &Integer,
+    ) -> RubyResult<AnyObject> {
+        let import_object = wasmer_wasi::generate_import_object_from_env(
+            store.inner(),
+            self.inner.clone(),
+            Version::try_from(wasi_version)
+                .map_err(to_ruby_err::<TypeError, _>)?
+                .into(),
+        );
+
+        Ok(ImportObject::ruby_new(ImportObject::raw_new(import_object)))
+    }
+}
 }
