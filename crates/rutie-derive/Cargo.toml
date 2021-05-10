@@ -1,0 +1,14 @@
+[package]
+name = "rutie-derive"
+version = "0.1.0"
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
+edition = "2018"
+description = "Provide useful types to complete the `rutie-derive-macros` crate"
+readme = "README.md"
+repository = "https://github.com/wasmerio/wasmer-ruby"
+keywords = ["ruby", "extension"]
+publish = false
+
+[dependencies]
+rutie = "0.8"
+rutie-derive-macros = { path = "../rutie-derive-macros", version = "0.1.0" }

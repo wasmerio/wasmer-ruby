@@ -1,21 +1,66 @@
-# coding: utf-8
 require "prelude"
 
 class GlobalTest < Minitest::Test
-  def bytes
-    IO.read File.expand_path("global.wasm", File.dirname(__FILE__)), mode: "rb"
+  TEST_BYTES = 
+    (<<~WAST)
+    (module
+      (global $x (export "x") (mut i32) (i32.const 0))
+      (global $y (export "y") (mut i32) (i32.const 7))
+      (global $z (export "z") i32 (i32.const 42))
+     
+      (func (export "get_x") (result i32)
+        (global.get $x))
+     
+      (func (export "increment_x")
+        (global.set $x
+          (i32.add (global.get $x) (i32.const 1)))))
+    WAST
+
+  def instance
+    Instance.new Module.new(Store.new, TEST_BYTES), nil
+  end
+  
+  def test_constructor
+    store = Store.new
+    global = Global.new store, Value.i32(42), false
+
+    assert_equal global.value, 42
+
+    type = global.type
+
+    assert_equal type.type, Type::I32
+    assert_equal type.mutable?, false
   end
 
-  def test_global_mutable
-    globals = Wasmer::Instance.new(self.bytes).globals
+  def test_constructor_mutable
+    store = Store.new
+    global = Global.new store, Value.i32(42), true
 
-    assert_equal globals.x.mutable, true
-    assert_equal globals.y.mutable, true
-    assert_equal globals.z.mutable, false
+    assert_equal global.value, 42
+
+    type = global.type
+
+    assert_equal type.type, Type::I32
+    assert_equal type.mutable?, true
+
+    global.value = 153
+
+    assert_equal global.value, 153
+  end
+
+  def test_export
+    assert_kind_of Global, instance.exports.x
+  end
+
+  def test_type
+    type = instance.exports.x.type
+
+    assert_equal type.type, Type::I32
+    assert_equal type.mutable?, true
   end
 
   def test_global_read_write
-    y = Wasmer::Instance.new(self.bytes).globals.y
+    y = instance.exports.y
 
     assert_equal y.value, 7
 
@@ -24,42 +69,32 @@ class GlobalTest < Minitest::Test
     assert_equal y.value, 8
   end
 
-  def test_global_write_invalid_type
-    y = Wasmer::Instance.new(self.bytes).globals.y
-
-    error = assert_raises(TypeError) {
-      y.value = 4.2
-    }
-    assert_equal "Failed to set `AnyObject { value: Value { value: 37830236869912170 } }` to the global `y` (with type `I32`).", error.message
-  end
-
   def test_global_read_write_and_exported_functions
-    instance = Wasmer::Instance.new self.bytes
     exports = instance.exports
-    x = instance.globals.x
+    x = exports.x
+    get_x = exports.get_x
 
     assert_equal x.value, 0
-    assert_equal exports.get_x, 0
+    assert_equal get_x.(), 0
 
     x.value = 1
 
     assert_equal x.value, 1
-    assert_equal exports.get_x, 1
+    assert_equal get_x.(), 1
 
-    exports.increment_x
+    exports.increment_x.()
 
     assert_equal x.value, 2
-    assert_equal exports.get_x, 2
+    assert_equal get_x.(), 2
   end
 
-  def test_global_read_write_constants
-    z = Wasmer::Instance.new(self.bytes).globals.z
+  def test_global_read_write_constant
+    z = instance.exports.z
 
     assert_equal z.value, 42
 
-    error = assert_raises(RuntimeError) {
+    assert_raises(RuntimeError) {
       z.value = 153
     }
-    assert_equal "The global variable `z` is not mutable, cannot set a new value.", error.message
   end
 end

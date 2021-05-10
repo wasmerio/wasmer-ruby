@@ -1,117 +1,67 @@
 require "prelude"
 
 class InstanceTest < Minitest::Test
-  def bytes
-    IO.read File.expand_path("tests.wasm", File.dirname(__FILE__)), mode: "rb"
+  def test_version
+    assert_kind_of String, Wasmer::VERSION
+    assert Wasmer::VERSION, "foo"
   end
-
-  def invalid_bytes
-    IO.read File.expand_path("invalid.wasm", File.dirname(__FILE__)), mode: "rb"
-  end
-
-  def test_can_construct
-    assert Wasmer::Instance.new self.bytes
-  end
-
-  def test_constructor_needs_bytes
-    error = assert_raises(ArgumentError) {
-      Wasmer::Instance.new 123
-    }
-    assert_equal "WebAssembly module must be represented by Ruby bytes only.", error.message
-  end
-
-  def test_module_without_an_exported_memory
-    bytes = IO.read File.expand_path("no_memory.wasm", File.dirname(__FILE__)), mode: "rb"
-    error = assert_raises(RuntimeError) {
-      Wasmer::Instance.new(bytes).memory
-    }
-    assert_equal "The WebAssembly module has no exported memory.", error.message
-  end
-
-  def test_invalid_module
-    error = assert_raises(RuntimeError) {
-      Wasmer::Instance.new self.invalid_bytes
-    }
-    assert_equal "Failed to instantiate the module:\n    compile error: Validation error \"Invalid type\"", error.message
-  end
-
-  def test_basic_sum
-    exports = Wasmer::Instance.new(self.bytes).exports
-    assert exports.respond_to?(:sum)
-    assert_equal 3, exports.sum(1, 2)
-  end
-
-  def test_call_unknown_function
-    exports = Wasmer::Instance.new(self.bytes).exports
-    assert !exports.respond_to?(:foo)
-    error = assert_raises(RuntimeError) {
-      exports.foo
-    }
-    assert_equal "Function `foo` does not exist.", error.message
-  end
-
-  def test_call_missing_argument
-    error = assert_raises(ArgumentError) {
-      Wasmer::Instance.new(self.bytes).exports.sum 1
-    }
-    assert_equal "Missing 1 argument(s) when calling `sum`: Expect 2 argument(s), given 1.", error.message
-  end
-
-  def test_call_extra_argument
-    error = assert_raises(ArgumentError) {
-      Wasmer::Instance.new(self.bytes).exports.sum 1, 2, 3
-    }
-    assert_equal "Given 1 extra argument(s) when calling `sum`: Expect 2 argument(s), given 3.", error.message
-  end
-
-  def test_call_cannot_convert_argument
-    error = assert_raises(ArgumentError) {
-      Wasmer::Instance.new(self.bytes).exports.sum 1, "2"
-    }
-    assert_equal "Cannot convert argument #2 to a WebAssembly value. Only integers and floats are supported. Given `RString`.", error.message
-  end
-
-  def test_call_arity_0
-    assert_equal 42, Wasmer::Instance.new(self.bytes).exports.arity_0
-  end
-
-  def test_call_i32_i32
-    assert_equal 7, Wasmer::Instance.new(self.bytes).exports.i32_i32(7)
-  end
-
-  def test_call_i64_i64
-    assert_equal 7, Wasmer::Instance.new(self.bytes).exports.i64_i64(7)
-  end
-
-  def test_call_f32_f32
-    assert_equal 7.0, Wasmer::Instance.new(self.bytes).exports.f32_f32(7.0)
-  end
-
-  def test_call_f64_f64
-    assert_equal 7.0, Wasmer::Instance.new(self.bytes).exports.f64_f64(7.0)
-  end
-
-  def test_call_i32_i64_f32_f64_f64
-    assert_equal 1 + 2 + 3.4 + 5.6, Wasmer::Instance.new(self.bytes).exports.i32_i64_f32_f64_f64(1, 2, 3.4, 5.6).round(6)
-  end
-
-  def test_call_bool_casted_to_i32
-    assert_equal 1, Wasmer::Instance.new(self.bytes).exports.bool_casted_to_i32
-  end
-
-  def test_call_string
-    assert_equal 1048576, Wasmer::Instance.new(self.bytes).exports.string
-  end
-
-  def test_call_void
-    assert_nil Wasmer::Instance.new(self.bytes).exports.void
+  
+  def test_new
+    assert Instance.new Module.new(Store.new, "(module)"), nil
   end
 
   def test_exports
-    assert_instance_of Wasmer::ExportedFunctions, Wasmer::Instance.new(self.bytes).exports
+    instance = Instance.new Module.new(Store.new, "(module)"), nil
+
+    assert_kind_of Exports, instance.exports
   end
 
-  def test_memory
-    assert_instance_of Wasmer::Memory, Wasmer::Instance.new(self.bytes).memory
+  def test_exports_all_kind
+    module_ = Module.new(
+      Store.new,
+      (<<~WAST)
+      (module
+        (func (export "func") (param i32 i64))
+        (global (export "glob") i32 (i32.const 7))
+        (table (export "tab") 0 funcref)
+        (memory (export "mem") 1))
+      WAST
+    )
+    instance = Instance.new module_, nil
+    exports = instance.exports
+
+    assert exports.respond_to? :func
+    assert exports.respond_to? :glob
+    assert exports.respond_to? :tab
+    assert exports.respond_to? :mem
+    assert not(exports.respond_to? :foo)
+
+    assert_kind_of Function, exports.func
+    assert_kind_of Memory, exports.mem
+    assert_kind_of Global, exports.glob
+    assert_kind_of Table, exports.tab
+  end
+
+  def test_exports_len()
+    module_ = Module.new(
+      Store.new,
+      (<<~WAST)
+      (module
+        (func (export "func") (param i32 i64))
+        (global (export "glob") i32 (i32.const 7)))
+      WAST
+    )
+    instance = Instance.new module_, nil
+    exports = instance.exports
+
+    assert_equal exports.length, 2
+  end
+
+  def test_export_does_not_exist
+    exports = Instance.new(Module.new(Store.new, "(module)"), nil).exports
+
+    assert_raises(NameError) {
+      exports.foo
+    }
   end
 end

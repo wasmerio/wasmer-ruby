@@ -4,7 +4,7 @@ require "rake/testtask"
 
 desc 'Build the Rust extension'
 task :build_lib do
-  sh 'cargo build --release'
+  sh 'cargo build --release --manifest-path crates/wasmer/Cargo.toml'
 end
 
 desc 'Install the bundle'

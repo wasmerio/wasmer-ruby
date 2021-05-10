@@ -1,0 +1,19 @@
+[package]
+name = "rutie-derive-macros"
+version = "0.1.0"
+authors = ["Wasmer Engineering Team <engineering@wasmer.io>"]
+edition = "2018"
+description = "Procedural macros on top of `rutie` to write Ruby extensions faster and safer"
+readme = "README.md"
+repository = "https://github.com/wasmerio/wasmer-ruby"
+keywords = ["ruby", "extension"]
+publish = false
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0", features = ["full"] }
+quote = "1.0"
+paste = "1.0"
+proc-macro2 = "1.0"

@@ -1,20 +1,6 @@
-[package]
-publish = false
-name = "wasmer-ruby"
-version = "0.4.0"
-authors = ["Ivan Enderlin <ivan.enderlin@hoa-project.net>"]
-edition = "2018"
-description = "Ruby extension to run WebAssembly binaries"
-readme = "README.md"
-repository = "https://github.com/wasmerio/wasmer-ruby"
-keywords = ["ruby", "extension", "webassembly"]
-categories = ["wasm"]
-
-[lib]
-name = "wasmer"
-crate-type = ["dylib"]
-
-[dependencies]
-wasmer-runtime = "0.14"
-rutie = "0.7"
-lazy_static = "1.4"
+[workspace]
+members = [
+    "crates/rutie-derive",
+    "crates/rutie-derive-macros",
+    "crates/wasmer",
+]
