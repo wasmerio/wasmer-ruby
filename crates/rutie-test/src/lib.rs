@@ -5,7 +5,9 @@ macro_rules! test_ruby {
 
         let code = format!(
             r#"
-root = ENV["CARGO_MANIFEST_DIR"]
+root = File.expand_path("../..", ENV["CARGO_MANIFEST_DIR"])
+
+Dir.chdir(root)
 
 class RbConfig
   CONFIG = {{
@@ -13,8 +15,8 @@ class RbConfig
   }}
 end
 
-$LOAD_PATH.unshift(File.expand_path("../../lib", root))
-$LOAD_PATH.unshift(File.expand_path("../../vendor/bundle/gems/rutie-0.0.4/lib", root))
+$LOAD_PATH.unshift(File.expand_path("lib", root))
+$LOAD_PATH.unshift(File.expand_path("vendor/bundle/rutie/lib", root))
 
 require 'wasmer'
 
