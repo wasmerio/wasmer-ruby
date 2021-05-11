@@ -13,7 +13,7 @@ gem:
 
 # Generate the documentation.
 doc:
-	cargo doc --manifest-path crates/wasmer/Cargo.toml --no-deps
+	cargo rustdoc --manifest-path crates/wasmer/Cargo.toml -- --extend-css doc/patch-rustdoc.css
 
 # Clean the project.
 clean:
