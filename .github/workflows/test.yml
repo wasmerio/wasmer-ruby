@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [2.6.7, 2.7.3, 3.0.1]
+        ruby: ['2.6', '2.7', '3.0']
         target:
           - id: 'linux-amd64'
             os: 'ubuntu-latest'
@@ -49,44 +49,11 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
-      - name: Cache Ruby versions
-        uses: actions/cache@v1
-        with:
-          path: ~/.rbenv/
-          key: ${{ runner.os }}-rbenv-versions
-
-      - name: Set up `rbenv`
-        if: matrix.target.id == 'linux-amd64'
-        shell: bash
-        run: |
-          sudo apt install rbenv rubygems
-
-      - name: Set up `rbenv`
-        if: matrix.target.id == 'darwin-amd64'
-        shell: bash
-        run: |
-          if test -d $HOME/.rbenv/bin; then
-            brew upgrade rbenv ruby-build
-          else
-            brew install rbenv
-          fi
-
-      - name: Inspect setup
-        shell: bash
-        run: |
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          which gem
-          which ruby-build
-          which rbenv
-          rbenv install --list
-
       - name: Set up Ruby ${{ matrix.ruby }}
-        shell: bash
-        run: |
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          rbenv install --skip-existing ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
 
       - name: Set up just
         shell: bash
@@ -97,11 +64,7 @@ jobs:
       - name: Compile the library
         shell: bash
         run: |
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/${{ matrix.ruby }}/bin:$PATH"
           export PATH="$HOME/.cargo/bin:$PATH"
-          export GEM_HOME="$HOME/.gem"
           gem install rake
           gem install bundler
           just build
@@ -110,6 +73,5 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          export PATH="$HOME/.rbenv/versions/${{ matrix.ruby }}/bin:$PATH"
           export GEM_HOME="$HOME/.gem"
           just test
