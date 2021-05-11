@@ -1,5 +1,5 @@
 require 'rutie'
 
 module Wasmer
-  Rutie.new(:wasmer).init 'Init_wasmer', __dir__
+  Rutie.new(:wasmer).init 'init', __dir__
 end

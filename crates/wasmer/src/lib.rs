@@ -83,7 +83,7 @@ macro_rules! ruby_define {
 #[doc(hidden)]
 #[allow(non_snake_case)]
 #[no_mangle]
-pub extern "C" fn Init_wasmer() {
+pub extern "C" fn init() {
     let mut wasmer_module = Module::from_existing("Wasmer");
 
     wasmer_module.const_set("VERSION", &RString::new_utf8(env!("CARGO_PKG_VERSION")));

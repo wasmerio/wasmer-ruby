@@ -2,9 +2,9 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "wasmer"
 require "minitest/autorun"
-require 'color_pound_spec_reporter'
+require "minitest/reporters"
 
-Minitest::Reporters.use! [ColorPoundSpecReporter.new]   
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 ExportType = Wasmer::ExportType
 Exports = Wasmer::Exports

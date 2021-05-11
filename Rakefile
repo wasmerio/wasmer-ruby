@@ -15,7 +15,7 @@ end
 Rake::TestTask.new(test: [:bundle_install, :build_lib]) do |t|
   t.libs << "tests"
   t.libs << "lib"
-  t.test_files = FileList["tests/**/*_test.rb"]
+  t.test_files = FileList["tests/*_test.rb"]
 end
 
 task :default => :test
