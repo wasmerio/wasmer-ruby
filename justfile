@@ -1,6 +1,7 @@
 # Compile and install the Ruby extension.
 build:
 	rake build_lib
+	rake bundle_install
 
 # Run the tests.
 test:
