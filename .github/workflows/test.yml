@@ -31,7 +31,7 @@ jobs:
 
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
-      #fail-fast: true
+      fail-fast: false
 
     runs-on: ${{ matrix.target.os }}
 
@@ -53,7 +53,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
 
       - name: Set up just
         shell: bash
