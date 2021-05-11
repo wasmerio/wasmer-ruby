@@ -29,9 +29,14 @@ jobs:
             target-name: 'x86_64-apple-darwin'
             rust-toolchain: 'stable'
 
+          - id: 'windows-amd64'
+            os: 'windows-latest'
+            target-name: 'x86_64-pc-windows-msvc'
+            rust-toolchain: 'stable'
+
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
-      fail-fast: false
+      fail-fast: true
 
     runs-on: ${{ matrix.target.os }}
 
