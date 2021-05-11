@@ -31,7 +31,7 @@ jobs:
 
       # As soon as one job fails in the matrix, all the other
       # in-progress jobs are canceled.
-      fail-fast: true
+      #fail-fast: true
 
     runs-on: ${{ matrix.target.os }}
 
@@ -59,18 +59,27 @@ jobs:
         if: matrix.target.id == 'linux-amd64'
         shell: bash
         run: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          export PATH="$HOME/.rbenv/shims:$PATH"
-          sudo apt install rbenv
-          sudo apt install rubygems
+          sudo apt install rbenv rubygems
 
       - name: Set up `rbenv`
         if: matrix.target.id == 'darwin-amd64'
         shell: bash
         run: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
+          if test -d $HOME/.rbenv/bin; then
+            brew upgrade rbenv ruby-build
+          else
+            brew install rbenv
+          fi
+
+      - name: Inspect setup
+        shell: bash
+        run: |
           export PATH="$HOME/.rbenv/shims:$PATH"
-          test -d $HOME/.rbenv/bin || brew install rbenv
+          export PATH="$HOME/.rbenv/bin:$PATH"
+          which gem
+          which ruby-build
+          which rbenv
+          rbenv install --list
 
       - name: Set up Ruby ${{ matrix.ruby }}
         shell: bash
