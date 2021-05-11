@@ -68,9 +68,14 @@ jobs:
           gem install bundler
           just build
 
+      - name: Inspect
+        shell: bash
+        run: |
+          ls vendor/bundle/
+          ls vendor/bundle/ruby/*/gems/
+
       - name: Run all the tests
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          export GEM_HOME="$HOME/.gem"
           just test
