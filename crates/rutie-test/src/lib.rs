@@ -18,7 +18,7 @@ end
 $LOAD_PATH.unshift(File.expand_path("lib", root))
 $LOAD_PATH.unshift(File.expand_path("vendor/bundle/rutie/lib", root))
 
-require 'wasmer'
+require "wasmer"
 
 class AssertionError < RuntimeError
 end
