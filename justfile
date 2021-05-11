@@ -5,6 +5,7 @@ build:
 # Run the tests.
 test:
 	rake test
+	cargo test --manifest-path crates/wasmer/Cargo.toml --doc
 
 # Build the `.gem` file.
 gem:
