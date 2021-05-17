@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
+require "bundler/setup"
 require "wasmer"
 require "minitest/autorun"
 require "minitest/reporters"

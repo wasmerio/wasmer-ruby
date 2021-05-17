@@ -1,10 +1,12 @@
 # Compile and install the Ruby extension.
 build:
 	rake build_lib
+	rake bundle_install
 
-# Run the tests.
+# Run all the tests.
 test:
 	rake test
+	cargo test --manifest-path crates/wasmer/Cargo.toml --doc
 
 # Build the `.gem` file.
 gem:
@@ -12,7 +14,7 @@ gem:
 
 # Generate the documentation.
 doc:
-	cargo doc --manifest-path crates/wasmer/Cargo.toml --no-deps
+	cargo rustdoc --manifest-path crates/wasmer/Cargo.toml -- --extend-css doc/patch-rustdoc.css
 
 # Clean the project.
 clean:

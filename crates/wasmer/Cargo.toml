@@ -11,8 +11,8 @@ categories = ["wasm"]
 publish = false
 
 [lib]
-name = "wasmer"
-crate-type = ["dylib"]
+name = "wasmer_ruby"
+crate-type = ["dylib", "rlib"]
 
 [dependencies]
 wasmer = "1.0"
@@ -22,3 +22,6 @@ rutie-derive = { path = "../rutie-derive", version = "0.1.0" }
 lazy_static = "1.4"
 wat = "1.0"
 wasmprinter = "0.2"
+
+[dev-dependencies]
+rutie-test = { path = "../rutie-test", version = "0.1.0" }
