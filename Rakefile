@@ -1,4 +1,3 @@
-require "rbconfig"
 require "bundler/gem_tasks"
 require "rake/testtask"
 

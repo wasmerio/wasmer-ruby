@@ -9,14 +9,7 @@ root = File.expand_path("../..", ENV["CARGO_MANIFEST_DIR"])
 
 Dir.chdir(root)
 
-class RbConfig
-  CONFIG = {{
-    "host_os" => ENV["TARGET"]
-  }}
-end
-
 $LOAD_PATH.unshift(File.expand_path("lib", root))
-$LOAD_PATH.unshift(File.expand_path("vendor/bundle/rutie/lib", root))
 
 require "wasmer"
 
