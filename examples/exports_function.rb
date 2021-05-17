@@ -63,7 +63,7 @@ results = sum.call(1, 2)
 # Did you notice something? We didn't cast the Ruby values
 # (arguments of `sum`) to WebAssembly values. It's done automatically!
 #
-# Same for the results. It's casted to Python values automatically.
+# Same for the results. It's casted to Ruby values automatically.
 
 assert { results == 3 }
 
