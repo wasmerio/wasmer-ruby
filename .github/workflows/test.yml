@@ -35,9 +35,6 @@ jobs:
 
     runs-on: ${{ matrix.target.os }}
 
-    env:
-      NO_LINK_RUTIE: 1
-
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -71,13 +68,7 @@ jobs:
           gem install bundler
           just build
 
-      - name: Inspect
-        shell: bash
-        run: |
-          ls vendor/bundle/
-          ls vendor/bundle/ruby/*/gems/
-
-      - name: Run all the tests
+      - name: Run the tests
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"

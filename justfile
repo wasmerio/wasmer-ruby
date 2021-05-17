@@ -6,7 +6,13 @@ build:
 # Run the tests.
 test:
 	rake test
+
+# Run the doctests.
+doctest:
 	cargo test --manifest-path crates/wasmer/Cargo.toml --doc
+
+# Run all the tests.
+test-all: test doctest
 
 # Build the `.gem` file.
 gem:
