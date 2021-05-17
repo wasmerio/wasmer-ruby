@@ -1,0 +1,50 @@
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Build and Publish
+
+    strategy:
+      matrix:
+        target:
+          - id: 'linux-amd64'
+            os: 'ubuntu-latest'
+            target-name: 'x86_64-unknown-linux-gnu'
+            rust-toolchain: 'stable'
+
+    runs-on: ${{ matrix.target.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.target.rust-toolchain }}
+          default: true
+          override: true
+          target: ${{ matrix.target.target-name }}
+
+      - name: Set up just
+        shell: bash
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          test -f $HOME/.cargo/bin/just || cargo install just
+
+      - name: Build the documentation
+        shell: bash
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          just doc
+
+      - name: Publish the documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/doc/
