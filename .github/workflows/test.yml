@@ -35,6 +35,9 @@ jobs:
 
     runs-on: ${{ matrix.target.os }}
 
+    env:
+      NO_LINK_RUTIE: 1
+
     steps:
       - name: Check out code
         uses: actions/checkout@v2
