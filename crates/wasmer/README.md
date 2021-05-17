@@ -49,6 +49,10 @@ Features
 documentation](https://wasmerio.github.io/wasmer-ruby/wasmer_ruby/index.html)
 full of examples.
 
+**Examples** as tutorials: [browser the `examples/`
+directory](https://github.com/wasmerio/wasmer-ruby/tree/master/examples),
+it's the best place for a complete introduction!
+
 # Quick Introduction
 
 The `wasmer` package brings the required API to execute WebAssembly
