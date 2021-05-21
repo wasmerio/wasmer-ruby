@@ -1,5 +1,5 @@
 # coding: utf-8
-require File.expand_path "../prelude", __FILE__
+require_relative "prelude"
 
 # Wasmer will let you easily run WebAssembly module in a Ruby host.
 #

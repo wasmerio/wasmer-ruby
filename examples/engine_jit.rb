@@ -1,4 +1,4 @@
-require File.expand_path "../prelude", __FILE__
+require_relative "prelude"
 
 # Defining an engine in Wasmer is one of the fundamental steps.
 #

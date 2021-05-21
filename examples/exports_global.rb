@@ -1,5 +1,4 @@
-# coding: utf-8
-require File.expand_path "../prelude", __FILE__
+require_relative "prelude"
 
 # A Wasm module can export entities, like functions, memories, globals
 # and tables.

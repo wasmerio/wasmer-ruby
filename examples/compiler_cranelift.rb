@@ -1,4 +1,4 @@
-require File.expand_path "../prelude", __FILE__
+require_relative "prelude"
 
 # A Wasm module can be compiled with multiple compilers.
 #
