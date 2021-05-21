@@ -170,11 +170,12 @@ too!
 
 ### Testing
 
-Running the `test` recipe will automatically build and run all the
-tests. It includes library tests, along with documentation tests.
+Running the `test-all` recipe will automatically build and run all the
+tests. It includes library tests, along with documentation tests and
+the examples:
 
 ```sh
-$ just test
+$ just test-all
 ```
 
 ### Documentation
