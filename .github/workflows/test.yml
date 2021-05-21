@@ -67,7 +67,6 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          gem install rake
           gem install bundler
           just build
 
