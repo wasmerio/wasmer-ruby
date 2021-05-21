@@ -26,7 +26,7 @@
   <h3>
     <a href="https://wasmer.io/">Website</a>
     <span> • </span>
-    <a href="https://docs.wasmer.io">Docs</a>
+    <a href="https://wasmerio.github.io/wasmer-ruby/wasmer_ruby/index.html">Docs</a>
     <span> • </span>
     <a href="https://slack.wasmer.io/">Slack Channel</a>
   </h3>
