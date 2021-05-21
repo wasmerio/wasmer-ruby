@@ -1,5 +1,5 @@
 # coding: utf-8
-require "./prelude"
+require File.expand_path "../prelude", __FILE__
 
 # A Wasm module can import entities, like functions, memories,
 # globals and tables.
