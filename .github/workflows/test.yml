@@ -70,4 +70,4 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          just test
+          just test-all

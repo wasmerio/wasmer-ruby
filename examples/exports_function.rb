@@ -1,4 +1,4 @@
-require "./prelude"
+require File.expand_path "../prelude", __FILE__
 
 # A Wasm module can export entities, like functions, memories,
 # globals and tables.

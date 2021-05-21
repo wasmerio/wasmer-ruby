@@ -1,5 +1,5 @@
 # coding: utf-8
-require "./prelude"
+require File.expand_path "../prelude", __FILE__
 
 # Running a WASI compiled WebAssembly module with Wasmer.
 #

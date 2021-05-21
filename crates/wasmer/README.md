@@ -26,7 +26,7 @@
   <h3>
     <a href="https://wasmer.io/">Website</a>
     <span> • </span>
-    <a href="https://docs.wasmer.io">Docs</a>
+    <a href="https://wasmerio.github.io/wasmer-ruby/wasmer_ruby/index.html">Docs</a>
     <span> • </span>
     <a href="https://slack.wasmer.io/">Slack Channel</a>
   </h3>
@@ -170,11 +170,12 @@ too!
 
 ### Testing
 
-Running the `test` recipe will automatically build and run all the
-tests. It includes library tests, along with documentation tests.
+Running the `test-all` recipe will automatically build and run all the
+tests. It includes library tests, along with documentation tests and
+the examples:
 
 ```sh
-$ just test
+$ just test-all
 ```
 
 ### Documentation
