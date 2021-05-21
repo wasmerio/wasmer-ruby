@@ -5,11 +5,70 @@ All notable changes to this project will be documented in this file.
 ## Table of Contents
 
 * [Unreleased](#unreleased)
+* [0.5.0](#050---2021-05-17)
 * [0.4.0](#040---2020-02-03)
 * [0.3.0](#030---2019-07-16)
 * [0.2.0](#020---2019-05-01)
 
 ## [Unreleased]
+
+## [0.5.0] - 2021-05-17
+
+This is a full rewrite of the entire project. This version is a
+candidate to become the 1.0 version.
+
+We advise to take a look at:
+
+* [the new documentation
+  online](https://wasmerio.github.io/wasmer-ruby/wasmer_ruby/index.html),
+* [the collection of
+  examples](https://github.com/wasmerio/wasmer-ruby/tree/master/examples).
+  
+Shortly, here are the new types the extension provides:
+
+* `Store`, which holds the engine, the compiler etc.
+* `Module`, which represents a Wasm module, with `validate`, `new`,
+  `name=`, `name`, `exports`, `imports`, `custom_sections`,
+  `serialize` and `deserialize`,
+* `Instance`, which represents a Wasm instance, with `new` and
+  `exports`,
+* `Exports`, which represents a collection of exported entities, with
+  `respond_to_missing?`, `method_missing`, and `length`,
+* `ImportObject`, which represents a collection of imports that will
+  be passed to `Instance`, with `new`, `contains_namespace`, and
+  `register`,
+* `Function`, which represents an imported or exported function, with
+  `new`, `call` and `type`,
+* `Memory`, which represents an imported or exported memory, with
+  `new`, `type`, `size`, `data_size`, `grow`, + memory views that
+  extends `Enumerable`,
+* `Global`, which represents an imported or exported global, with
+  `new`, `mutable?`, `value`, `value=`, and `type`,
+* `Table`, which represents an imported or exported table, with `new`
+  (small API for the moment),
+* `Type`, `FunctionType`, `MemoryType`, `GlobalType` and `TableType`,
+* `ExportType` and `ImportType`,
+* `Value` which represents a Wasm value,
+* `Wasi` module, which provides the `Version`, `StateBuilder` and
+  `Environment` classes.
+
+## Added
+
+* Online documentation, with tested examples
+  ([#51](https://github.com/wasmerio/wasmer-ruby/pull/51) by [@Hywan])
+* Tests run against Ruby 2.7 + 3.0, and against Linux + macOS
+  ([#49](https://github.com/wasmerio/wasmer-ruby/pull/49) by [@Hywan])
+
+## Changed
+
+As we said, the extension has been fully rewritten, and the code is
+likely to not be compatible anymore. Here are the most notable
+patches:
+
+* The big rewrite
+  ([#48](https://github.com/wasmerio/wasmer-ruby/pull/48) by [@Hywan])
+* Remove Ruby dependency to `rutie`
+  ([#52](https://github.com/wasmerio/wasmer-ruby/pull/52) by [@Hywan])
 
 ## [0.4.0] - 2020-02-03
 
@@ -137,7 +196,8 @@ All notable changes to this project will be documented in this file.
 
 ## [0.2.0] - 2019-05-01
 
-[Unreleased]: https://github.com/wasmerio/wasmer-ruby/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/wasmerio/wasmer-ruby/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.1.0...0.2.0

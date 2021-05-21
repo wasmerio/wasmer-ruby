@@ -10,8 +10,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// true
+    /// # "#); }
     /// ```
     pub struct Boolean;
 
@@ -19,8 +21,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// 42
+    /// # "#); }
     /// ```
     pub struct Integer;
 
@@ -28,8 +32,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// 4.2
+    /// # "#); }
     /// ```
     pub struct Float;
 
@@ -37,8 +43,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// "hello"
+    /// # "#); }
     /// ```
     pub struct String;
 
@@ -46,8 +54,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// [1, "two", 3.0]
+    /// # "#); }
     /// ```
     pub struct Array<T>;
 
@@ -55,8 +65,10 @@ pub mod Ruby {
     ///
     /// # Example
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// {"foo": 42, "bar": 153}
+    /// # "#); }
     /// ```
     pub struct Hash<K, V>;
 
@@ -73,8 +85,10 @@ pub mod Wasmer {
     ///
     /// # Example
     ///
-    /// ```ruby
-    /// Type::I32
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// Wasmer::Type::I32
+    /// # "#); }
     /// ```
     #[allow(non_camel_case_types)]
     pub enum Type {
@@ -99,19 +113,50 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// function_type = FunctionType.new [Type::I32, Type::I64], [Type::I32]
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// function_type = Wasmer::FunctionType.new(
+        ///     [Wasmer::Type::I32, Wasmer::Type::I64],
+        ///     [Wasmer::Type::I32]
+        /// )
+        /// # "#); }
         /// ```
         pub fn new(params: Array<Type>, results: Array<Type>) -> Self {
             x!()
         }
 
         /// Returns the parameters.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// function_type = Wasmer::FunctionType.new(
+        ///     [Wasmer::Type::I32, Wasmer::Type::I64],
+        ///     [Wasmer::Type::I32]
+        /// )
+        ///
+        /// assert { function_type.params == [Wasmer::Type::I32, Wasmer::Type::I64] }
+        /// # "#); }
+        /// ```
         pub fn params(&self) -> Array<Type> {
             x!()
         }
 
         /// Returns the results.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// function_type = Wasmer::FunctionType.new(
+        ///     [Wasmer::Type::I32, Wasmer::Type::I64],
+        ///     [Wasmer::Type::I32]
+        /// )
+        ///
+        /// assert { function_type.results == [Wasmer::Type::I32] }
+        /// # "#); }
+        /// ```
         pub fn results(&self) -> Array<Type> {
             x!()
         }
@@ -128,24 +173,56 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// memory_type = MemoryType.new 1, 3, true
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// memory_type = Wasmer::MemoryType.new 1, 3, true
+        /// # "#); }
         /// ```
         pub fn new(minimum: Integer, maximum: Option<Integer>, shared: Boolean) -> Self {
             x!()
         }
 
         /// Returns the minimum size of the memory.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// memory_type = Wasmer::MemoryType.new 1, 3, true
+        ///
+        /// assert { memory_type.minimum == 1 }
+        /// # "#); }
+        /// ```
         pub fn minimum(&self) -> Integer {
             x!()
         }
 
         /// Returns the maximum size of the memory of any.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// memory_type = Wasmer::MemoryType.new 1, 3, true
+        ///
+        /// assert { memory_type.maximum == 3 }
+        /// # "#); }
+        /// ```
         pub fn maximum(&self) -> Option<Integer> {
             x!()
         }
 
         /// Returns whether the memory is shared or not.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// memory_type = Wasmer::MemoryType.new 1, 3, true
+        ///
+        /// assert { memory_type.shared? }
+        /// # "#); }
+        /// ```
         pub fn shared(&self) -> Integer {
             x!()
         }
@@ -159,19 +236,41 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// global_type = GlobalType.new Type::I32, true
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// global_type = Wasmer::GlobalType.new Wasmer::Type::I32, true
+        /// # "#); }
         /// ```
         pub fn new(r#type: Type, mutable: Boolean) -> Self {
             x!()
         }
 
         /// Returns the type of the global.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// global_type = Wasmer::GlobalType.new Wasmer::Type::I32, true
+        ///
+        /// assert { global_type.type == Wasmer::Type::I32 }
+        /// # "#); }
+        /// ```
         pub fn r#type(&self) -> Type {
             x!()
         }
 
         /// Returns whether the global is mutable.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// global_type = Wasmer::GlobalType.new Wasmer::Type::I32, true
+        ///
+        /// assert { global_type.mutable? }
+        /// # "#); }
+        /// ```
         pub fn mutable(&self) -> Boolean {
             x!()
         }
@@ -190,24 +289,56 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// table_type = TableType.new Type::I32, 7, 42
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// table_type = Wasmer::TableType.new Wasmer::Type::I32, 7, 42
+        /// # "#); }
         /// ```
         pub fn new(r#type: Type, minimum: Integer, maximum: Option<Integer>) -> Self {
             x!()
         }
 
         /// Returns the type of table.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// table_type = Wasmer::TableType.new Wasmer::Type::I32, 7, 42
+        ///
+        /// assert { table_type.type == Wasmer::Type::I32 }
+        /// # "#); }
+        /// ```
         pub fn r#type(&self) -> Type {
             x!()
         }
 
         /// Returns the minimum size of the table.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// table_type = Wasmer::TableType.new Wasmer::Type::I32, 7, 42
+        ///
+        /// assert { table_type.minimum == 7 }
+        /// # "#); }
+        /// ```
         pub fn minimum(&self) -> Integer {
             x!()
         }
 
         /// Returns the maximum size of the table if any.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// table_type = Wasmer::TableType.new Wasmer::Type::I32, 7, 42
+        ///
+        /// assert { table_type.maximum == 42 }
+        /// # "#); }
+        /// ```
         pub fn maximum(&self) -> Option<Integer> {
             x!()
         }
@@ -226,19 +357,41 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// export_type = ExportType.new "foo", Function.new([Type::I32], [])
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// export_type = Wasmer::ExportType.new "foo", Wasmer::Function.new([Wasmer::Type::I32], [])
+        /// # "#); }
         /// ```
         pub fn new(name: String, r#type: Any) -> Self {
             x!()
         }
 
         /// Returns the name of the export.
+        ///
+        /// # Example
+        ///
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// export_type = Wasmer::ExportType.new "foo", Wasmer::Function.new([Wasmer::Type::I32], [])
+        ///
+        /// assert { export_type.name == "foo" }
+        /// # "#); }
+        /// ```
         pub fn name(&self) -> String {
             x!()
         }
 
         /// Returns the type of the export.
+        ///
+        /// # Example
+        ///
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// export_type = Wasmer::ExportType.new "foo", Wasmer::Function.new([Wasmer::Type::I32], [])
+        ///
+        /// assert { export_type.type == Wasmer::Type::I32 }
+        /// # "#); }
+        /// ```
         pub fn r#type(&self) -> Type {
             x!()
         }
@@ -256,24 +409,56 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// import_type = ImportType.new "foo", "bar", Function.new([Type::I32], [])
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// import_type = Wasmer::ImportType.new "foo", "bar", Wasmer::Function.new([Wasmer::Type::I32], [])
+        /// # "#); }
         /// ```
         pub fn new(module: String, name: String, r#type: Any) -> Self {
             x!()
         }
 
         /// Returns the module's name of the import.
+        ///
+        /// # Example
+        ///
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// import_type = Wasmer::ImportType.new "foo", "bar", Wasmer::Function.new([Wasmer::Type::I32], [])
+        /// # "#); }
+        ///
+        /// assert { import_type.module == "foo" }
+        /// ```
         pub fn module(&self) -> String {
             x!()
         }
 
         /// Returns the name of the import.
+        ///
+        /// # Example
+        ///
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// import_type = Wasmer::ImportType.new "foo", "bar", Wasmer::Function.new([Wasmer::Type::I32], [])
+        /// # "#); }
+        ///
+        /// assert { import_type.name == "bar" }
+        /// ```
         pub fn name(&self) -> String {
             x!()
         }
 
         /// Returns the type of the import.
+        ///
+        /// # Example
+        ///
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// import_type = Wasmer::ImportType.new "foo", "bar", Wasmer::Function.new([Wasmer::Type::I32], [])
+        /// # "#); }
+        ///
+        /// assert { import_type.type == Wasmer::Type::I32 }
+        /// ```
         pub fn r#type(&self) -> Type {
             x!()
         }
@@ -297,19 +482,15 @@ pub mod Wasmer {
     ///
     /// Use the store with the default engine and the default compiler:
     ///
-    /// ```ruby
-    /// store = Store.new
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// # "#); }
     /// ```
     pub struct Store;
 
     impl Store {
         /// Creates a new `Store`.
-        ///
-        /// # Example
-        ///
-        /// ```ruby
-        /// store = Store.new
-        /// ```
         pub fn new() -> Self {
             x!()
         }
@@ -332,14 +513,17 @@ pub mod Wasmer {
     ///
     /// # Example
     ///
-    /// ```ruby
-    /// store = Store.new
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
     ///
-    /// # Let's compile WebAssembly from bytes.
-    /// module_ = Module.new store, wasm_bytes
+    /// ## Let's compile WebAssembly from bytes.
+    /// wasm_bytes = "\x00asm\x01\x00\x00\x00";
+    /// module_ = Wasmer::Module.new store, wasm_bytes
     ///
-    /// # Let's compile WebAssembly from WAT.
-    /// module_ = Module.new store, "(module)"
+    /// ## Let's compile WebAssembly from WAT.
+    /// module_ = Wasmer::Module.new store, "(module)"
+    /// # "#); }
     /// ```
     pub struct Module;
 
@@ -353,8 +537,11 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// Module.validate Store.new, wasm_bytes
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// wasm_bytes = "\x00asm\x01\x00\x00\x00";
+        /// Wasmer::Module.validate Wasmer::Store.new, wasm_bytes
+        /// # "#); }
         /// ```
         pub fn validate(store: Store, bytes: String) -> Boolean {
             x!()
@@ -374,19 +561,22 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// store = Store.new
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// store = Wasmer::Store.new
         ///
-        /// # Module with an existing name.
-        /// assert Module.new(store, "(module $moduleName)").name == "moduleName"
+        /// ## Module with an existing name.
+        /// assert { Wasmer::Module.new(store, "(module $moduleName)").name == "moduleName" }
         ///
-        /// # Module with no name.
-        /// assert Module.new(store, "(module)").name.is_nil?
+        /// ## Module with no name.
+        /// assert { Wasmer::Module.new(store, "(module)").name.nil? }
         ///
-        /// # Change the module's name.
-        /// module_ = Module.new store, "(module $moduleName)"
-        /// module.name = "hello"
-        /// assert module.name == "hello"
+        /// ## Change the module's name.
+        /// module_ = Wasmer::Module.new store, "(module $moduleName)"
+        /// module_.name = "hello"
+        ///
+        /// assert { module_.name == "hello" }
+        /// # "#); }
         /// ```
         pub fn name(&self, name: String) {
             x!()
@@ -431,13 +621,15 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
         /// bytes = IO.read "custom_sections.wasm", mode: "rb"
-        /// module_ = Module.new Store.new, bytes
+        /// module_ = Wasmer::Module.new Wasmer::Store.new, bytes
         ///
-        /// assert module_.custom_sections("easter_egg") == ["Wasmer"]
-        /// assert module_.custom_sections("hello") == ["World!"]
-        /// assert module_.custom_sections("foo") == []
+        /// assert { module_.custom_sections("easter_egg") == ["Wasmer"] }
+        /// assert { module_.custom_sections("hello") == ["World!"] }
+        /// assert { module_.custom_sections("foo") == [] }
+        /// # "#); }
         /// ```
         pub fn custom_sections(&self, name: String) -> Array<String> {
             x!()
@@ -448,9 +640,11 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// module_ = Module.new Store.new, "(module)"
-        /// assert_kind_of String, module_.serialize
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// module_ = Wasmer::Module.new Wasmer::Store.new, "(module)"
+        /// assert { module_.serialize.is_a?(String) }
+        /// # "#); }
         /// ```
         pub fn serialize(&self) -> String {
             x!()
@@ -474,10 +668,11 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// store = Store.new
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// store = Wasmer::Store.new
         ///
-        /// serialized_module = Module.new(
+        /// serialized_module = Wasmer::Module.new(
         ///   store,
         ///   (<<~WAST)
         ///   (module
@@ -485,16 +680,17 @@ pub mod Wasmer {
         ///   WAST
         /// ).serialize
         ///
-        /// module_ = Module.deserialize store, serialized_module
+        /// module_ = Wasmer::Module.deserialize store, serialized_module
         /// serialized_module = nil
         ///
         /// exports = module_.exports
         ///
-        /// assert exports.length() == 1
-        /// assert exports[0].name == "function"
-        /// assert_kind_of FunctionType, exports[0].type
-        /// assert exports[0].type.params == [Type::I32, Type::I64]
-        /// assert exports[0].type.results == []
+        /// assert { exports.length() == 1 }
+        /// assert { exports[0].name == "function" }
+        /// assert { exports[0].type.is_a?(Wasmer::FunctionType) }
+        /// assert { exports[0].type.params == [Wasmer::Type::I32, Wasmer::Type::I64] }
+        /// assert { exports[0].type.results == [] }
+        /// # "#); }
         /// ```
         pub fn deserialize(bytes: String) -> Self {
             x!()
@@ -516,9 +712,10 @@ pub mod Wasmer {
     /// Example without an import object. The following creates a
     /// module with a sum exported function that sum two integers.
     ///
-    /// ```ruby
-    /// module_ = Module.new(
-    ///   Store.new,
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// module_ = Wasmer::Module.new(
+    ///   Wasmer::Store.new,
     ///   (<<~WAST)
     ///   (module
     ///     (type (func (param i32 i32) (result i32)))
@@ -529,9 +726,10 @@ pub mod Wasmer {
     ///     (export "sum" (func 0)))
     ///   WAST
     /// )
-    /// instance = Instance.new module_, nil
+    /// instance = Wasmer::Instance.new module_, nil
     ///
-    /// assert instance.exports.sum.(1, 2) == 3
+    /// assert { instance.exports.sum.(1, 2) == 3 }
+    /// # "#); }
     /// ```
     ///
     /// Example with an import object. The following creates a module
@@ -539,13 +737,14 @@ pub mod Wasmer {
     /// (ii) exports an `add_one` function that adds 1 to any given
     /// integer (by using the `math.sum` function).
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// def sum(x, y)
     ///   x + y
     /// end
     ///
-    /// store = Store.new
-    /// module_ = Module.new(
+    /// store = Wasmer::Store.new
+    /// module_ = Wasmer::Module.new(
     ///   store,
     ///   (<<~WAST)
     ///   (module
@@ -557,17 +756,22 @@ pub mod Wasmer {
     ///   WAST
     /// )
     ///
-    /// import_object = ImportObject.new
+    /// import_object = Wasmer::ImportObject.new
     /// import_object.register(
     ///   "math",
     ///   {
-    ///     :sum => Function.new(store, method(:sum), FunctionType.new([Type::I32, Type::I32], [Type::I32]))
+    ///     :sum => Wasmer::Function.new(
+    ///        store,
+    ///        method(:sum),
+    ///        Wasmer::FunctionType.new([Wasmer::Type::I32, Wasmer::Type::I32], [Wasmer::Type::I32])
+    ///     )
     ///   }
     /// )
     ///
-    /// instance = Instance.new module_, import_object
+    /// instance = Wasmer::Instance.new module_, import_object
     ///
-    /// assert instance.exports.add_one.(1) == 2
+    /// assert { instance.exports.add_one.(1) == 2 }
+    /// # "#); }
     /// ```
     pub struct Instance;
 
@@ -599,9 +803,10 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// module_ = Module.new(
-        ///   Store.new,
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// module_ = Wasmer::Module.new(
+        ///   Wasmer::Store.new,
         ///   (<<~WAST)
         ///   (module
         ///     (func (export "func") (param i32 i64))
@@ -610,19 +815,20 @@ pub mod Wasmer {
         ///     (memory (export "mem") 1))
         ///   WAST
         /// )
-        /// instance = Instance.new module_, nil
+        /// instance = Wasmer::Instance.new module_, nil
         /// exports = instance.exports
         ///
-        /// assert exports.respond_to? :func
-        /// assert exports.respond_to? :glob
-        /// assert exports.respond_to? :tab
-        /// assert exports.respond_to? :mem
-        /// assert not(exports.respond_to? :foo)
+        /// assert { exports.respond_to? :func }
+        /// assert { exports.respond_to? :glob }
+        /// assert { exports.respond_to? :tab }
+        /// assert { exports.respond_to? :mem }
+        /// assert { not(exports.respond_to? :foo) }
         ///
-        /// assert_kind_of Function, exports.func
-        /// assert_kind_of Memory, exports.mem
-        /// assert_kind_of Global, exports.glob
-        /// assert_kind_of Table, exports.tab
+        /// assert { exports.func.is_a?(Wasmer::Function) }
+        /// assert { exports.mem.is_a?(Wasmer::Memory) }
+        /// assert { exports.glob.is_a?(Wasmer::Global) }
+        /// assert { exports.tab.is_a?(Wasmer::Table) }
+        /// # "#); }
         /// ```
         pub fn method_missing(name: String) -> Any {
             x!()
@@ -637,13 +843,14 @@ pub mod Wasmer {
     /// Importing a function, `math.sum`, and call it through the
     /// exported `add_one` function:
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// def sum(x, y)
     ///   x + y
     /// end
     ///
-    /// store = Store.new
-    /// module_ = Module.new(
+    /// store = Wasmer::Store.new
+    /// module_ = Wasmer::Module.new(
     ///   store,
     ///   (<<~WAST)
     ///   (module
@@ -655,24 +862,30 @@ pub mod Wasmer {
     ///   WAST
     /// )
     ///
-    /// import_object = ImportObject.new
+    /// import_object = Wasmer::ImportObject.new
     /// import_object.register(
     ///   "math",
     ///   {
-    ///     :sum => Function.new(store, method(:sum), FunctionType.new([Type::I32, Type::I32], [Type::I32]))
+    ///     :sum => Wasmer::Function.new(
+    ///       store,
+    ///       method(:sum),
+    ///       Wasmer::FunctionType.new([Wasmer::Type::I32, Wasmer::Type::I32], [Wasmer::Type::I32])
+    ///     )
     ///   }
     /// )
     ///
-    /// instance = Instance.new module_, import_object
+    /// instance = Wasmer::Instance.new module_, import_object
     ///
-    /// assert instance.exports.add_one.(1) == 2
+    /// assert { instance.exports.add_one.(1) == 2 }
+    /// # "#); }
     /// ```
     ///
     /// Importing a memory:
     ///
-    /// ```ruby
-    /// store = Store.new
-    /// module_ = Module.new(
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// module_ = Wasmer::Module.new(
     ///   store,
     ///   (<<~WAST)
     ///   (module
@@ -688,10 +901,10 @@ pub mod Wasmer {
     ///   WAST
     /// )
     ///
-    /// memory = Memory.new store, MemoryType.new(1, nil, false)
+    /// memory = Wasmer::Memory.new store, Wasmer::MemoryType.new(1, nil, false)
     /// view = memory.uint8_view(0)
     ///
-    /// import_object = ImportObject.new
+    /// import_object = Wasmer::ImportObject.new
     /// import_object.register(
     ///   "env",
     ///   {
@@ -699,22 +912,24 @@ pub mod Wasmer {
     ///   }
     /// )
     ///
-    /// instance = Instance.new module_, import_object
+    /// instance = Wasmer::Instance.new module_, import_object
     ///
-    /// assert view[0] == 0
-    ///
-    /// instance.exports.increment.()
-    /// assert view[0] == 1
+    /// assert { view[0] == 0 }
     ///
     /// instance.exports.increment.()
-    /// assert view[0] == 2
+    /// assert { view[0] == 1 }
+    ///
+    /// instance.exports.increment.()
+    /// assert { view[0] == 2 }
+    /// # "#); }
     /// ```
     ///
     /// Importing a global:
     ///
-    /// ```ruby
-    /// store = Store.new
-    /// module_ = Module.new(
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// module_ = Wasmer::Module.new(
     ///   store,
     ///   (<<~WAST)
     ///     (module
@@ -727,9 +942,9 @@ pub mod Wasmer {
     ///   WAST
     /// )
     ///
-    /// global = Global.new store, Value.i32(7), true
+    /// global = Wasmer::Global.new store, Wasmer::Value.i32(7), true
     ///
-    /// import_object = ImportObject.new
+    /// import_object = Wasmer::ImportObject.new
     /// import_object.register(
     ///   "env",
     ///   {
@@ -737,15 +952,16 @@ pub mod Wasmer {
     ///   }
     /// )
     ///
-    /// instance = Instance.new module_, import_object
+    /// instance = Wasmer::Instance.new module_, import_object
     ///
-    /// assert instance.exports.read_g.() == 7
+    /// assert { instance.exports.read_g.() == 7 }
     ///
     /// global.value = 153
-    /// assert instance.exports.read_g.() == 153
+    /// assert { instance.exports.read_g.() == 153 }
     ///
     /// instance.exports.write_g.(11)
-    /// assert global.value == 11
+    /// assert { global.value == 11 }
+    /// # "#); }
     /// ```
     ///
     /// etc.
@@ -797,24 +1013,45 @@ pub mod Wasmer {
     ///
     /// First, a function through a symbol:
     ///
-    /// ```ruby
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
     /// def foo(x)
     ///   x + 1
     /// end
     ///
-    /// function = Function.new Store.new, method(:foo), FunctionType.new([Type::I32], [])
+    /// function = Wasmer::Function.new(
+    ///   Wasmer::Store.new,
+    ///   ## A symbol.
+    ///   method(:foo),
+    ///   Wasmer::FunctionType.new([Wasmer::Type::I32], [])
+    /// )
+    /// # "#); }
     /// ```
     ///
     /// Second, a function through a proc as a lambda:
     ///
-    /// ```ruby
-    /// function = Function.new Store.new, -> (x) { x + 1 }, FunctionType.new([Type::I32], [])
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// function = Wasmer::Function.new(
+    ///   Wasmer::Store.new,
+    ///   ## A lambda.
+    ///   -> (x) { x + 1 },
+    ///   Wasmer::FunctionType.new([Wasmer::Type::I32], [])
+    /// )
+    /// # "#); }
     /// ```
     ///
     /// Third, a function through a proc:
     ///
-    /// ```ruby
-    /// function = Function.new Store.new, Proc.new { |x| x + 1 }, FunctionType.new([Type::I32], [])
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// function = Wasmer::Function.new(
+    ///   Wasmer::Store.new,
+    ///   ## A proc.
+    ///   Proc.new { |x| x + 1 },
+    ///   Wasmer::FunctionType.new([Wasmer::Type::I32], [])
+    /// )
+    /// # "#); }
     /// ```
     pub struct Function;
 
@@ -856,21 +1093,25 @@ pub mod Wasmer {
     ///
     /// Creates a [`Memory`] from scratch:
     ///
-    /// ```ruby
-    /// store = Store.new
-    /// memory_type = MemoryType.new 3, 10, true
-    /// memory = Memory.new store, memory_type
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// memory_type = Wasmer::MemoryType.new 3, 10, true
+    /// memory = Wasmer::Memory.new store, memory_type
     ///
-    /// assert memory.size == 3
+    /// assert { memory.size == 3 }
+    /// # "#); }
     /// ```
     ///
     /// Gets a memory from the exports of an instance:
     ///
-    /// ```ruby
-    /// module_ = Module.new Store.new, wasm_bytes
-    /// instance = Instance.new module, nil
+    /// ```rust,ignore
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// module_ = Wasmer::Module.new Wasmer::Store.new, wasm_bytes
+    /// instance = Wasmer::Instance.new module, nil
     ///
     /// memory = instance.exports.memory
+    /// # "#); }
     /// ```
     pub struct Memory;
 
@@ -899,7 +1140,8 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
+        /// ```rust,ignore
+        /// # fn main() { rutie_test::test_ruby!(r#"
         /// memory = instance.exports.memory
         /// old_memory_size = memory.data_size
         ///
@@ -907,8 +1149,9 @@ pub mod Wasmer {
         ///
         /// memory_size = memory.data_size
         ///
-        /// assert memory_size == 1179648
-        /// assert memory_size - old_memory_size == 65536
+        /// assert { memory_size == 1179648 }
+        /// assert { memory_size - old_memory_size == 65536 }
+        /// # "#); }
         /// ```
         pub fn grow(&self, number_of_pages: Integer) -> Integer {
             x!()
@@ -968,16 +1211,18 @@ pub mod Wasmer {
     ///
     /// # Example
     ///
-    /// ```ruby
-    /// store = Store.new
-    /// global = Global.new store, Value.i32(42), false
+    /// ```rust
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// global = Wasmer::Global.new store, Wasmer::Value.i32(42), false
     ///
-    /// assert global.value == 42
+    /// assert { global.value == 42 }
     ///
     /// type = global.type
     ///
-    /// assert type.type == Type::I32
-    /// assert type.mutable? == false
+    /// assert { type.type == Wasmer::Type::I32 }
+    /// assert { type.mutable? == false }
+    /// # "#); }
     /// ```
     pub struct Global;
 
@@ -996,20 +1241,22 @@ pub mod Wasmer {
         ///
         /// # Example
         ///
-        /// ```ruby
-        /// store = Store.new
-        /// global = Global.new store, Value.i32(42), true
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// store = Wasmer::Store.new
+        /// global = Wasmer::Global.new store, Wasmer::Value.i32(42), true
         ///
-        /// assert global.value == 42
+        /// assert { global.value == 42 }
         ///
         /// type = global.type
         ///
-        /// assert type.type == Type::I32
-        /// assert type.mutable? == true
+        /// assert { type.type == Wasmer::Type::I32 }
+        /// assert { type.mutable? == true }
         ///
         /// global.value = 153
         ///
-        /// assert global.value == 153
+        /// assert { global.value == 153 }
+        /// # "#); }
         /// ```
         pub fn value(&self, value: Any) -> Any {
             x!()
@@ -1048,21 +1295,53 @@ pub mod Wasmer {
 
     impl Value {
         /// Creates a new `Value` containing a `int32`.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// Wasmer::Value.i32(7)
+        /// # "#); }
+        /// ```
         pub fn i32(value: Integer) -> Self {
             x!()
         }
 
         /// Creates a new `Value` containing a `int64`.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// Wasmer::Value.i64(7)
+        /// # "#); }
+        /// ```
         pub fn i64(value: Integer) -> Self {
             x!()
         }
 
         /// Creates a new `Value` containing a `float32`.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// Wasmer::Value.f32(4.2)
+        /// # "#); }
+        /// ```
         pub fn f32(value: Float) -> Self {
             x!()
         }
 
         /// Creates a new `Value` containing a `float64`.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        /// # fn main() { rutie_test::test_ruby!(r#"
+        /// Wasmer::Value.f64(4.2)
+        /// # "#); }
+        /// ```
         pub fn f64(value: Float) -> Self {
             x!()
         }
@@ -1082,28 +1361,30 @@ pub mod Wasmer {
     ///
     /// # Example
     ///
-    /// ```ruby
-    /// store = Store.new
-    /// module_ = Module.new store, bytes
+    /// ```rust,ignore
+    /// # fn main() { rutie_test::test_ruby!(r#"
+    /// store = Wasmer::Store.new
+    /// module_ = Wasmer::Module.new store, bytes
     ///
-    /// # Get the WASI version.
-    /// wasi_version = Wasi::get_version module_, true
+    /// ## Get the WASI version.
+    /// wasi_version = Wasmer::Wasi::get_version module_, true
     ///
-    /// # Build a WASI environment for the imports.
-    /// wasi_env = Wasi::StateBuilder.new("test-program")
+    /// ## Build a WASI environment for the imports.
+    /// wasi_env = Wasmer::Wasi::StateBuilder.new("test-program")
     ///              .argument("--foo")
     ///              .environments({"ABC" => "DEF", "X" => "YZ"})
     ///              .map_directory("the_host_directory", ".")
     ///              .finalize
     ///
-    /// # Generate an `ImportObject` for the WASI environment.
+    /// ## Generate an `ImportObject` for the WASI environment.
     /// import_object = wasi_env.generate_import_object store, wasi_version
     ///
-    /// # Now we are ready to instantiate the module.
-    /// instance = Instance.new module_, import_object
+    /// ## Now we are ready to instantiate the module.
+    /// instance = Wasmer::Instance.new module_, import_object
     ///
     /// # Here we go, let's start the program.
     /// instance.exports._start.()
+    /// # "#); }
     /// ```
     pub mod Wasi {
         use super::*;

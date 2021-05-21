@@ -1,4 +1,3 @@
-require "rbconfig"
 require "bundler/gem_tasks"
 require "rake/testtask"
 
@@ -9,7 +8,9 @@ end
 
 desc 'Install the bundle'
 task :bundle_install do
+  sh 'bundle config set --local path "vendor/bundle"'
   sh 'bundle install'
+  sh 'cd vendor/bundle && ln -f -s ruby/*/gems/rutie-*/ rutie'
 end
 
 Rake::TestTask.new(test: [:bundle_install, :build_lib]) do |t|
