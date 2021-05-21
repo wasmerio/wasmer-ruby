@@ -63,15 +63,22 @@ jobs:
           export PATH="$HOME/.cargo/bin:$PATH"
           test -f $HOME/.cargo/bin/just || cargo install just
 
-      - name: Compile the library
+      - name: Compile the library and run the tests
+        if: ${{ matrix.target.id != 'windows-amd64' }}
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
           gem install bundler
           just build
+          just test-all
 
-      - name: Run the tests
+      - name: Compile the library and run the tests (Windows)
+        if: ${{ matrix.target.id == 'windows-amd64' }}
+        env:
+          NO_LINK_RUTIE: true
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
+          gem install bundler
+          just build
           just test-all
