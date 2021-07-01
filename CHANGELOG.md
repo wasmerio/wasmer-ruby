@@ -5,12 +5,29 @@ All notable changes to this project will be documented in this file.
 ## Table of Contents
 
 * [Unreleased](#unreleased)
+* [1.0.0](#100---2021-07-01)
 * [0.5.0](#050---2021-05-17)
 * [0.4.0](#040---2020-02-03)
 * [0.3.0](#030---2019-07-16)
 * [0.2.0](#020---2019-05-01)
 
 ## [Unreleased]
+
+## [1.0.0] - 2021-07-01
+
+It's basically the 0.5.0 version. The only noticeable change is that
+the Wasmer runtime has been updated to version 2.0.
+
+## Added
+
+* All examples are now tested as part of the test suite
+  ([#53](https://github.com/wasmerio/wasmer-ruby/pull/53) by @Hywan)
+
+## Changed
+
+* The Ruby embedding has been updated to Wasmer 2.0, which is faster
+  in many regards
+  ([#57](https://github.com/wasmerio/wasmer-ruby/pull/57) by @Hywan)
 
 ## [0.5.0] - 2021-05-17
 
@@ -196,7 +213,8 @@ patches:
 
 ## [0.2.0] - 2019-05-01
 
-[Unreleased]: https://github.com/wasmerio/wasmer-ruby/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/wasmerio/wasmer-ruby/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.5.0...1.0.0
 [0.5.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/wasmerio/wasmer-ruby/compare/0.2.0...0.3.0
