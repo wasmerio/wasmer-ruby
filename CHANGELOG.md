@@ -21,13 +21,13 @@ the Wasmer runtime has been updated to version 2.0.
 ## Added
 
 * All examples are now tested as part of the test suite
-  ([#53](https://github.com/wasmerio/wasmer-ruby/pull/53) by @Hywan)
+  ([#53](https://github.com/wasmerio/wasmer-ruby/pull/53) by [@Hywan])
 
 ## Changed
 
 * The Ruby embedding has been updated to Wasmer 2.0, which is faster
   in many regards
-  ([#57](https://github.com/wasmerio/wasmer-ruby/pull/57) by @Hywan)
+  ([#57](https://github.com/wasmerio/wasmer-ruby/pull/57) by [@Hywan])
 
 ## [0.5.0] - 2021-05-17
 
