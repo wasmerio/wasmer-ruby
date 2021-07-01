@@ -185,6 +185,12 @@ impl MemoryType {
     }
 }
 
+impl From<wasmer::MemoryType> for MemoryType {
+    fn from(value: wasmer::MemoryType) -> Self {
+        Self::from(&value)
+    }
+}
+
 impl From<&wasmer::MemoryType> for MemoryType {
     fn from(value: &wasmer::MemoryType) -> Self {
         Self {
