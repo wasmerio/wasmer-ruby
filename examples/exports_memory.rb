@@ -67,7 +67,7 @@ reader = memory.uint8_view pointer
 # Go read. We know `Hello, World!` is 13 bytes long.
 #
 # Don't forget that we read bytes. We need to decode them!
-returned_string = reader.take(13).pack("U*")
+returned_string = reader.take(13).pack("C*").force_encoding('utf-8')
 
 assert { returned_string == 'Hello, World!' }
 
