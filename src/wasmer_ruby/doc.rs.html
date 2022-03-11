@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/wasmer/src/doc.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>doc.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="stylesheet" type="text/css" href="../../theme.css"><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../wasmer_ruby/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates&#x2F;wasmer&#x2F;src&#x2F;doc.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>doc.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="stylesheet" type="text/css" href="../../theme.css"><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../wasmer_ruby/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../wasmer_ruby/index.html"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1512,9 +1512,8 @@
 <span id="1510">1510</span>
 <span id="1511">1511</span>
 <span id="1512">1512</span>
-</pre><pre class="rust">
-<span class="macro">macro_rules!</span> <span class="ident">x</span> {
-    () <span class="op">=</span><span class="op">&gt;</span> {
+</pre><pre class="rust"><code><span class="macro">macro_rules!</span> <span class="ident">x</span> {
+    () =&gt; {
         <span class="macro">unimplemented!</span>(<span class="string">&quot;This code exists only for documentation purposes&quot;</span>);
     };
 }
@@ -1594,7 +1593,7 @@
 <span class="doccomment">/// The `Wasmer` module provides the entire Wasmer API to manipulate</span>
 <span class="doccomment">/// the WebAssembly runtime.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">Wasmer</span> {
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::doc::Ruby</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::doc::Ruby</span>::<span class="kw-2">*</span>;
 
     <span class="doccomment">/// A WebAssembly type.</span>
     <span class="doccomment">///</span>
@@ -1636,7 +1635,7 @@
         <span class="doccomment">/// )</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">params</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>, <span class="ident">results</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">params</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>, <span class="ident">results</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1654,7 +1653,7 @@
         <span class="doccomment">/// assert { function_type.params == [Wasmer::Type::I32, Wasmer::Type::I64] }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">params</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">params</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1672,7 +1671,7 @@
         <span class="doccomment">/// assert { function_type.results == [Wasmer::Type::I32] }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">results</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">results</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -1693,7 +1692,7 @@
         <span class="doccomment">/// memory_type = Wasmer::MemoryType.new 1, 3, true</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">minimum</span>: <span class="ident">Integer</span>, <span class="ident">maximum</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>, <span class="ident">shared</span>: <span class="ident">Boolean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">minimum</span>: <span class="ident">Integer</span>, <span class="ident">maximum</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>, <span class="ident">shared</span>: <span class="ident">Boolean</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1708,7 +1707,7 @@
         <span class="doccomment">/// assert { memory_type.minimum == 1 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">minimum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">minimum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1723,7 +1722,7 @@
         <span class="doccomment">/// assert { memory_type.maximum == 3 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maximum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maximum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1738,7 +1737,7 @@
         <span class="doccomment">/// assert { memory_type.shared? }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shared</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shared</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -1756,7 +1755,7 @@
         <span class="doccomment">/// global_type = Wasmer::GlobalType.new Wasmer::Type::I32, true</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">r#type</span>: <span class="ident">Type</span>, <span class="ident">mutable</span>: <span class="ident">Boolean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">r#type</span>: <span class="ident">Type</span>, <span class="ident">mutable</span>: <span class="ident">Boolean</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1771,7 +1770,7 @@
         <span class="doccomment">/// assert { global_type.type == Wasmer::Type::I32 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Type</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Type</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1786,7 +1785,7 @@
         <span class="doccomment">/// assert { global_type.mutable? }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mutable</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Boolean</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mutable</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Boolean</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -1809,7 +1808,7 @@
         <span class="doccomment">/// table_type = Wasmer::TableType.new Wasmer::Type::I32, 7, 42</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">r#type</span>: <span class="ident">Type</span>, <span class="ident">minimum</span>: <span class="ident">Integer</span>, <span class="ident">maximum</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">r#type</span>: <span class="ident">Type</span>, <span class="ident">minimum</span>: <span class="ident">Integer</span>, <span class="ident">maximum</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1824,7 +1823,7 @@
         <span class="doccomment">/// assert { table_type.type == Wasmer::Type::I32 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Type</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Type</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1839,7 +1838,7 @@
         <span class="doccomment">/// assert { table_type.minimum == 7 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">minimum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">minimum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1854,7 +1853,7 @@
         <span class="doccomment">/// assert { table_type.maximum == 42 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maximum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maximum</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -1877,7 +1876,7 @@
         <span class="doccomment">/// export_type = Wasmer::ExportType.new &quot;foo&quot;, Wasmer::Function.new([Wasmer::Type::I32], [])</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">r#type</span>: <span class="ident">Any</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">r#type</span>: <span class="ident">Any</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1892,7 +1891,7 @@
         <span class="doccomment">/// assert { export_type.name == &quot;foo&quot; }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1907,7 +1906,7 @@
         <span class="doccomment">/// assert { export_type.type == Wasmer::Type::I32 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Type</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Type</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -1929,7 +1928,7 @@
         <span class="doccomment">/// import_type = Wasmer::ImportType.new &quot;foo&quot;, &quot;bar&quot;, Wasmer::Function.new([Wasmer::Type::I32], [])</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">module</span>: <span class="ident">String</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">r#type</span>: <span class="ident">Any</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">module</span>: <span class="ident">String</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">r#type</span>: <span class="ident">Any</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1944,7 +1943,7 @@
         <span class="doccomment">///</span>
         <span class="doccomment">/// assert { import_type.module == &quot;foo&quot; }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">module</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">module</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1959,7 +1958,7 @@
         <span class="doccomment">///</span>
         <span class="doccomment">/// assert { import_type.name == &quot;bar&quot; }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
             <span class="macro">x!</span>()
         }
 
@@ -1974,7 +1973,7 @@
         <span class="doccomment">///</span>
         <span class="doccomment">/// assert { import_type.type == Wasmer::Type::I32 }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Type</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Type</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2006,7 +2005,7 @@
 
     <span class="kw">impl</span> <span class="ident">Store</span> {
         <span class="doccomment">/// Creates a new `Store`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2058,12 +2057,12 @@
         <span class="doccomment">/// Wasmer::Module.validate Wasmer::Store.new, wasm_bytes</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">bytes</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Boolean</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">bytes</span>: <span class="ident">String</span>) -&gt; <span class="ident">Boolean</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a new [`Module`].</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">bytes</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">bytes</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2106,7 +2105,7 @@
         <span class="doccomment">/// # Example</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// See the [`ExportType`] class to learn more.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">ExportType</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">ExportType</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2119,7 +2118,7 @@
         <span class="doccomment">/// # Example</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// See the [`ImportType`] class to learn more.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">imports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">ImportType</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">imports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">ImportType</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2146,7 +2145,7 @@
         <span class="doccomment">/// assert { module_.custom_sections(&quot;foo&quot;) == [] }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_sections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_sections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>) -&gt; <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2161,7 +2160,7 @@
         <span class="doccomment">/// assert { module_.serialize.is_a?(String) }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2207,7 +2206,7 @@
         <span class="doccomment">/// assert { exports[0].type.results == [] }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">bytes</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">bytes</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2292,12 +2291,12 @@
 
     <span class="kw">impl</span> <span class="ident">Instance</span> {
         <span class="doccomment">/// Creates a new `Instance`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">module</span>: <span class="ident">Module</span>, <span class="ident">import_object</span>: <span class="ident">ImportObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">module</span>: <span class="ident">Module</span>, <span class="ident">import_object</span>: <span class="ident">ImportObject</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns all the exported entities.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Exports</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exports</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Exports</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2309,7 +2308,7 @@
 
     <span class="kw">impl</span> <span class="ident">Exports</span> {
         <span class="doccomment">/// Returns the number of exports.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2345,7 +2344,7 @@
         <span class="doccomment">/// assert { exports.tab.is_a?(Wasmer::Table) }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">method_missing</span>(<span class="ident">name</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Any</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">method_missing</span>(<span class="ident">name</span>: <span class="ident">String</span>) -&gt; <span class="ident">Any</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2484,13 +2483,13 @@
 
     <span class="kw">impl</span> <span class="ident">ImportObject</span> {
         <span class="doccomment">/// Creates a new `ImportObject`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Checks whether the import object contains a specific</span>
         <span class="doccomment">/// namespace.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_namespace</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">namespace_name</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Boolean</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_namespace</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">namespace_name</span>: <span class="ident">String</span>) -&gt; <span class="ident">Boolean</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2573,17 +2572,17 @@
     <span class="kw">impl</span> <span class="ident">Function</span> {
         <span class="doccomment">/// Creates a new `Function`. The `function` can be of kind</span>
         <span class="doccomment">/// `Symbol`, `Proc` or `Lambda`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">function</span>: <span class="ident">Any</span>, <span class="ident">function_type</span>: <span class="ident">FunctionType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">function</span>: <span class="ident">Any</span>, <span class="ident">function_type</span>: <span class="ident">FunctionType</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Calls the function with arguments. It returns zero or more results.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call</span>(<span class="ident">x0</span>: <span class="ident">Any</span>, <span class="ident">x1</span>: <span class="ident">Any</span>, <span class="ident">x2</span>: <span class="ident">Any</span>, <span class="ident">etc</span>: <span class="ident">Any</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Any</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call</span>(<span class="ident">x0</span>: <span class="ident">Any</span>, <span class="ident">x1</span>: <span class="ident">Any</span>, <span class="ident">x2</span>: <span class="ident">Any</span>, <span class="ident">etc</span>: <span class="ident">Any</span>) -&gt; <span class="ident">Any</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns the function type.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FunctionType</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">FunctionType</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2632,22 +2631,22 @@
 
     <span class="kw">impl</span> <span class="ident">Memory</span> {
         <span class="doccomment">/// Creates a new `Memory`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">memory_type</span>: <span class="ident">MemoryType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">memory_type</span>: <span class="ident">MemoryType</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns the memory type.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MemoryType</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">MemoryType</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns the size (in pages) of the memory.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns the size (in bytes) of the memory.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2668,43 +2667,43 @@
         <span class="doccomment">/// assert { memory_size - old_memory_size == 65536 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">number_of_pages</span>: <span class="ident">Integer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Integer</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">number_of_pages</span>: <span class="ident">Integer</span>) -&gt; <span class="ident">Integer</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `uint8`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint8_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Uint8View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint8_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Uint8View</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `int8`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int8_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Int8View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int8_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Int8View</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `uint16`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint16_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Uint16View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint16_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Uint16View</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `int16`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int16_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Int16View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int16_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Int16View</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `uint32`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint32_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Uint32View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uint32_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Uint32View</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Creates a read-and-write view over the memory data where</span>
         <span class="doccomment">/// elements are of kind `int32`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int32_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Int32View</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">int32_view</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Int32View</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2743,12 +2742,12 @@
 
     <span class="kw">impl</span> <span class="ident">Global</span> {
         <span class="doccomment">/// Creates a new `Global`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">mutable</span>: <span class="ident">Boolean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">value</span>: <span class="ident">Value</span>, <span class="ident">mutable</span>: <span class="ident">Boolean</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns whether the global is muable.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mutable</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Boolean</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mutable</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Boolean</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2773,12 +2772,12 @@
         <span class="doccomment">/// assert { global.value == 153 }</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Any</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Any</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Any</span>) -&gt; <span class="ident">Any</span> {
             <span class="macro">x!</span>()
         }
 
         <span class="doccomment">/// Returns the global type.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GlobalType</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">r#type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">GlobalType</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2796,7 +2795,7 @@
 
     <span class="kw">impl</span> <span class="ident">Table</span> {
         <span class="doccomment">/// Creates a new `Table`.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">table_type</span>: <span class="ident">TableType</span>, <span class="ident">initia_value</span>: <span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="ident">Store</span>, <span class="ident">table_type</span>: <span class="ident">TableType</span>, <span class="ident">initia_value</span>: <span class="ident">Value</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2818,7 +2817,7 @@
         <span class="doccomment">/// Wasmer::Value.i32(7)</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i32</span>(<span class="ident">value</span>: <span class="ident">Integer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i32</span>(<span class="ident">value</span>: <span class="ident">Integer</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2831,7 +2830,7 @@
         <span class="doccomment">/// Wasmer::Value.i64(7)</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i64</span>(<span class="ident">value</span>: <span class="ident">Integer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">i64</span>(<span class="ident">value</span>: <span class="ident">Integer</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2844,7 +2843,7 @@
         <span class="doccomment">/// Wasmer::Value.f32(4.2)</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">f32</span>(<span class="ident">value</span>: <span class="ident">Float</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">f32</span>(<span class="ident">value</span>: <span class="ident">Float</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
 
@@ -2857,7 +2856,7 @@
         <span class="doccomment">/// Wasmer::Value.f64(4.2)</span>
         <span class="doccomment">/// # &quot;#); }</span>
         <span class="doccomment">/// ```</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">f64</span>(<span class="ident">value</span>: <span class="ident">Float</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">f64</span>(<span class="ident">value</span>: <span class="ident">Float</span>) -&gt; <span class="self">Self</span> {
             <span class="macro">x!</span>()
         }
     }
@@ -2903,7 +2902,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">Wasi</span> {
         <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-        <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::doc::Ruby</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::doc::Ruby</span>::<span class="kw-2">*</span>;
 
         <span class="doccomment">/// Represents a WASI version.</span>
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
@@ -2921,21 +2920,21 @@
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StateBuilder</span>;
 
         <span class="kw">impl</span> <span class="ident">StateBuilder</span> {
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">program_name</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">program_name</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
             <span class="doccomment">/// Adds an argument.</span>
             <span class="doccomment">///</span>
             <span class="doccomment">/// Arguments must not contain the nul (`0x0`) byte.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">argument</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">argument</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">argument</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">argument</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
             <span class="doccomment">/// Adds multiple arguments.</span>
             <span class="doccomment">///</span>
             <span class="doccomment">/// Arguments must not contain the nul (`0x0`) byte.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">arguments</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">arguments</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">arguments</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">arguments</span>: <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
@@ -2943,7 +2942,7 @@
             <span class="doccomment">///</span>
             <span class="doccomment">/// Environment variable keys and values must not contain</span>
             <span class="doccomment">/// the byte `=` (`0x3d`) or null (`0x0`).</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">environment</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">environment</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
@@ -2951,7 +2950,7 @@
             <span class="doccomment">///</span>
             <span class="doccomment">/// Environment variable keys and values must not contain</span>
             <span class="doccomment">/// the byte `=` (`0x3d`) or null (`0x0`).</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">environments</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">environments</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
@@ -2960,7 +2959,7 @@
             <span class="doccomment">/// This opens the given directories at the virtual root,</span>
             <span class="doccomment">/// `/`, and allows the WASI module to read and write to the</span>
             <span class="doccomment">/// given directories.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preopen_directory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preopen_directory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
@@ -2969,22 +2968,22 @@
             <span class="doccomment">/// This opens the given directories at the virtual root,</span>
             <span class="doccomment">/// `/`, and allows the WASI module to read and write to the</span>
             <span class="doccomment">/// given directories.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preopen_directories</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">preopen_directories</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
             <span class="doccomment">/// Preopen a directory with a different name exposed to the WASI.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_directory</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_directory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">alias</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
             <span class="doccomment">/// Preopen directories with a different name exposed to the WASI.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_directories</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_directories</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">pairs</span>: <span class="ident">Hash</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro">x!</span>()
             }
 
             <span class="doccomment">/// Produces a WASI [`Environment`] based on this state builder.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finalize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Environment</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finalize</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Environment</span> {
                 <span class="macro">x!</span>()
             }
         }
@@ -3007,7 +3006,7 @@
                 <span class="kw-2">&amp;</span><span class="self">self</span>,
                 <span class="ident">store</span>: <span class="ident">Store</span>,
                 <span class="ident">wasi_version</span>: <span class="ident">Version</span>,
-            ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ImportObject</span> {
+            ) -&gt; <span class="ident">ImportObject</span> {
                 <span class="macro">x!</span>()
             }
         }
@@ -3020,10 +3019,11 @@
         <span class="doccomment">/// at least one WASI namespace exits to detect the</span>
         <span class="doccomment">/// version. Note that the strict detection is faster than the</span>
         <span class="doccomment">/// non-strict one.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_version</span>(<span class="ident">module</span>: <span class="ident">Module</span>, <span class="ident">strict</span>: <span class="ident">Boolean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Version</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_version</span>(<span class="ident">module</span>: <span class="ident">Module</span>, <span class="ident">strict</span>: <span class="ident">Boolean</span>) -&gt; <span class="ident">Version</span> {
             <span class="macro">x!</span>()
         }
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmer_ruby" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmer_ruby" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
+</body></html>
