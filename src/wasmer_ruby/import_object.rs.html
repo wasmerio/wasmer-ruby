@@ -1,14 +1,12 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates&#x2F;wasmer&#x2F;src&#x2F;import_object.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>import_object.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="stylesheet" type="text/css" href="../../theme.css"><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../wasmer_ruby/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../wasmer_ruby/index.html"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1"> 1</span>
-<span id="2"> 2</span>
-<span id="3"> 3</span>
-<span id="4"> 4</span>
-<span id="5"> 5</span>
-<span id="6"> 6</span>
-<span id="7"> 7</span>
-<span id="8"> 8</span>
-<span id="9"> 9</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/wasmer/src/import_object.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>import_object.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="stylesheet" href="../../theme.css"><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../wasmer_ruby/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
 <span id="10">10</span>
 <span id="11">11</span>
 <span id="12">12</span>
@@ -78,71 +76,71 @@
 <span id="76">76</span>
 <span id="77">77</span>
 <span id="78">78</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">error</span>::{<span class="ident">to_ruby_err</span>, <span class="ident">unwrap_or_raise</span>, <span class="ident">TypeError</span>},
-    <span class="ident">externals</span>::{<span class="ident">function::RubyFunction</span>, <span class="ident">global::RubyGlobal</span>, <span class="ident">memory::RubyMemory</span>, <span class="ident">table::RubyTable</span>},
-    <span class="ident">prelude</span>::<span class="kw-2">*</span>,
+</pre><pre class="rust"><code><span class="kw">use crate</span>::{
+    error::{to_ruby_err, unwrap_or_raise, TypeError},
+    externals::{function::RubyFunction, global::RubyGlobal, memory::RubyMemory, table::RubyTable},
+    prelude::<span class="kw-2">*</span>,
 };
-<span class="kw">use</span> <span class="ident">rutie</span>::{<span class="ident">AnyObject</span>, <span class="ident">Boolean</span>, <span class="ident">Hash</span>, <span class="ident">NilClass</span>, <span class="ident">Object</span>, <span class="ident">RString</span>, <span class="ident">Symbol</span>};
+<span class="kw">use </span>rutie::{AnyObject, Boolean, Hash, NilClass, Object, RString, Symbol};
 
-<span class="attribute">#[<span class="ident">rubyclass</span>(<span class="ident">module</span> <span class="op">=</span> <span class="string">&quot;Wasmer&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ImportObject</span> {
-    <span class="ident">inner</span>: <span class="ident">wasmer::ImportObject</span>,
+<span class="attribute">#[rubyclass(module = <span class="string">&quot;Wasmer&quot;</span>)]
+</span><span class="kw">pub struct </span>ImportObject {
+    inner: wasmer::ImportObject,
 }
 
-<span class="kw">impl</span> <span class="ident">ImportObject</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">raw_new</span>(<span class="ident">inner</span>: <span class="ident">wasmer::ImportObject</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">inner</span> }
+<span class="kw">impl </span>ImportObject {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>raw_new(inner: wasmer::ImportObject) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ inner }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">inner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">wasmer::ImportObject</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>inner(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>wasmer::ImportObject {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.inner
     }
 }
 
-<span class="attribute">#[<span class="ident">rubymethods</span>]</span>
-<span class="kw">impl</span> <span class="ident">ImportObject</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">RubyResult</span><span class="op">&lt;</span><span class="ident">AnyObject</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">ImportObject::ruby_new</span>(<span class="ident">ImportObject</span> {
-            <span class="ident">inner</span>: <span class="ident">Default::default</span>(),
+<span class="attribute">#[rubymethods]
+</span><span class="kw">impl </span>ImportObject {
+    <span class="kw">pub fn </span>new() -&gt; RubyResult&lt;AnyObject&gt; {
+        <span class="prelude-val">Ok</span>(ImportObject::ruby_new(ImportObject {
+            inner: Default::default(),
         }))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_namespace</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">namespace_name</span>: <span class="kw-2">&amp;</span><span class="ident">RString</span>) -&gt; <span class="ident">RubyResult</span><span class="op">&lt;</span><span class="ident">Boolean</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">Boolean::new</span>(
-            <span class="self">self</span>.<span class="ident">inner</span>().<span class="ident">contains_namespace</span>(<span class="ident">namespace_name</span>.<span class="ident">to_str</span>()),
+    <span class="kw">pub fn </span>contains_namespace(<span class="kw-2">&amp;</span><span class="self">self</span>, namespace_name: <span class="kw-2">&amp;</span>RString) -&gt; RubyResult&lt;Boolean&gt; {
+        <span class="prelude-val">Ok</span>(Boolean::new(
+            <span class="self">self</span>.inner().contains_namespace(namespace_name.to_str()),
         ))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">namespace_name</span>: <span class="kw-2">&amp;</span><span class="ident">RString</span>, <span class="ident">namespace</span>: <span class="kw-2">&amp;</span><span class="ident">Hash</span>) -&gt; <span class="ident">RubyResult</span><span class="op">&lt;</span><span class="ident">NilClass</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wasmer_namespace</span> <span class="op">=</span> <span class="ident">wasmer::Exports::new</span>();
+    <span class="kw">pub fn </span>register(<span class="kw-2">&amp;mut </span><span class="self">self</span>, namespace_name: <span class="kw-2">&amp;</span>RString, namespace: <span class="kw-2">&amp;</span>Hash) -&gt; RubyResult&lt;NilClass&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>wasmer_namespace = wasmer::Exports::new();
 
-        <span class="ident">namespace</span>.<span class="ident">each</span>(<span class="op">|</span><span class="ident">key</span>, <span class="ident">value</span><span class="op">|</span> {
-            <span class="ident">unwrap_or_raise</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">key</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">RString</span><span class="op">&gt;</span>() {
-                    <span class="ident">name</span>.<span class="ident">to_string</span>()
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">key</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">Symbol</span><span class="op">&gt;</span>() {
-                    <span class="ident">name</span>.<span class="ident">to_string</span>()
-                } <span class="kw">else</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">to_ruby_err</span>::<span class="op">&lt;</span><span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="macro">format!</span>(
+        namespace.each(|key, value| {
+            unwrap_or_raise(|| {
+                <span class="kw">let </span>name = <span class="kw">if let </span><span class="prelude-val">Ok</span>(name) = key.try_convert_to::&lt;RString&gt;() {
+                    name.to_string()
+                } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(name) = key.try_convert_to::&lt;Symbol&gt;() {
+                    name.to_string()
+                } <span class="kw">else </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(to_ruby_err::&lt;TypeError, <span class="kw">_</span>&gt;(<span class="macro">format!</span>(
                         <span class="string">&quot;`ImportObject` cannot register the name because it has an invalid type `{:?}` (expects `String` or `Symbol`)&quot;</span>,
-                        <span class="ident">key</span>.<span class="ident">ty</span>()
+                        key.ty()
                     )));
                 };
 
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">function</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">RubyFunction</span><span class="op">&gt;</span>() {
-                    <span class="ident">wasmer_namespace</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">function</span>.<span class="ident">upcast</span>().<span class="ident">inner</span>().<span class="ident">clone</span>());
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">memory</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">RubyMemory</span><span class="op">&gt;</span>() {
-                    <span class="ident">wasmer_namespace</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">memory</span>.<span class="ident">upcast</span>().<span class="ident">inner</span>().<span class="ident">clone</span>());
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">global</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">RubyGlobal</span><span class="op">&gt;</span>() {
-                    <span class="ident">wasmer_namespace</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">global</span>.<span class="ident">upcast</span>().<span class="ident">inner</span>().<span class="ident">clone</span>());
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">table</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">try_convert_to</span>::<span class="op">&lt;</span><span class="ident">RubyTable</span><span class="op">&gt;</span>() {
-                    <span class="ident">wasmer_namespace</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">table</span>.<span class="ident">upcast</span>().<span class="ident">inner</span>().<span class="ident">clone</span>());
-                } <span class="kw">else</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">to_ruby_err</span>::<span class="op">&lt;</span><span class="ident">TypeError</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="macro">format!</span>(
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(function) = value.try_convert_to::&lt;RubyFunction&gt;() {
+                    wasmer_namespace.insert(name, function.upcast().inner().clone());
+                } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(memory) = value.try_convert_to::&lt;RubyMemory&gt;() {
+                    wasmer_namespace.insert(name, memory.upcast().inner().clone());
+                } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(global) = value.try_convert_to::&lt;RubyGlobal&gt;() {
+                    wasmer_namespace.insert(name, global.upcast().inner().clone());
+                } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(table) = value.try_convert_to::&lt;RubyTable&gt;() {
+                    wasmer_namespace.insert(name, table.upcast().inner().clone());
+                } <span class="kw">else </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(to_ruby_err::&lt;TypeError, <span class="kw">_</span>&gt;(<span class="macro">format!</span>(
                         <span class="string">&quot;`ImportObject` cannot register the given type `{:?}` associated to `{:?}`&quot;</span>,
-                        <span class="ident">value</span>.<span class="ident">ty</span>(),
-                        <span class="ident">name</span>,
+                        value.ty(),
+                        name,
                     )));
                 }
 
@@ -150,12 +148,11 @@
             });
         });
 
-        <span class="self">self</span>.<span class="ident">inner</span>
-            .<span class="ident">register</span>(<span class="ident">namespace_name</span>.<span class="ident">to_str</span>(), <span class="ident">wasmer_namespace</span>);
+        <span class="self">self</span>.inner
+            .register(namespace_name.to_str(), wasmer_namespace);
 
-        <span class="prelude-val">Ok</span>(<span class="ident">NilClass::new</span>())
+        <span class="prelude-val">Ok</span>(NilClass::new())
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmer_ruby" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="wasmer_ruby" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>
