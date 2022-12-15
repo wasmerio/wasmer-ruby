@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['2.6', '2.7', '3.0']
+        ruby: ['2.6', '2.7', '3.0', '3.1']
         target:
           - id: 'linux-amd64'
             os: 'ubuntu-latest'
