@@ -1,7 +1,8 @@
 # Compile and install the Ruby extension.
 build:
 	rake build_lib
-	rake bundle_install
+	bundle install
+	# rake bundle_install
 
 # Run all the tests.
 test-all: test-lib test-doc test-example
