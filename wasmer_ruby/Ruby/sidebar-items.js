@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Any","Represents any kind of object."],["Array","A native Ruby array."],["Boolean","A native Ruby boolean."],["Float","A native Ruby float."],["Hash","A native Ruby hash."],["Integer","A native Ruby integer."],["String","A native Ruby string."]]};
+window.SIDEBAR_ITEMS = {"struct":["Any","Array","Boolean","Float","Hash","Integer","String"]};
